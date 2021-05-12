@@ -1,5 +1,5 @@
 {
-    "dataset": "mnist",
+    "dataset": "cifar",
     "mobility-model": "levy-walk",
     "client-num": 45,
     "local-set-size": 2,
@@ -14,7 +14,7 @@
         "opportunistic": true,
         "gradient replay": true
     },
-    "pretrained-model": "pretrained/test_base_2nn_mnist.pickle",
+    "pretrained-model": "pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
     "pretrain-setup": {
         "learning-rate": 0.001,
         "data-size": 3600,
