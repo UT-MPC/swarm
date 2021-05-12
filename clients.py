@@ -1005,17 +1005,16 @@ class JSDGradientReplayClient(JSDSimularityDelegationClient):
             for c in found_supersets:
                 self._cache_comb[c][1] = avg_weights(self._cache_comb[c][1], grads)
 
-        stale_list = []
+        not_stale_list = []
         if len(self._cache_comb) > 0:
             agg_g = None
             for cc in self._cache_comb:
                 agg_g = add_weights(agg_g, multiply_weights(cc[1], cc[2]))
                 cc[2] *= 0.98 # @TODO add this to hyperparams
-                if cc[2] < 0.001:
-                    stale_list.append(cc)
+                if cc[2] < 0.005:
+                    not_stale_list.append(cc)
             # remove stale gradients from the data structure
-            for sl in stale_list:
-                self._cache_comb.remove(sl)
+            self._cache_comb = not_stale_list
             
             # aggregate weights
             agg_g = multiply_weights(agg_g, self._hyperparams['apply-rate'])
