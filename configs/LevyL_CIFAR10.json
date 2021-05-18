@@ -1,5 +1,5 @@
 {
-    "dataset": "mnist",
+    "dataset": "cifar",
     "mobility-model": "levy-walk",
     "client-num": 45,
     "local-set-size": 2,
@@ -17,7 +17,7 @@
         "opportunistic": true,
         "gradient replay": true
     },
-    "pretrained-model": "pretrained/test_base_2nn_mnist.pickle",
+    "pretrained-model": "pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
     "pretrain-setup": {
         "learning-rate": 0.001,
         "data-size": 3600,
@@ -25,13 +25,13 @@
         "batch-size": 50
     },
     "enc-exp-config":{
-        "encounter-data-file": "encounter_data/levy_walk_client_45_epi_2000_dur_50.pickle",
+        "encounter-data-file": "encounter_data/levy_walk_client_45_epi_1000_dur_50.pickle",
         "communication-time": 0.2,
         "train-time-per-step": 0.1,
         "max-rounds": 3
     },
     "hyperparams" : {
-        "orig-lr": 0.01,
+        "orig-lr": 0.001,
         "batch-size": 50,
         "kappa": 7,
         "offset": 0.96,

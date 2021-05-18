@@ -8,9 +8,9 @@
     "local-data-points": 150,
     "noise-percentage": 50,
     "strategies": {
-        "local": false,
-        "federated": false,
-        "greedy": false,
+        "local": true,
+        "federated": true,
+        "greedy": true,
         "opportunistic": true,
         "gradient replay": true
     },
@@ -28,7 +28,7 @@
         "max-rounds": 3
     },
     "hyperparams" : {
-        "orig-lr": 0.01,
+        "orig-lr": 0.001,
         "batch-size": 50,
         "kappa": 7,
         "offset": 0.96,
