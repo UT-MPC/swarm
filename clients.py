@@ -19,6 +19,8 @@ from sklearn.utils import shuffle
 def get_client_class(class_name):
     if class_name == 'greedy':
         client_class = GreedyNoSimClient
+    elif class_name == 'local':
+        client_class = LocalClient
     elif class_name == 'opportunistic':
         client_class = JSDGreedySimClient
     elif class_name == 'opportunistic-weighted':
