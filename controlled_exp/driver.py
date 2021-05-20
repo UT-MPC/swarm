@@ -269,20 +269,19 @@ def main():
     elif config['hyperparams']['evaluation-metrics'] == 'f1-score-weighted':
         key = 'f1-score'
     
-    if parsed.graph_file != None:
-        for k in logs.keys():
-            plt.plot(np.arange(0, len(logs[k][key])), np.array(logs[k][key]), lw=1.2)
-        plt.legend(list(logs.keys()))
-        if key == 'accuracy':
-            y_label = 'Accuracy'
-        elif key == 'f1-score':
-            y_label = 'F1-score'
-        # plt.ylim(0.9, 0.940)
-        # plt.title(parsed.graph_file)
-        plt.ylabel(y_label)
-        plt.xlabel("Encounters")
-        plt.savefig(GRAPH_FILE_PATH)
-        plt.close()
+    for k in logs.keys():
+        plt.plot(np.arange(0, len(logs[k][key])), np.array(logs[k][key]), lw=1.2)
+    plt.legend(list(logs.keys()))
+    if key == 'accuracy':
+        y_label = 'Accuracy'
+    elif key == 'f1-score':
+        y_label = 'F1-score'
+    # plt.ylim(0.9, 0.940)
+    # plt.title(parsed.graph_file)
+    plt.ylabel(y_label)
+    plt.xlabel("Encounters")
+    plt.savefig(GRAPH_FILE_PATH)
+    plt.close()
 
     # upload to S3 storage
     client = boto3.client('s3')
