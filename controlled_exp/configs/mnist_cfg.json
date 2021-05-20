@@ -1,6 +1,6 @@
 {
     "dataset": "mnist",
-    "intervals": [2, 2, 2],
+    "intervals": [100, 100, 100],
     "repeat": 3,
     "local-set": [0,1],
     "goal-set": [0,1,2,3,4],
@@ -10,9 +10,10 @@
     "number-of-data-points": 150,
     "noise-percentage": 100,
     "strategies": {
-        "local": false,
-        "greedy": false,
+        "local": true,
+        "greedy": true,
         "opportunistic": true,
+        "opportunistic-weighted": true,
         "gradient replay": true
     },
     "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
