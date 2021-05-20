@@ -245,9 +245,9 @@ def main():
                     else:
                         ValueError('invalid evaluation-metrics: {}'.format(config['hyperparams']['evaluation-metrics']))
 
-                    if i == len(config['intervals'])-1 and j == repeat-1:
-                        with open('weights/' + ck + '_last_weights.pickle', 'wb') as handle:
-                            pickle.dump(clients[ck]._weights , handle, protocol=pickle.HIGHEST_PROTOCOL)
+                    # if i == len(config['intervals'])-1 and j == repeat-1:
+                    #     with open('weights/' + ck + '_last_weights.pickle', 'wb') as handle:
+                    #         pickle.dump(clients[ck]._weights , handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     with open(HIST_FILE_PATH, 'wb') as handle:
         pickle.dump(logs, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -283,6 +283,15 @@ def main():
         plt.xlabel("Encounters")
         plt.savefig(GRAPH_FILE_PATH)
         plt.close()
+
+    # upload to S3 storage
+    client = boto3.client('s3')
+    S3_BUCKET_NAME = 'opfl-sim-models'
+    FOLDER_NAME = 'controlled_exps'
+    upload_hist_path = PurePath(FOLDER_NAME, 'hists/' + parsed.tag + '.pickle')
+    client.upload_file(str(HIST_FILE_PATH), S3_BUCKET_NAME, str(upload_hist_path))
+    upload_graph_path = PurePath(FOLDER_NAME, 'figs/' + parsed.tag + '.pdf')
+    client.upload_file(str(GRAPH_FILE_PATH), S3_BUCKET_NAME, str(upload_graph_path))
         
 if __name__ == '__main__':
     main()
