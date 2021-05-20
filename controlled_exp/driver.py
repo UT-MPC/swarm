@@ -12,10 +12,13 @@ import models as custom_models
 import copy
 import pickle
 import numpy as np
+import boto3
 from tqdm import tqdm
 from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_dataset
 import matplotlib.pyplot as plt
 import matplotlib
+from pathlib import PurePath, Path
+from cfg_utils import pathlib, HIST_FOLDER, FIG_FOLDER
 
 # Use truetype fonts for graphs
 matplotlib.rcParams['pdf.fonttype'] = 42
@@ -31,14 +34,14 @@ def main():
     """
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.FATAL)
 
+    setup_env()
+
     # parse arguments
     parser = argparse.ArgumentParser(description='set params for controlled experiment')
-    parser.add_argument('--out', dest='out_file',
-                        type=str, default='logs/log.pickle', help='log history output')
+    parser.add_argument('--tag', dest='tag',
+                        type=str, default='default_tag', help='tag for name of the output')
     parser.add_argument('--cfg', dest='config_file',
                         type=str, default='configs/mnist_cfg.json', help='name of the config file')
-    parser.add_argument('--draw_graph', dest='graph_file',
-                        type=str, default=None, help='name of the output graph filename')
     parser.add_argument('--seed', dest='seed',
                     type=int, default=0, help='use pretrained weights')
     parser.add_argument('--global', dest='global',
@@ -46,8 +49,11 @@ def main():
 
     parsed = parser.parse_args()
 
-    if parsed.config_file == None or parsed.out_file == None:
+    if parsed.config_file == None or parsed.tag == None:
         print('Config file and output diretory has to be specified. Run \'python driver.py -h\' for help/.')
+
+    HIST_FILE_PATH = PurePath(HIST_FOLDER, parsed.tag + '.pickle')
+    GRAPH_FILE_PATH = PurePath(FIG_FOLDER, parsed.tag + '.pdf')
 
     np.random.seed(parsed.seed)
     tf.compat.v1.set_random_seed(parsed.seed)
@@ -243,24 +249,19 @@ def main():
                         with open('weights/' + ck + '_last_weights.pickle', 'wb') as handle:
                             pickle.dump(clients[ck]._weights , handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    with open(parsed.out_file, 'wb') as handle:
+    with open(HIST_FILE_PATH, 'wb') as handle:
         pickle.dump(logs, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     # draw graph
     if config['hyperparams']['evaluation-metrics'] == 'split-f1-score-weighted':
-        if parsed.graph_file != None:
-            for k in logs.keys():
-                filename = parsed.graph_file.split('.')[:-1] 
-                filename = ''.join(filename) + '_' + k
-                filename += '.pdf'
-                print(filename)
-                for labels in logs[k].keys():
-                    plt.plot(np.arange(0, len(logs[k][labels])), np.array(logs[k][labels]), lw=1.2)
-                plt.legend(list(logs[k].keys()))
-                plt.ylabel('F1-score')
-                plt.xlabel("Encounters")
-                plt.savefig(filename)
-                plt.close()
+        for k in logs.keys():
+            for labels in logs[k].keys():
+                plt.plot(np.arange(0, len(logs[k][labels])), np.array(logs[k][labels]), lw=1.2)
+            plt.legend(list(logs[k].keys()))
+            plt.ylabel('F1-score')
+            plt.xlabel("Encounters")
+            plt.savefig(GRAPH_FILE_PATH)
+            plt.close()
         return
 
     if config['hyperparams']['evaluation-metrics'] == 'loss-and-accuracy':
@@ -280,7 +281,7 @@ def main():
         # plt.title(parsed.graph_file)
         plt.ylabel(y_label)
         plt.xlabel("Encounters")
-        plt.savefig(parsed.graph_file)
+        plt.savefig(GRAPH_FILE_PATH)
         plt.close()
         
 if __name__ == '__main__':

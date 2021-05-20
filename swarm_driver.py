@@ -36,7 +36,6 @@ def main():
     parser = argparse.ArgumentParser(description='set params for simulation')
     parser.add_argument('--seed', dest='seed',
                         type=int, default=0, help='use pretrained weights')
-
     parser.add_argument('--tag', dest='tag',
                         type=str, default='default_tag', help='tag')
     parser.add_argument('--cfg', dest='config_file',
