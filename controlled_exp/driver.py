@@ -18,7 +18,7 @@ from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_datase
 import matplotlib.pyplot as plt
 import matplotlib
 from pathlib import PurePath, Path
-from cfg_utils import pathlib, HIST_FOLDER, FIG_FOLDER
+from cfg_utils import setup_env, HIST_FOLDER, FIG_FOLDER
 
 # Use truetype fonts for graphs
 matplotlib.rcParams['pdf.fonttype'] = 42
