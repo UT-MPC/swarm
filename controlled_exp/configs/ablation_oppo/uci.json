@@ -9,11 +9,13 @@
     "noise-percentage": 100,
     "noise-label-set-size": 3,
     "strategies": {
-        "local": true,
+        "local": false,
         "greedy": true,
         "opportunistic": true,
+        "opportunistic (low thres.)": true,
         "opportunistic-weighted": false,
-        "gradient replay": true
+        "gradient replay": true,
+        "gradient replay (low thres.)": true
     },
     "pretrained-model": "../pretrained/deepConvLSTM_pretrained_20p.pickle",
     "hyperparams" : {
@@ -21,7 +23,7 @@
         "batch-size": 50,
         "kappa": 18,
         "offset": 0.96,
-        "apply-rate": 10,
+        "apply-rate": 3,
         "test-data-per-label": 0,
         "evaluation-metrics": "f1-score-weighted",
         "similarity-threshold": 0.2

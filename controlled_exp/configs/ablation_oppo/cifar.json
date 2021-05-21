@@ -20,7 +20,7 @@
     },
     "pretrained-model": "../pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
     "hyperparams" : {
-        "orig-lr": 0.01,
+        "orig-lr": 0.0005,
         "batch-size": 50,
         "kappa": 7,
         "offset": 0.96,
