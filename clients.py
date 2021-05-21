@@ -36,7 +36,7 @@ def get_client_class(class_name):
     elif class_name == 'gradient replay decay':
         client_class = JSDGradientReplayDecayClient
     elif class_name == 'gradient replay (low thres.)':
-        client_class = HighJSDLocalIncStaleMomentumClient
+        client_class = HighJSDGradientReplayDecayClient
     # 'cecay': Client-specific dECAY
     elif class_name == 'greedy-cecay':
         client_class = GreedyNoSimCecayClient
