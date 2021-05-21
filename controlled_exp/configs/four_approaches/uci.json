@@ -6,15 +6,14 @@
     "goal-set": [1,5,7,11,17],
     "label-sets": [[7,11], [17,9], [19, 0]],
     "number-of-data-points": 150,
-    "noise-percentage": 50,
+    "noise-percentage": 100,
     "noise-label-set-size": 3,
     "strategies": {
-        "local": false,
-        "jsd-greedy-sim": true,
-        "greedy-no-sim": false,
-        "momentum": false,
-        "jsd-momentum": false,
-        "jsd-local-inc-stale-momentum": true
+        "local": true,
+        "greedy": true,
+        "opportunistic": true,
+        "opportunistic-weighted": false,
+        "gradient replay": true
     },
     "pretrained-model": "../pretrained/deepConvLSTM_pretrained_20p.pickle",
     "hyperparams" : {

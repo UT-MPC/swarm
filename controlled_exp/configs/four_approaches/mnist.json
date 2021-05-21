@@ -1,7 +1,7 @@
 {
     "dataset": "mnist",
     "intervals": [100, 100, 100],
-    "repeat": 3,
+    "repeat": 1,
     "local-set": [0,1],
     "goal-set": [0,1,2,3,4],
     "label-sets": [[2,3],[3,4,5],[4,5,6]],
@@ -10,11 +10,13 @@
     "number-of-data-points": 150,
     "noise-percentage": 100,
     "strategies": {
-        "local": true,
+        "local": false,
         "greedy": true,
         "opportunistic": true,
+        "opportunistic (low thres.)": true,
         "opportunistic-weighted": false,
-        "gradient replay": true
+        "gradient replay": true,
+        "gradient replay (low thres.)": true
     },
     "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
     "hyperparams" : {

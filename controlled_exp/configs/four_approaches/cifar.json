@@ -16,7 +16,7 @@
         "opportunistic-weighted": false,
         "gradient replay": true
     },
-    "pretrained-model": "pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
+    "pretrained-model": "../pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
     "hyperparams" : {
         "orig-lr": 0.01,
         "batch-size": 50,
