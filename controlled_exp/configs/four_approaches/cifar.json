@@ -10,11 +10,13 @@
     "number-of-data-points": 150,
     "noise-percentage": 100,
     "strategies": {
-        "local": true,
+        "local": false,
         "greedy": true,
         "opportunistic": true,
+        "opportunistic (low thres.)": true,
         "opportunistic-weighted": false,
-        "gradient replay": true
+        "gradient replay": true,
+        "gradient replay (low thres.)": true
     },
     "pretrained-model": "../pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
     "hyperparams" : {
