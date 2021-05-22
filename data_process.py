@@ -13,7 +13,7 @@ SIZE_Y = 28
 def download_uci_opportunity():
     client = boto3.client('s3')
     S3_BUCKET_NAME = 'opfl-sim-models'
-    DATA_PATH = 'data/opportunity-uci/oppChallenge_gestures.data'
+    DATA_PATH = 'data/opportunity-uci'
     Path(DATA_PATH).mkdir(parents=True, exist_ok=True)
     client.download_file(S3_BUCKET_NAME, 'oppChallenge_gestures.data', DATA_PATH)
 
