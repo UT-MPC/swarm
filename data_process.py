@@ -14,8 +14,9 @@ def download_uci_opportunity():
     client = boto3.client('s3')
     S3_BUCKET_NAME = 'opfl-sim-models'
     DATA_PATH = 'data/opportunity-uci'
+    FILE_NAME = 'oppChallenge_gestures.data'
     Path(DATA_PATH).mkdir(parents=True, exist_ok=True)
-    client.download_file(S3_BUCKET_NAME, 'oppChallenge_gestures.data', DATA_PATH)
+    client.download_file(S3_BUCKET_NAME, FILE_NAME, DATA_PATH + '/' + FILE_NAME)
 
 # get X and Y data from a list of files
 # returns: list of numpy arrays (num_samples_from_user, num_pixels)
