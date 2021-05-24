@@ -230,8 +230,8 @@ def main():
                         for bn in range(int(config['number-of-data-points']/config['hyperparams']['batch-size'])):
                             clients[ck].delegate(other, 1, 1)
                     else:
-                        # for bn in range(int(config['number-of-data-points']/config['hyperparams']['batch-size'])):
-                        clients[ck].delegate(enc_clients[ii], 1, 1)
+                        for bn in range(int(config['number-of-data-points']/config['hyperparams']['batch-size'])):
+                            clients[ck].delegate(enc_clients[ii], 1, 1)
                         
                     hist = clients[ck].eval()
                     if config['hyperparams']['evaluation-metrics'] == 'loss-and-accuracy':

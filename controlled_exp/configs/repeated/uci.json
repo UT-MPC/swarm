@@ -1,8 +1,9 @@
 {
     "dataset": "opportunity-uci",
-    "intervals": [100, 100, 100],
+    "intervals": [15, 15, 15],
+    "repeat": 10,
+    "same-repeat": true,
     "local-set": [1,5],
-    "repeat": 1,
     "goal-set": [1,5,7,11,17],
     "label-sets": [[7,11], [17,9], [19, 0]],
     "number-of-data-points": 150,
