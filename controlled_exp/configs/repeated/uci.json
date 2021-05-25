@@ -24,7 +24,8 @@
         "apply-rate": 3,
         "test-data-per-label": 0,
         "evaluation-metrics": "f1-score-weighted",
-        "similarity-threshold": 0.2
+        "similarity-threshold": 0.2,
+        "decay": 0.998
     },
     "test-data-per-label": 0
 }

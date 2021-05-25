@@ -24,7 +24,8 @@
         "apply-rate": 12,
         "test-data-per-label": 800,
         "evaluation-metrics": "loss-and-accuracy",
-        "similarity-threshold": 0.2
+        "similarity-threshold": 0.2,
+        "decay": 0.998
     },
     "test-data-per-label": 800
 }
