@@ -104,6 +104,7 @@ class DelegationClient:
         self._hyperparams = hyperparams
         self._evaluation_metrics = hyperparams['evaluation-metrics']
         self._similarity_threshold = hyperparams['similarity-threshold']
+        self._low_similarity_threshold = hyperparams['low-similarity-threshold']
         self.task_num = train_data_provider.task_num
 
         self.last_batch_num = {} # keeps the last batch num of the other client that this client was trained on
@@ -516,7 +517,7 @@ class JSDSimularityDelegationClient(DelegationClient):
     def decide_delegation(self, other):
         jsd = self.get_similarity(other)
         if jsd != np.nan and jsd != np.inf:
-            return jsd <= 0.5
+            return jsd <= self._similarity_threshold
         return False
 
 class HighJSDSimularityDelegationClient(DelegationClient):
@@ -529,7 +530,7 @@ class HighJSDSimularityDelegationClient(DelegationClient):
     def decide_delegation(self, other):
         jsd = self.get_similarity(other)
         if jsd != np.nan and jsd != np.inf:
-            return jsd <= 0.4
+            return jsd <= self._low_similarity_threshold
         return False
 
 class LocalClient(DelegationClient):
