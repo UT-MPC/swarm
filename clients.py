@@ -969,7 +969,7 @@ class JSDGradientReplayClient(JSDSimularityDelegationClient):
         for l in unknown_set:
             self.desired_prob[l] = 1./len(unknown_set)
         self.local_weight = np.exp(-8*JSD(get_even_prob(set(self._local_data_dist)), self._desired_data_dist, self._num_classes))
-        self.local_decay = 0.98
+        self.local_decay = self._hyperparams['decay']
         self.local_apply_rate = 1
 
     def delegate(self, other, epoch, iteration=1):
@@ -1012,7 +1012,7 @@ class JSDGradientReplayClient(JSDSimularityDelegationClient):
             agg_g = None
             for cc in self._cache_comb:
                 agg_g = add_weights(agg_g, multiply_weights(cc[1], cc[2]))
-                cc[2] *= 0.98 # @TODO add this to hyperparams
+                cc[2] *= self._hyperparams['decay'] # @TODO add this to hyperparams
                 if cc[2] < 0.005:
                     not_stale_list.append(cc)
             # remove stale gradients from the data structure
