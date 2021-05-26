@@ -14,7 +14,7 @@
         "opportunistic": true,
         "gradient replay": true
     },
-    "pretrained-model": "../pretrained/deepConvLSTM_pretrained_20p.pickle",
+    "pretrained-model": "../pretrained/deepConvLSTM_pretrained_10p.pickle",
     "hyperparams" : {
         "orig-lr": 0.0005,
         "batch-size": 50,
