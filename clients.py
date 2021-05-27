@@ -1100,14 +1100,14 @@ class JSDGradientReplayNoWeightingClient(JSDSimularityDelegationClient):
             self._cache_comb = not_stale_list
             
             # aggregate weights
-            agg_g = multiply_weights(agg_g, self._hyperparams['apply-rate'])
+            agg_g = multiply_weights(agg_g, 1)
 
             # do training
             for _ in range(iteration):
                 self._weights = add_weights(self._weights, agg_g)
                 new_weights = self.fit_w_lr_to(self, epoch, lr)
                 grads = gradients(self._weights, new_weights)
-                self._weights = add_weights(self._weights, multiply_weights(grads, self._hyperparams['apply-rate'] * self.local_apply_rate))
+                self._weights = add_weights(self._weights, multiply_weights(grads, self.local_apply_rate))
                 self.local_apply_rate *= self.local_decay
 
         # else:
