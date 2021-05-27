@@ -853,14 +853,14 @@ class JSDWeightedGreedySimClient(JSDSimularityDelegationClient):
             fac = np.exp(-8*JSD(get_even_prob(set(other._local_data_dist.keys())), self._desired_data_dist, self._num_classes))
             update = self.fit_to(other, epoch)
             grads = gradients(self._weights, update)
-            agg = multiply_weights(grads, fac*10)
+            agg = multiply_weights(grads, fac*self._hyperparams['apply-rate'])
             self._weights = add_weights(self._weights, agg)
             # print("{}: {}".format(set(other._local_data_dist.keys()), fac))
 
             fac = np.exp(-8*JSD(get_even_prob(set(self._local_data_dist.keys())), self._desired_data_dist, self._num_classes))
             update = self.fit_to(self, epoch)
             grads = gradients(self._weights, update)
-            agg = multiply_weights(grads, fac*10)
+            agg = multiply_weights(grads, fac*self._hyperparams['apply-rate'])
             self._weights = add_weights(self._weights, agg)
 
 class HighJSDGreedySimClient(HighJSDSimularityDelegationClient):
@@ -1100,14 +1100,14 @@ class JSDGradientReplayNoWeightingClient(JSDSimularityDelegationClient):
             self._cache_comb = not_stale_list
             
             # aggregate weights
-            agg_g = multiply_weights(agg_g, 1)
+            agg_g = multiply_weights(agg_g, self._hyperparams['apply-rate'])
 
             # do training
             for _ in range(iteration):
                 self._weights = add_weights(self._weights, agg_g)
                 new_weights = self.fit_w_lr_to(self, epoch, lr)
                 grads = gradients(self._weights, new_weights)
-                self._weights = add_weights(self._weights, multiply_weights(grads, self.local_apply_rate))
+                self._weights = add_weights(self._weights, multiply_weights(grads, self._hyperparams['apply-rate'] * self.local_apply_rate))
                 self.local_apply_rate *= self.local_decay
 
         # else:
