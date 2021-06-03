@@ -7,16 +7,18 @@
     "goal-set-size": 5,
     "local-data-points": 150,
     "noise-percentage": 50,
+    "district-9": [[1,2], [3,4], [5,6],
+    [7,8], [9,0], [1,2],
+    [4,5], [6,7], [8,9]],
     "strategies": {
-        "local": false,
-        "federated": false,
-        "greedy": false,
+        "local": true,
+        "greedy": true,
         "opportunistic": true,
         "gradient replay": true
     },
     "pretrained-model": "pretrained/test_base_2nn_mnist.pickle",
     "pretrain-setup": {
-        "learning-rate": 0.001,
+        "learning-rate": 0.01,
         "data-size": 3600,
         "epochs": 50,
         "batch-size": 50
@@ -32,10 +34,11 @@
         "batch-size": 50,
         "kappa": 7,
         "offset": 0.96,
-        "apply-rate": 6,
+        "apply-rate": 9,
         "test-data-per-label": 800,
         "evaluation-metrics": "loss-and-accuracy",
-        "similarity-threshold": 0.2,
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.5,
         "num-rounds": 250,
         "time-per-round": 100
     }

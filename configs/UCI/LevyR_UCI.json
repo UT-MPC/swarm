@@ -1,25 +1,21 @@
 {
-    "dataset": "mnist",
+    "dataset": "opportunity-uci",
     "mobility-model": "levy-walk",
     "client-num": 45,
     "local-set-size": 2,
-    "local-data-size": 150,
+    "local-data-size": 160,
     "goal-set-size": 5,
-    "local-data-points": 150,
+    "local-data-points": 120,
     "noise-percentage": 50,
-    "district-9": [[1,2], [3,4], [5,6],
-    [7,8], [9,0], [1,2],
-    [4,5], [6,7], [8,9]],
     "strategies": {
         "local": true,
-        "federated": true,
         "greedy": true,
         "opportunistic": true,
         "gradient replay": true
     },
-    "pretrained-model": "pretrained/test_base_2nn_mnist.pickle",
+    "pretrained-model": "pretrained/deepConvLSTM_pretrained_20p.pickle",
     "pretrain-setup": {
-        "learning-rate": 0.001,
+        "learning-rate": 0.01,
         "data-size": 3600,
         "epochs": 50,
         "batch-size": 50
@@ -31,14 +27,15 @@
         "max-rounds": 3
     },
     "hyperparams" : {
-        "orig-lr": 0.01,
+        "orig-lr": 0.001,
         "batch-size": 50,
         "kappa": 7,
-        "offset": 0.96,
-        "apply-rate": 6,
+        "offset": 0.9,
+        "apply-rate": 9,
         "test-data-per-label": 800,
         "evaluation-metrics": "loss-and-accuracy",
-        "similarity-threshold": 0.2,
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.5,
         "num-rounds": 250,
         "time-per-round": 100
     }
