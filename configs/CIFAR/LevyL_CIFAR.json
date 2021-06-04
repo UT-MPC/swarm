@@ -40,6 +40,7 @@
         "similarity-threshold": 0.5,
         "low-similarity-threshold": 0.5,
         "num-rounds": 250,
-        "time-per-round": 100
+        "time-per-round": 100,
+	"decay": 0.998
     }
 }
