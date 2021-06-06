@@ -141,7 +141,7 @@ def main():
         else:
             ValueError('invalid evaluation-metrics: {}'.format(config['hyperparams']['evaluation-metrics']))
     if config['dataset'] == 'opportunity-uci':
-        candidated = np.arange(0, 18)
+        candidates = np.arange(0, 18)
     else:
         candidates = np.arange(0,10)
     if len(config['intervals']) != len(config['label-sets']):
