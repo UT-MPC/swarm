@@ -1089,6 +1089,12 @@ class JSDGradientReplayNoDecayClient(JSDSimularityDelegationClient):
         else: # @TODO this is where I'm not too sure about
             for c in found_supersets:
                 self._cache_comb[c][1] = avg_weights(self._cache_comb[c][1], grads)
+
+        if len(self._cache_comb) > 0:
+            agg_g = None
+            for cc in self._cache_comb:
+                agg_g = add_weights(agg_g, multiply_weights(cc[1], cc[2]))
+            # remove stale gradients from the data structure
             
             # aggregate weights
             agg_g = multiply_weights(agg_g, self._hyperparams['apply-rate'])
