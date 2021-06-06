@@ -140,8 +140,10 @@ def main():
                 logs[ck]['f1: ' + str(labels)].append(hist[str(labels)])
         else:
             ValueError('invalid evaluation-metrics: {}'.format(config['hyperparams']['evaluation-metrics']))
-
-    candidates = np.arange(0,10)
+    if config['dataset'] == 'opportunity-uci':
+        candidated = np.arange(0, 18)
+    else:
+        candidates = np.arange(0,10)
     if len(config['intervals']) != len(config['label-sets']):
         raise ValueError('length of intervals and label-sets should be the same: {} != {}'.format(config['intervals'], config['label-sets']))
     
