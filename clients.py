@@ -543,30 +543,6 @@ class HighJSDSimularityDelegationClient(DelegationClient):
             return jsd <= self._low_similarity_threshold
         return False
 
-class OpportunisticCheckClient(JSDSimularityDelegationClient):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.delegation_number = 0
-
-    def delegate(self, other, epoch, iteration):
-        if self.decide_delegation(other):
-            self.delegation_number += 1
-    
-    def eval(self, *args):
-        return (self.delegation_number, 0, 0)
-
-class LowThresOpportunisticCheckClient(HighJSDSimilarityDelegationClient):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.delegation_number = 0
-
-    def delegate(self, other, epoch, iteration):
-        if self.decide_delegation(other):
-            self.delegation_number += 1
-    
-    def eval(self, *args):
-        return (self.delegation_number, 0, 0)
-
 class LocalClient(DelegationClient):
     def __init__(self, *args):
         super().__init__(*args)
@@ -906,6 +882,31 @@ class HighJSDGreedySimClient(HighJSDSimularityDelegationClient):
         for _ in range(iteration):
             self._weights = self.fit_to(other, epoch)
             self._weights = self.fit_to(self, epoch)
+
+
+class OpportunisticCheckClient(JSDSimularityDelegationClient):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.delegation_number = 0
+
+    def delegate(self, other, epoch, iteration):
+        if self.decide_delegation(other):
+            self.delegation_number += 1
+    
+    def eval(self, *args):
+        return (self.delegation_number, 0, 0)
+
+class LowThresOpportunisticCheckClient(HighJSDSimilarityDelegationClient):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.delegation_number = 0
+
+    def delegate(self, other, epoch, iteration):
+        if self.decide_delegation(other):
+            self.delegation_number += 1
+    
+    def eval(self, *args):
+        return (self.delegation_number, 0, 0)
 
 class KLGreedyOnlySimClient(KLSimularityDelegationClient):
     def __init__(self, *args):
