@@ -896,7 +896,7 @@ class OpportunisticCheckClient(JSDSimularityDelegationClient):
     def eval(self, *args):
         return (self.delegation_number, 0, 0)
 
-class LowThresOpportunisticCheckClient(HighJSDSimilarityDelegationClient):
+class LowThresOpportunisticCheckClient(HighJSDSimularityDelegationClient):
     def __init__(self, *args):
         super().__init__(*args)
         self.delegation_number = 0
