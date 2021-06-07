@@ -813,6 +813,7 @@ class KLGreedySimClient(KLSimularityDelegationClient):
 class JSDGreedySimClient(JSDSimularityDelegationClient):
     def __init__(self, *args):
         super().__init__(*args)
+        self.fac_agg = 0
 
     def delegate(self, other, epoch, iteration):
         if not self.decide_delegation(other):
@@ -821,6 +822,8 @@ class JSDGreedySimClient(JSDSimularityDelegationClient):
         for _ in range(iteration):
             self._weights = self.fit_to(other, epoch)
             self._weights = self.fit_to(self, epoch)
+            self.fac_agg += 2
+            print('greedy: {}'.format(self.fac_agg))
 
 class JSDGreedySimCecayClient(JSDSimularityDelegationClient):
     def __init__(self, *args):
@@ -852,6 +855,7 @@ class JSDGreedySimCecayClient(JSDSimularityDelegationClient):
 class JSDWeightedGreedySimClient(JSDSimularityDelegationClient):
     def __init__(self, *args):
         super().__init__(*args)
+        self.fac_agg = 0
 
     def delegate(self, other, epoch, iteration):
         if not self.decide_delegation(other):
@@ -864,12 +868,15 @@ class JSDWeightedGreedySimClient(JSDSimularityDelegationClient):
             agg = multiply_weights(grads, fac*self._hyperparams['apply-rate'])
             self._weights = add_weights(self._weights, agg)
             # print("{}: {}".format(set(other._local_data_dist.keys()), fac))
+            self.fac_agg += fac
 
             fac = np.exp(-8*JSD(get_even_prob(set(self._local_data_dist.keys())), self._desired_data_dist, self._num_classes))
             update = self.fit_to(self, epoch)
             grads = gradients(self._weights, update)
             agg = multiply_weights(grads, fac*self._hyperparams['apply-rate'])
             self._weights = add_weights(self._weights, agg)
+            self.fac_agg += fac
+            print('weighted: {}'.format(self.fac_agg))
 
 class HighJSDGreedySimClient(HighJSDSimularityDelegationClient):
     def __init__(self, *args):
