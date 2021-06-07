@@ -68,6 +68,12 @@ def get_client_class(class_name):
     elif class_name == 'compressed-v2 ':
         client_class = V2CompressedCNNTaskAwareClient
 
+    ### clients for checking encounters
+    elif class_name == 'oppo check':
+        client_class = OpportunisticCheckClient
+    elif class_name == 'oppo check low':
+        client_class = LowThresOpportunisticCheckClient
+
     else:
         return None
     return client_class
@@ -536,6 +542,30 @@ class HighJSDSimularityDelegationClient(DelegationClient):
         if jsd != np.nan and jsd != np.inf:
             return jsd <= self._low_similarity_threshold
         return False
+
+class OpportunisticCheckClient(JSDSimularityDelegationClient):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.delegation_number = 0
+
+    def delegate(self, other, epoch, iteration):
+        if self.decide_delegation(other):
+            self.delegation_number += 1
+    
+    def eval(self, *args):
+        return (self.delegation_number, 0, 0)
+
+class LowThresOpportunisticCheckClient(HighJSDSimilarityDelegationClient):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.delegation_number = 0
+
+    def delegate(self, other, epoch, iteration):
+        if self.decide_delegation(other):
+            self.delegation_number += 1
+    
+    def eval(self, *args):
+        return (self.delegation_number, 0, 0)
 
 class LocalClient(DelegationClient):
     def __init__(self, *args):
