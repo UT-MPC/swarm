@@ -40,8 +40,11 @@ def main():
                         type=str, default='default_tag', help='tag')
     parser.add_argument('--cfg', dest='config_file',
                         type=str, default='toy_realworld_mnist_cfg.json', help='name of the config file')
+    parser.add_argument('--allowOverlap', dest='allowOverlap',
+                        type=str, default=False, help='allow client to exchange with multiple clients at once')
 
     parsed = parser.parse_args()
+    allowOverlap = parsed.allowOverlap
 
     if parsed.config_file == None or parsed.tag == None:
         print('Config file and the tag has to be specified. Run \'python delegation_swarm_driver.py -h\' for help/.')
@@ -192,7 +195,7 @@ def main():
         start = timer()
         print("{} == running {} with {}".format(swarm_names[i], test_swarms[i].__class__.__name__, test_swarms[i]._clients[0].__class__.__name__))
         print("swarm {} of {}".format(i+1, len(test_swarms)))
-        test_swarms[i].run()
+        test_swarms[i].run(allowOverlap)
         end = timer()
         print('-------------- Elasped Time --------------')
         print(end - start)
