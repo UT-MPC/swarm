@@ -192,7 +192,7 @@ class Swarm():
         for i in range(len(self._clients)):
             self.last_data_update_time[i] = 0
 
-    def run(self):
+    def run(self, allowOverlap=False):
         # stores the end time of the last encounter
         # this is to prevent one client exchanging with more than two
         # at the same time
@@ -214,7 +214,7 @@ class Swarm():
                 continue
             c1 = self._clients[c1_idx]
             c2 = self._clients[c2_idx]
-            if self.last_end_time[c1_idx] > cur_t or self.last_end_time[c2_idx] > cur_t:
+            if not allowOverlap and (self.last_end_time[c1_idx] > cur_t or self.last_end_time[c2_idx] > cur_t):
                 continue  # client already occupied
 
             # assume both clients are fully occupied for delegation(so side-delegation in one time period)
