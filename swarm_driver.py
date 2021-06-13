@@ -41,7 +41,7 @@ def main():
     parser.add_argument('--cfg', dest='config_file',
                         type=str, default='toy_realworld_mnist_cfg.json', help='name of the config file')
     parser.add_argument('--allowOverlap', dest='allowOverlap',
-                        type=str, default=False, help='allow client to exchange with multiple clients at once')
+                        action='store_true', default=False, help='allow client to exchange with multiple clients at once')
 
     parsed = parser.parse_args()
     allowOverlap = parsed.allowOverlap
