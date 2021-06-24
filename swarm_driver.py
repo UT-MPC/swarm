@@ -204,7 +204,7 @@ def main():
         print("swarm {} of {}".format(i+1, len(test_swarms)))
         log_and_upload('starting running swarm {}'.format(i), wsinfo['workstation-name'], 
                         parsed.tag, LOG_FILE_PATH)
-        test_swarms[i].run(upto, allowOverlap)
+        test_swarms[i].run(parsed.upto, allowOverlap)
         end = timer()
         print('-------------- Elasped Time --------------')
         print(end - start)
