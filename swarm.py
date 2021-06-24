@@ -192,7 +192,7 @@ class Swarm():
         for i in range(len(self._clients)):
             self.last_data_update_time[i] = 0
 
-    def run(self, allowOverlap=False):
+    def run(self, upto, allowOverlap=False):
         # stores the end time of the last encounter
         # this is to prevent one client exchanging with more than two
         # at the same time
@@ -203,13 +203,19 @@ class Swarm():
         start_time = datetime.datetime.now()
         # iterate encounters
         cur_t = 0 # current time
+        cur_idx = 0
         for index, row in self.enc_df.iterrows():
+            if cur_idx > upto:
+                break
+            cur_idx += 1
             cur_t = row[TIME_START]
             end_t = row[TIME_END]
             t_left = end_t - cur_t # time left
             # only pairs of clients can exchange in a place
             c1_idx = (int)(row[CLIENT1])
             c2_idx = (int)(row[CLIENT2])
+            if c1_idx == c2_idx:
+                continue
             if c1_idx >= len(self._clients) or c2_idx >= len(self._clients):
                 continue
             c1 = self._clients[c1_idx]
@@ -262,6 +268,7 @@ class Swarm():
                 print("\n------------ index {} done ---".format(index), end='') 
                 print("elasped time: {}".format(elasped), end='')
                 print(" ----  remaining time: {}".format(rem))  
+                logging.info('index {} done ---".format(index)')
 
             K.clear_session()
         return

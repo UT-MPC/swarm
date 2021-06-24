@@ -24,10 +24,15 @@ import boto3
 from cfg_utils import setup_env, LOG_FOLDER, FIG_FOLDER, HIST_FOLDER
 from pathlib import PurePath, Path
 import logging
+import sys
 
 # hyperparams for uci dataset
 SLIDING_WINDOW_LENGTH = 24
 SLIDING_WINDOW_STEP = 12
+
+# S3 client and bucket
+client = boto3.client('s3')
+S3_BUCKET_NAME = 'opfl-sim-models'
 
 def main():
     setup_env()
@@ -42,6 +47,8 @@ def main():
                         type=str, default='toy_realworld_mnist_cfg.json', help='name of the config file')
     parser.add_argument('--allowOverlap', dest='allowOverlap',
                         action='store_true', default=False, help='allow client to exchange with multiple clients at once')
+    parser.add_argument('--upto', dest='upto',
+                        type=int, default=sys.maxsize, help='number of indices on enc. data to run sim.')
 
     parsed = parser.parse_args()
     allowOverlap = parsed.allowOverlap
@@ -195,7 +202,9 @@ def main():
         start = timer()
         print("{} == running {} with {}".format(swarm_names[i], test_swarms[i].__class__.__name__, test_swarms[i]._clients[0].__class__.__name__))
         print("swarm {} of {}".format(i+1, len(test_swarms)))
-        test_swarms[i].run(allowOverlap)
+        log_and_upload('starting running swarm {}'.format(i), wsinfo['workstation-name'], 
+                        parsed.tag, LOG_FILE_PATH)
+        test_swarms[i].run(upto, allowOverlap)
         end = timer()
         print('-------------- Elasped Time --------------')
         print(end - start)
@@ -239,8 +248,6 @@ def main():
     logging.info('Simulation completed successfully.')
 
     # upload to S3 storage
-    client = boto3.client('s3')
-    S3_BUCKET_NAME = 'opfl-sim-models'
     upload_log_path = PurePath(wsinfo['workstation-name'], 'logs/' + parsed.tag + '.log')
     client.upload_file(str(LOG_FILE_PATH), S3_BUCKET_NAME, str(upload_log_path))
     upload_hist_path = PurePath(wsinfo['workstation-name'], 'hists/' + parsed.tag + '.pickle')
@@ -280,6 +287,11 @@ def get_accs_over_time(loaded_hist, key):
         loss_list.append(loss_list[i-1] + ldat_nodup[i][1]/len(loaded_hist[key]))
         
     return times, loss_list
+
+def log_and_upload(message, bucket, tag, log_file_path):
+    logging.info(message)
+    upload_log_path = PurePath(bucket, 'logs/' + tag + '.log')
+    client.upload_file(str(log_file_path), S3_BUCKET_NAME, str(upload_log_path))
 
 if __name__ == '__main__':
     main()
