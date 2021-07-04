@@ -57,11 +57,11 @@ def main():
         print('Config file and the tag has to be specified. Run \'python delegation_swarm_driver.py -h\' for help/.')
         
     LOG_FILE_PATH = Path(LOG_FOLDER, parsed.tag + '.log')
-    if LOG_FILE_PATH.exists():
-        ans = input("Simulation under the same tag already exists. Do you want to proceed? [y/N]: ")
-        if not (ans == 'y' or ans == 'Y'):
-            print('exit simulation.')
-            exit()
+    # if LOG_FILE_PATH.exists():
+    #     ans = input("Simulation under the same tag already exists. Do you want to proceed? [y/N]: ")
+    #     if not (ans == 'y' or ans == 'Y'):
+    #         print('exit simulation.')
+    #         exit()
     try:
         with open('configs/workstation_info.json', 'rb') as f:
             wsinfo_json = f.read()
