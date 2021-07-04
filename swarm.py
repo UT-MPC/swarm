@@ -268,7 +268,7 @@ class Swarm():
                 print("\n------------ index {} done ---".format(index), end='') 
                 print("elasped time: {}".format(elasped), end='')
                 print(" ----  remaining time: {}".format(rem))  
-                logging.info('index {} done ---".format(index)')
+                logging.info('index {} done ---'.format(index))
 
             K.clear_session()
         return
