@@ -9,6 +9,7 @@ import datetime
 import logging
 import numpy as np
 from tqdm import tqdm
+import boto3
 
 # data frame column names for encounter data
 TIME_START="time_start"
@@ -16,6 +17,9 @@ TIME_END="time_end"
 CLIENT1="client1"
 CLIENT2="client2"
 ENC_IDX="encounter index"
+
+client = boto3.client('s3')
+S3_BUCKET_NAME = 'opfl-sim-models'
 
 class Swarm():
     def __init__(self, model_fn, opt_fn,
