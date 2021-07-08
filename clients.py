@@ -1056,7 +1056,7 @@ class JSDGradientReplayClient(JSDSimularityDelegationClient):
             for cc in self._cache_comb:
                 agg_g = add_weights(agg_g, multiply_weights(cc[1], cc[2]))
                 cc[2] *= self._hyperparams['decay'] # @TODO add this to hyperparams
-                if cc[2] < 0.005:
+                if cc[2] > 0.005:
                     not_stale_list.append(cc)
             # remove stale gradients from the data structure
             self._cache_comb = not_stale_list

@@ -172,6 +172,9 @@ def main():
                        hyperparams
                        )
 
+    def log_callback(message):
+        log_and_upload(message, wsinfo['workstation-name'], parsed.tag, LOG_FILE_PATH)
+
     for k in config['strategies'].keys():
         if config['strategies'][k]:
             swarm_names.append(k)
@@ -191,7 +194,8 @@ def main():
                     config['local-data-size'],
                     enc_exp_config,
                     hyperparams,
-                    orig_swarm
+                    orig_swarm,
+                    log_callback
                 )
             )
     
@@ -292,6 +296,8 @@ def log_and_upload(message, bucket, tag, log_file_path):
     logging.info(message)
     upload_log_path = PurePath(bucket, 'logs/' + tag + '.log')
     client.upload_file(str(log_file_path), S3_BUCKET_NAME, str(upload_log_path))
+
+
 
 if __name__ == '__main__':
     main()
