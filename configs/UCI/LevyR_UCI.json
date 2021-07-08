@@ -21,7 +21,7 @@
         "batch-size": 50
     },
     "enc-exp-config":{
-        "encounter-data-file": "encounter_data/levy_walk_client_45_epi_2000_dur_50.pickle",
+        "encounter-data-file": "encounter_data/levy_walk_client_45_epi_500_dur_50.pickle",
         "communication-time": 0.2,
         "train-time-per-step": 0.1,
         "max-rounds": 3
@@ -32,7 +32,7 @@
         "kappa": 7,
         "offset": 0.9,
         "apply-rate": 9,
-        "test-data-per-label": 800,
+        "test-data-per-label": 0,
         "evaluation-metrics": "loss-and-accuracy",
         "similarity-threshold": 0.5,
         "low-similarity-threshold": 0.5,
