@@ -3,9 +3,9 @@
     "mobility-model": "levy-walk",
     "client-num": 45,
     "local-set-size": 2,
-    "local-data-size": 160,
+    "local-data-size": 150,
     "goal-set-size": 5,
-    "local-data-points": 120,
+    "local-data-points": 150,
     "noise-percentage": 50,
     "strategies": {
         "local": true,
