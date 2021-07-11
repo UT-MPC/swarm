@@ -21,7 +21,7 @@
         "batch-size": 50
     },
     "enc-exp-config":{
-        "encounter-data-file": "encounter_data/sigcomm2009_c45_full.pickle",
+        "encounter-data-file": "encounter_data/sigcomm_new_5000.pickle",
         "communication-time": 0.2,
         "train-time-per-step": 0.1,
         "max-rounds": 3

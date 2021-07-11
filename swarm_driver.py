@@ -57,6 +57,12 @@ def main():
         print('Config file and the tag has to be specified. Run \'python delegation_swarm_driver.py -h\' for help/.')
         
     LOG_FILE_PATH = Path(LOG_FOLDER, parsed.tag + '.log')
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s",
+                              "%Y-%m-%d %H:%M:%S")
+    ch.setFormatter(formatter)
+
     # if LOG_FILE_PATH.exists():
     #     ans = input("Simulation under the same tag already exists. Do you want to proceed? [y/N]: ")
     #     if not (ans == 'y' or ans == 'Y'):
