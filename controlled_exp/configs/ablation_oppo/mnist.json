@@ -24,10 +24,12 @@
         "batch-size": 50,
         "kappa": 7,
         "offset": 0.96,
-        "apply-rate": 9,
+        "apply-rate": 3,
         "test-data-per-label": 800,
         "evaluation-metrics": "loss-and-accuracy",
-        "similarity-threshold": 0.2
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.4,
+        "decay": 0.998
     },
     "test-data-per-label": 800
 }
