@@ -119,6 +119,11 @@ def main():
         with open(config['pretrained-model'], 'rb') as handle:
             init_weights = pickle.load(handle)
     # pretrain new model
+    elif config['pretrained-model'] == "none":
+        init_model = model_fn()
+        compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']} # @TODO change metric for HAR(UCI)
+        init_model.compile(**compile_config)
+        init_weights = init_model.get_weights()
     else:
         # pretraining setup
         x_pretrain, y_pretrain_orig = dp.filter_data_by_labels(x_train, y_train_orig, 
