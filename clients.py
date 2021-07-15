@@ -1205,7 +1205,7 @@ class JSDGradientReplayNoWeightingClient(JSDSimularityDelegationClient):
         if len(self._cache_comb) > 0:
             agg_g = None
             for cc in self._cache_comb:
-                agg_g = add_weights(agg_g, multiply_weights(cc[1], 1))
+                agg_g = add_weights(agg_g, multiply_weights(cc[1], 1/len(self._cache_comb)))
                 cc[2] *= self._hyperparams['decay'] # @TODO add this to hyperparams
                 if cc[2] > 0.005:
                     not_stale_list.append(cc)
