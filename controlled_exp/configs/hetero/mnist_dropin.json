@@ -1,0 +1,34 @@
+{
+    "dataset": "mnist",
+    "intervals": [5],
+    "repeat": 400,
+    "local-set": [0,1],
+    "goal-set": [0,1,2,3,4],
+    "label-sets": [[0,1,2,3,4]],
+    "noise-label-set-size": 2,
+    "same-repeat": false,
+    "number-of-data-points": 150,
+    "noise-percentage": 0,
+    "strategies": {
+        "dropin": true,
+        "hetero": true
+    },
+    "strategy-types": {
+        "dropin": [1],
+        "hetero": [1,3]
+    },
+    "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.01,
+        "batch-size": 50,
+        "kappa": 12,
+        "offset": 0.96,
+        "apply-rate": 3,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.4,
+        "decay": 0.997
+    },
+    "test-data-per-label": 800
+}

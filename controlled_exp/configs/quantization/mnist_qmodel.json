@@ -1,0 +1,82 @@
+{
+    "dataset": "mnist",
+    "intervals": [10],
+    "repeat": 20,
+    "device-power-interval": [1,1,1,4,4,4,7,7,7,10],
+    "local-set": [0,1],
+    "goal-set": [0,1,2,3,4,5,6,7,8,9],
+    "label-sets": [[0,1,2,3,4,5,6,7,8,9]],
+    "noise-label-set-size": 2,
+    "same-repeat": false,
+    "number-of-data-points": 200,
+    "noise-percentage": 0,
+    "strategies": {
+        "Q. grad": false,
+        "Q. grad & model": false,
+        "No Q": true,
+        "Q. Net": true
+    },
+    "strategy-variants": {
+        "Q. grad": [{
+                            "bits": 8,
+                            "model-size": 20,
+                            "optimizer": "adam",
+                            "optimizer-params" : {
+                                "learning_rate": 0.0001
+                            }
+                         }
+                        ],
+        "Q. grad & model": [{
+                            "bits": 8,
+                            "q-model": "quantized-2nn",
+                            "model-bits": 16,
+                            "model-size": 20,
+                            "optimizer": "adam",
+                            "optimizer-params" : {
+                                "learning_rate": 0.0001
+                            }
+                         }
+                        ],
+        "No Q": [{
+                "bits": 64,
+                "q-model": "2nn",
+                "model-size": 20,
+                "optimizer": "sgd",
+                "optimizer-params" : {
+                    "learning_rate": 0.001
+                    } 
+                }
+            ],
+        "Q. Net": [{
+            "bits": 64,
+            "q-model": "2nn",
+            "model-size": 20,
+            "optimizer": "sgd",
+            "optimizer-params" : {
+                "learning_rate": 0.01
+                } 
+            }
+        ]
+
+    },
+    "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.01,
+        "batch-size": 25,
+        "kappa": 12,
+        "offset": 0.96,
+        "apply-rate": 3,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.4,
+        "decay": 0.997,
+        "hetero-lower-bound": 1,
+        "hetero-upper-bound": 10,
+        "hetero-distribution": "5-10",
+        "optimizer-params" : {
+            "learning_rate": 0.001
+        }
+    },
+    "test-data-per-label": 800
+}

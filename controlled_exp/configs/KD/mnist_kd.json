@@ -1,0 +1,32 @@
+{
+    "dataset": "mnist",
+    "intervals": [500],
+    "repeat": 1,
+    "local-set": [0,1],
+    "goal-set": [0,1,2,3,4],
+    "label-sets": [[0,1,2,3,4]],
+    "noise-label-set-size": 2,
+    "same-repeat": false,
+    "number-of-data-points": 150,
+    "public-dataset-size-per-label": 500,
+    "noise-percentage": 0,
+    "strategies": {
+        "only data": true,
+        "only model": true,
+        "data model half half": true
+    },
+    "pretrained-model": "../pretrained/2nn_mnist_student_100perlabel_10epochs.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.01,
+        "batch-size": 50,
+        "kappa": 12,
+        "offset": 0.96,
+        "apply-rate": 3,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.4,
+        "decay": 0.997
+    },
+    "test-data-per-label": 800
+}

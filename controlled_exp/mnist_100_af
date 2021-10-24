@@ -1,0 +1,752 @@
+2021-07-28 16:34:59.241504: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+Unable to init server: Could not connect: Connection refused
+Unable to init server: 연결할 수 없습니다: Connection refused
+
+(driver.py:29823): Gdk-CRITICAL **: 16:35:00.150: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+2021-07-28 16:35:00.616590: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcuda.so.1
+2021-07-28 16:35:00.650556: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:982] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2021-07-28 16:35:00.650970: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1716] Found device 0 with properties: 
+pciBusID: 0000:0a:00.0 name: GeForce RTX 2080 SUPER computeCapability: 7.5
+coreClock: 1.845GHz coreCount: 48 deviceMemorySize: 7.79GiB deviceMemoryBandwidth: 462.00GiB/s
+2021-07-28 16:35:00.650986: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudart.so.10.1
+2021-07-28 16:35:00.651080: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcublas.so.10'; dlerror: libcublas.so.10: 동적 오브젝트 파일을 열 수 없습니다: 그런 파일이나 디렉터리가 없습니다
+2021-07-28 16:35:00.653610: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcufft.so.10
+2021-07-28 16:35:00.654414: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcurand.so.10
+2021-07-28 16:35:00.656620: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusolver.so.10
+2021-07-28 16:35:00.657426: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcusparse.so.10
+2021-07-28 16:35:00.664162: I tensorflow/stream_executor/platform/default/dso_loader.cc:48] Successfully opened dynamic library libcudnn.so.7
+2021-07-28 16:35:00.664285: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1753] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2021-07-28 16:35:00.664872: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN)to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2021-07-28 16:35:00.675355: I tensorflow/core/platform/profile_utils/cpu_utils.cc:104] CPU Frequency: 3593320000 Hz
+2021-07-28 16:35:00.680339: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x455b230 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-07-28 16:35:00.680621: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-07-28 16:35:00.686192: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1257] Device interconnect StreamExecutor with strength 1 edge matrix:
+2021-07-28 16:35:00.686252: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1263]      
+  0%|          | 0/100 [00:00<?, ?it/s]  1%|          | 1/100 [00:02<03:28,  2.11s/it]  2%|▏         | 2/100 [00:06<04:29,  2.75s/it]  3%|▎         | 3/100 [00:10<05:15,  3.26s/it]  4%|▍         | 4/100 [00:15<05:42,  3.57s/it]  5%|▌         | 5/100 [00:19<06:03,  3.82s/it]  6%|▌         | 6/100 [00:21<05:17,  3.38s/it]  7%|▋         | 7/100 [00:26<05:38,  3.63s/it]  8%|▊         | 8/100 [00:30<05:55,  3.87s/it]  9%|▉         | 9/100 [00:32<05:10,  3.41s/it] 10%|█         | 10/100 [00:37<05:31,  3.68s/it] 11%|█         | 11/100 [00:41<05:44,  3.87s/it] 12%|█▏        | 12/100 [00:43<05:02,  3.44s/it] 13%|█▎        | 13/100 [00:46<04:30,  3.11s/it] 14%|█▍        | 14/100 [00:51<05:35,  3.90s/it] 15%|█▌        | 15/100 [00:55<05:11,  3.67s/it] 16%|█▌        | 16/100 [00:59<05:24,  3.86s/it] 17%|█▋        | 17/100 [01:05<06:25,  4.65s/it] 18%|█▊        | 18/100 [01:10<06:12,  4.55s/it] 19%|█▉        | 19/100 [01:14<06:03,  4.48s/it] 20%|██        | 20/100 [01:19<06:02,  4.53s/it] 21%|██        | 21/100 [01:23<05:53,  4.47s/it] 22%|██▏       | 22/100 [01:27<05:47,  4.46s/it] 23%|██▎       | 23/100 [01:30<04:51,  3.79s/it] 24%|██▍       | 24/100 [01:32<04:22,  3.45s/it] 25%|██▌       | 25/100 [01:39<05:21,  4.28s/it] 26%|██▌       | 26/100 [01:43<05:21,  4.34s/it] 27%|██▋       | 27/100 [01:48<05:26,  4.48s/it] 28%|██▊       | 28/100 [01:52<05:11,  4.33s/it] 29%|██▉       | 29/100 [01:56<05:10,  4.37s/it] 30%|███       | 30/100 [02:01<05:09,  4.42s/it] 31%|███       | 31/100 [02:04<04:41,  4.08s/it] 32%|███▏      | 32/100 [02:10<05:09,  4.56s/it] 33%|███▎      | 33/100 [02:14<05:01,  4.50s/it] 34%|███▍      | 34/100 [02:19<04:56,  4.50s/it] 35%|███▌      | 35/100 [02:23<04:50,  4.48s/it] 36%|███▌      | 36/100 [02:28<05:01,  4.70s/it] 37%|███▋      | 37/100 [02:34<05:18,  5.05s/it] 38%|███▊      | 38/100 [02:39<05:10,  5.00s/it] 39%|███▉      | 39/100 [02:45<05:27,  5.36s/it] 40%|████      | 40/100 [02:47<04:22,  4.38s/it] 41%|████      | 41/100 [02:52<04:23,  4.46s/it] 42%|████▏     | 42/100 [02:56<04:16,  4.42s/it] 43%|████▎     | 43/100 [03:01<04:15,  4.48s/it] 44%|████▍     | 44/100 [03:05<04:09,  4.46s/it] 45%|████▌     | 45/100 [03:10<04:05,  4.46s/it] 46%|████▌     | 46/100 [03:16<04:30,  5.00s/it] 47%|████▋     | 47/100 [03:21<04:19,  4.89s/it] 48%|████▊     | 48/100 [03:25<04:10,  4.82s/it] 49%|████▉     | 49/100 [03:30<03:59,  4.69s/it] 50%|█████     | 50/100 [03:32<03:20,  4.01s/it] 51%|█████     | 51/100 [03:37<03:22,  4.14s/it] 52%|█████▏    | 52/100 [03:41<03:24,  4.27s/it] 53%|█████▎    | 53/100 [03:46<03:25,  4.37s/it] 54%|█████▍    | 54/100 [03:50<03:21,  4.38s/it] 55%|█████▌    | 55/100 [03:53<02:49,  3.77s/it] 56%|█████▌    | 56/100 [03:57<02:55,  3.98s/it] 57%|█████▋    | 57/100 [04:02<02:59,  4.16s/it] 58%|█████▊    | 58/100 [04:06<02:57,  4.23s/it] 59%|█████▉    | 59/100 [04:11<02:57,  4.33s/it] 60%|██████    | 60/100 [04:15<02:53,  4.35s/it] 61%|██████    | 61/100 [04:17<02:26,  3.76s/it] 62%|██████▏   | 62/100 [04:20<02:06,  3.33s/it] 63%|██████▎   | 63/100 [04:24<02:15,  3.65s/it] 64%|██████▍   | 64/100 [04:29<02:22,  3.96s/it] 65%|██████▌   | 65/100 [04:31<02:00,  3.44s/it] 66%|██████▌   | 66/100 [04:36<02:08,  3.78s/it] 67%|██████▋   | 67/100 [04:40<02:11,  4.00s/it] 68%|██████▊   | 68/100 [04:44<02:12,  4.13s/it] 69%|██████▉   | 69/100 [04:47<01:51,  3.59s/it] 70%|███████   | 70/100 [04:49<01:37,  3.26s/it] 71%|███████   | 71/100 [04:54<01:44,  3.61s/it] 72%|███████▏  | 72/100 [04:59<01:58,  4.23s/it] 73%|███████▎  | 73/100 [05:05<02:03,  4.59s/it] 74%|███████▍  | 74/100 [05:09<01:58,  4.57s/it] 75%|███████▌  | 75/100 [05:15<02:04,  4.99s/it] 76%|███████▌  | 76/100 [05:20<01:59,  4.98s/it] 77%|███████▋  | 77/100 [05:25<01:52,  4.89s/it] 78%|███████▊  | 78/100 [05:29<01:44,  4.74s/it] 79%|███████▉  | 79/100 [05:32<01:25,  4.05s/it] 80%|████████  | 80/100 [05:36<01:22,  4.14s/it] 81%|████████  | 81/100 [05:41<01:21,  4.27s/it] 82%|████████▏ | 82/100 [05:46<01:20,  4.47s/it] 83%|████████▎ | 83/100 [05:52<01:25,  5.03s/it] 84%|████████▍ | 84/100 [05:56<01:18,  4.88s/it] 85%|████████▌ | 85/100 [06:01<01:11,  4.74s/it] 86%|████████▌ | 86/100 [06:06<01:06,  4.73s/it] 87%|████████▋ | 87/100 [06:10<01:00,  4.66s/it] 88%|████████▊ | 88/100 [06:15<00:55,  4.62s/it] 89%|████████▉ | 89/100 [06:20<00:52,  4.73s/it] 90%|█████████ | 90/100 [06:26<00:51,  5.18s/it] 91%|█████████ | 91/100 [06:30<00:44,  4.97s/it] 92%|█████████▏| 92/100 [06:35<00:38,  4.84s/it] 93%|█████████▎| 93/100 [06:40<00:33,  4.78s/it] 94%|█████████▍| 94/100 [06:44<00:28,  4.67s/it] 95%|█████████▌| 95/100 [06:49<00:23,  4.79s/it] 96%|█████████▌| 96/100 [06:55<00:20,  5.22s/it] 97%|█████████▋| 97/100 [07:00<00:14,  4.99s/it] 98%|█████████▊| 98/100 [07:06<00:10,  5.24s/it] 99%|█████████▉| 99/100 [07:11<00:05,  5.26s/it]100%|██████████| 100/100 [07:16<00:00,  5.10s/it]100%|██████████| 100/100 [07:16<00:00,  4.36s/it]
+  0%|          | 0/100 [00:00<?, ?it/s]  1%|          | 1/100 [00:02<03:47,  2.30s/it]  2%|▏         | 2/100 [00:06<04:53,  2.99s/it]  3%|▎         | 3/100 [00:11<05:36,  3.47s/it]  4%|▍         | 4/100 [00:15<06:03,  3.78s/it]  5%|▌         | 5/100 [00:22<07:20,  4.64s/it]  6%|▌         | 6/100 [00:27<07:12,  4.60s/it]  7%|▋         | 7/100 [00:29<06:05,  3.93s/it]  8%|▊         | 8/100 [00:33<06:15,  4.08s/it]  9%|▉         | 9/100 [00:38<06:27,  4.26s/it] 10%|█         | 10/100 [00:40<05:31,  3.68s/it] 11%|█         | 11/100 [00:45<05:53,  3.97s/it] 12%|█▏        | 12/100 [00:50<06:02,  4.12s/it] 13%|█▎        | 13/100 [00:54<06:10,  4.26s/it] 14%|█▍        | 14/100 [00:59<06:15,  4.37s/it] 15%|█▌        | 15/100 [01:03<06:12,  4.38s/it] 16%|█▌        | 16/100 [01:09<06:55,  4.95s/it] 17%|█▋        | 17/100 [01:14<06:51,  4.96s/it] 18%|█▊        | 18/100 [01:19<06:40,  4.88s/it] 19%|█▉        | 19/100 [01:24<06:26,  4.77s/it] 20%|██        | 20/100 [01:28<06:18,  4.73s/it] 21%|██        | 21/100 [01:34<06:48,  5.17s/it] 22%|██▏       | 22/100 [01:37<05:49,  4.48s/it] 23%|██▎       | 23/100 [01:42<05:51,  4.57s/it] 24%|██▍       | 24/100 [01:47<05:46,  4.56s/it] 25%|██▌       | 25/100 [01:52<05:54,  4.73s/it] 26%|██▌       | 26/100 [01:58<06:21,  5.16s/it] 27%|██▋       | 27/100 [02:03<06:09,  5.06s/it] 28%|██▊       | 28/100 [02:07<05:54,  4.93s/it] 29%|██▉       | 29/100 [02:12<05:40,  4.79s/it] 30%|███       | 30/100 [02:15<04:50,  4.15s/it] 31%|███       | 31/100 [02:17<04:12,  3.65s/it] 32%|███▏      | 32/100 [02:22<04:27,  3.93s/it] 33%|███▎      | 33/100 [02:27<04:47,  4.29s/it] 34%|███▍      | 34/100 [02:33<05:23,  4.90s/it] 35%|███▌      | 35/100 [02:38<05:12,  4.81s/it] 36%|███▌      | 36/100 [02:42<05:06,  4.79s/it] 37%|███▋      | 37/100 [02:47<04:58,  4.74s/it] 38%|███▊      | 38/100 [02:52<04:52,  4.72s/it] 39%|███▉      | 39/100 [02:54<04:02,  3.97s/it] 40%|████      | 40/100 [02:59<04:10,  4.18s/it] 41%|████      | 41/100 [03:05<04:44,  4.82s/it] 42%|████▏     | 42/100 [03:10<04:45,  4.92s/it] 43%|████▎     | 43/100 [03:13<03:59,  4.20s/it] 44%|████▍     | 44/100 [03:17<04:02,  4.34s/it] 45%|████▌     | 45/100 [03:22<04:08,  4.52s/it] 46%|████▌     | 46/100 [03:29<04:37,  5.14s/it] 47%|████▋     | 47/100 [03:33<04:23,  4.96s/it] 48%|████▊     | 48/100 [03:38<04:14,  4.90s/it] 49%|████▉     | 49/100 [03:43<04:04,  4.80s/it] 50%|█████     | 50/100 [03:47<03:58,  4.77s/it] 51%|█████     | 51/100 [03:54<04:23,  5.37s/it] 52%|█████▏    | 52/100 [03:59<04:08,  5.19s/it] 53%|█████▎    | 53/100 [04:03<03:55,  5.01s/it] 54%|█████▍    | 54/100 [04:10<04:15,  5.55s/it] 55%|█████▌    | 55/100 [04:15<03:55,  5.24s/it] 56%|█████▌    | 56/100 [04:20<03:44,  5.11s/it] 57%|█████▋    | 57/100 [04:24<03:33,  4.97s/it] 58%|█████▊    | 58/100 [04:31<03:46,  5.40s/it] 59%|█████▉    | 59/100 [04:36<03:37,  5.31s/it] 60%|██████    | 60/100 [04:38<02:57,  4.44s/it] 61%|██████    | 61/100 [04:43<02:56,  4.53s/it] 62%|██████▏   | 62/100 [04:47<02:51,  4.51s/it] 63%|██████▎   | 63/100 [04:50<02:25,  3.92s/it] 64%|██████▍   | 64/100 [04:52<02:05,  3.49s/it] 65%|██████▌   | 65/100 [04:57<02:13,  3.82s/it] 66%|██████▌   | 66/100 [05:00<01:56,  3.43s/it] 67%|██████▋   | 67/100 [05:04<02:06,  3.82s/it] 68%|██████▊   | 68/100 [05:09<02:10,  4.07s/it] 69%|██████▉   | 69/100 [05:14<02:17,  4.45s/it] 70%|███████   | 70/100 [05:20<02:27,  4.90s/it] 71%|███████   | 71/100 [05:25<02:21,  4.87s/it] 72%|███████▏  | 72/100 [05:29<02:13,  4.75s/it] 73%|███████▎  | 73/100 [05:32<01:49,  4.05s/it] 74%|███████▍  | 74/100 [05:37<01:50,  4.24s/it] 75%|███████▌  | 75/100 [05:41<01:49,  4.37s/it] 76%|███████▌  | 76/100 [05:46<01:46,  4.42s/it] 77%|███████▋  | 77/100 [05:51<01:44,  4.54s/it] 78%|███████▊  | 78/100 [05:55<01:40,  4.57s/it] 79%|███████▉  | 79/100 [06:00<01:37,  4.62s/it] 80%|████████  | 80/100 [06:07<01:44,  5.25s/it] 81%|████████  | 81/100 [06:11<01:36,  5.05s/it] 82%|████████▏ | 82/100 [06:18<01:40,  5.59s/it] 83%|████████▎ | 83/100 [06:23<01:29,  5.28s/it] 84%|████████▍ | 84/100 [06:25<01:11,  4.44s/it] 85%|████████▌ | 85/100 [06:30<01:06,  4.47s/it] 86%|████████▌ | 86/100 [06:32<00:54,  3.90s/it] 87%|████████▋ | 87/100 [06:35<00:45,  3.46s/it] 88%|████████▊ | 88/100 [06:41<00:50,  4.17s/it] 89%|████████▉ | 89/100 [06:46<00:50,  4.60s/it] 90%|█████████ | 90/100 [06:51<00:46,  4.63s/it] 91%|█████████ | 91/100 [06:56<00:41,  4.66s/it] 92%|█████████▏| 92/100 [07:00<00:37,  4.67s/it] 93%|█████████▎| 93/100 [07:05<00:32,  4.64s/it] 94%|█████████▍| 94/100 [07:10<00:28,  4.70s/it] 95%|█████████▌| 95/100 [07:14<00:23,  4.64s/it] 96%|█████████▌| 96/100 [07:19<00:18,  4.68s/it] 97%|█████████▋| 97/100 [07:24<00:14,  4.67s/it] 98%|█████████▊| 98/100 [07:28<00:09,  4.72s/it] 99%|█████████▉| 99/100 [07:31<00:04,  4.02s/it]100%|██████████| 100/100 [07:33<00:00,  3.56s/it]100%|██████████| 100/100 [07:33<00:00,  4.54s/it]
+  0%|          | 0/100 [00:00<?, ?it/s]  1%|          | 1/100 [00:04<07:32,  4.57s/it]  2%|▏         | 2/100 [00:07<06:25,  3.94s/it]  3%|▎         | 3/100 [00:09<05:41,  3.52s/it]  4%|▍         | 4/100 [00:14<06:07,  3.82s/it]  5%|▌         | 5/100 [00:18<06:31,  4.12s/it]  6%|▌         | 6/100 [00:21<05:36,  3.58s/it]  7%|▋         | 7/100 [00:25<06:05,  3.93s/it]  8%|▊         | 8/100 [00:30<06:17,  4.10s/it]  9%|▉         | 9/100 [00:37<07:27,  4.92s/it] 10%|█         | 10/100 [00:41<07:14,  4.83s/it] 11%|█         | 11/100 [00:44<06:05,  4.11s/it] 12%|█▏        | 12/100 [00:46<05:14,  3.57s/it] 13%|█▎        | 13/100 [00:51<05:42,  3.94s/it] 14%|█▍        | 14/100 [00:56<05:54,  4.12s/it] 15%|█▌        | 15/100 [01:00<06:03,  4.28s/it] 16%|█▌        | 16/100 [01:05<06:09,  4.40s/it] 17%|█▋        | 17/100 [01:09<06:09,  4.45s/it] 18%|█▊        | 18/100 [01:14<06:10,  4.52s/it] 19%|█▉        | 19/100 [01:19<06:07,  4.53s/it] 20%|██        | 20/100 [01:21<05:13,  3.92s/it] 21%|██        | 21/100 [01:26<05:24,  4.11s/it] 22%|██▏       | 22/100 [01:28<04:42,  3.62s/it] 23%|██▎       | 23/100 [01:35<05:51,  4.56s/it] 24%|██▍       | 24/100 [01:40<05:48,  4.58s/it] 25%|██▌       | 25/100 [01:44<05:41,  4.55s/it] 26%|██▌       | 26/100 [01:47<04:50,  3.92s/it] 27%|██▋       | 27/100 [01:53<05:37,  4.63s/it] 28%|██▊       | 28/100 [01:58<05:42,  4.76s/it] 29%|██▉       | 29/100 [02:00<04:48,  4.07s/it] 30%|███       | 30/100 [02:05<04:58,  4.26s/it] 31%|███       | 31/100 [02:10<04:59,  4.34s/it] 32%|███▏      | 32/100 [02:15<05:11,  4.59s/it] 33%|███▎      | 33/100 [02:21<05:37,  5.04s/it] 34%|███▍      | 34/100 [02:25<05:25,  4.94s/it] 35%|███▌      | 35/100 [02:30<05:14,  4.83s/it] 36%|███▌      | 36/100 [02:33<04:23,  4.12s/it] 37%|███▋      | 37/100 [02:37<04:29,  4.28s/it] 38%|███▊      | 38/100 [02:42<04:30,  4.37s/it] 39%|███▉      | 39/100 [02:48<05:03,  4.98s/it] 40%|████      | 40/100 [02:51<04:21,  4.36s/it] 41%|████      | 41/100 [02:56<04:20,  4.42s/it] 42%|████▏     | 42/100 [03:00<04:17,  4.44s/it] 43%|████▎     | 43/100 [03:05<04:20,  4.56s/it] 44%|████▍     | 44/100 [03:10<04:16,  4.59s/it] 45%|████▌     | 45/100 [03:14<04:14,  4.63s/it] 46%|████▌     | 46/100 [03:19<04:09,  4.62s/it] 47%|████▋     | 47/100 [03:21<03:30,  3.96s/it] 48%|████▊     | 48/100 [03:24<02:59,  3.45s/it] 49%|████▉     | 49/100 [03:26<02:40,  3.15s/it] 50%|█████     | 50/100 [03:31<03:01,  3.64s/it] 51%|█████     | 51/100 [03:36<03:14,  3.98s/it] 52%|█████▏    | 52/100 [03:38<02:48,  3.51s/it] 53%|█████▎    | 53/100 [03:43<03:10,  4.04s/it] 54%|█████▍    | 54/100 [03:49<03:32,  4.63s/it] 55%|█████▌    | 55/100 [03:54<03:30,  4.67s/it] 56%|█████▌    | 56/100 [03:59<03:25,  4.67s/it] 57%|█████▋    | 57/100 [04:03<03:21,  4.68s/it] 58%|█████▊    | 58/100 [04:08<03:16,  4.67s/it] 59%|█████▉    | 59/100 [04:13<03:16,  4.79s/it] 60%|██████    | 60/100 [04:17<03:02,  4.57s/it] 61%|██████    | 61/100 [04:22<02:58,  4.58s/it] 62%|██████▏   | 62/100 [04:27<02:55,  4.63s/it] 63%|██████▎   | 63/100 [04:31<02:50,  4.60s/it] 64%|██████▍   | 64/100 [04:36<02:47,  4.64s/it] 65%|██████▌   | 65/100 [04:38<02:17,  3.92s/it] 66%|██████▌   | 66/100 [04:44<02:28,  4.37s/it] 67%|██████▋   | 67/100 [04:47<02:19,  4.22s/it] 68%|██████▊   | 68/100 [04:52<02:18,  4.32s/it] 69%|██████▉   | 69/100 [04:56<02:15,  4.38s/it] 70%|███████   | 70/100 [04:59<01:55,  3.84s/it] 71%|███████   | 71/100 [05:04<01:57,  4.06s/it] 72%|███████▏  | 72/100 [05:06<01:39,  3.55s/it] 73%|███████▎  | 73/100 [05:11<01:45,  3.92s/it] 74%|███████▍  | 74/100 [05:15<01:47,  4.13s/it] 75%|███████▌  | 75/100 [05:20<01:46,  4.27s/it] 76%|███████▌  | 76/100 [05:25<01:46,  4.42s/it] 77%|███████▋  | 77/100 [05:29<01:42,  4.46s/it]simulating range 1 of 3 in repetition 1 of 1
+greedy: 2
+greedy: 4
+greedy: 6
+greedy: 8
+greedy: 10
+greedy: 12
+greedy: 14
+greedy: 16
+greedy: 18
+greedy: 20
+greedy: 22
+greedy: 24
+greedy: 26
+greedy: 28
+greedy: 30
+greedy: 32
+greedy: 34
+greedy: 36
+greedy: 38
+greedy: 40
+greedy: 42
+greedy: 44
+greedy: 46
+greedy: 48
+greedy: 50
+greedy: 52
+greedy: 54
+greedy: 56
+greedy: 58
+greedy: 60
+greedy: 62
+greedy: 64
+greedy: 66
+greedy: 68
+greedy: 70
+greedy: 72
+greedy: 74
+greedy: 76
+greedy: 78
+greedy: 80
+greedy: 82
+greedy: 84
+greedy: 86
+greedy: 88
+greedy: 90
+greedy: 92
+greedy: 94
+greedy: 96
+greedy: 98
+greedy: 100
+greedy: 102
+greedy: 104
+greedy: 106
+greedy: 108
+greedy: 110
+greedy: 112
+greedy: 114
+greedy: 116
+greedy: 118
+greedy: 120
+greedy: 122
+greedy: 124
+greedy: 126
+greedy: 128
+greedy: 130
+greedy: 132
+greedy: 134
+greedy: 136
+greedy: 138
+greedy: 140
+greedy: 142
+greedy: 144
+greedy: 146
+greedy: 148
+greedy: 150
+greedy: 152
+greedy: 154
+greedy: 156
+greedy: 158
+greedy: 160
+greedy: 162
+greedy: 164
+greedy: 166
+greedy: 168
+greedy: 170
+greedy: 172
+greedy: 174
+greedy: 176
+greedy: 178
+greedy: 180
+greedy: 182
+greedy: 184
+greedy: 186
+greedy: 188
+greedy: 190
+greedy: 192
+greedy: 194
+greedy: 196
+greedy: 198
+greedy: 200
+greedy: 202
+greedy: 204
+greedy: 206
+greedy: 208
+greedy: 210
+greedy: 212
+greedy: 214
+greedy: 216
+greedy: 218
+greedy: 220
+greedy: 222
+greedy: 224
+greedy: 226
+greedy: 228
+greedy: 230
+greedy: 232
+greedy: 234
+greedy: 236
+greedy: 238
+greedy: 240
+greedy: 242
+greedy: 244
+greedy: 246
+greedy: 248
+greedy: 250
+greedy: 252
+greedy: 254
+greedy: 256
+greedy: 258
+greedy: 260
+greedy: 262
+greedy: 264
+greedy: 266
+greedy: 268
+greedy: 270
+greedy: 272
+greedy: 274
+greedy: 276
+greedy: 278
+greedy: 280
+greedy: 282
+greedy: 284
+greedy: 286
+greedy: 288
+greedy: 290
+greedy: 292
+greedy: 294
+greedy: 296
+greedy: 298
+greedy: 300
+greedy: 302
+greedy: 304
+greedy: 306
+greedy: 308
+greedy: 310
+greedy: 312
+greedy: 314
+greedy: 316
+greedy: 318
+greedy: 320
+greedy: 322
+greedy: 324
+greedy: 326
+greedy: 328
+greedy: 330
+greedy: 332
+greedy: 334
+greedy: 336
+greedy: 338
+greedy: 340
+greedy: 342
+greedy: 344
+greedy: 346
+greedy: 348
+greedy: 350
+greedy: 352
+greedy: 354
+greedy: 356
+greedy: 358
+greedy: 360
+greedy: 362
+greedy: 364
+greedy: 366
+greedy: 368
+greedy: 370
+greedy: 372
+greedy: 374
+greedy: 376
+greedy: 378
+greedy: 380
+greedy: 382
+greedy: 384
+greedy: 386
+greedy: 388
+greedy: 390
+greedy: 392
+greedy: 394
+greedy: 396
+greedy: 398
+greedy: 400
+greedy: 402
+greedy: 404
+greedy: 406
+greedy: 408
+greedy: 410
+greedy: 412
+greedy: 414
+greedy: 416
+greedy: 418
+greedy: 420
+greedy: 422
+greedy: 424
+greedy: 426
+greedy: 428
+greedy: 430
+greedy: 432
+greedy: 434
+greedy: 436
+greedy: 438
+greedy: 440
+greedy: 442
+greedy: 444
+greedy: 446
+greedy: 448
+greedy: 450
+greedy: 452
+greedy: 454
+greedy: 456
+greedy: 458
+greedy: 460
+greedy: 462
+greedy: 464
+greedy: 466
+greedy: 468
+greedy: 470
+greedy: 472
+greedy: 474
+greedy: 476
+greedy: 478
+greedy: 480
+greedy: 482
+greedy: 484
+greedy: 486
+simulating range 2 of 3 in repetition 1 of 1
+greedy: 488
+greedy: 490
+greedy: 492
+greedy: 494
+greedy: 496
+greedy: 498
+greedy: 500
+greedy: 502
+greedy: 504
+greedy: 506
+greedy: 508
+greedy: 510
+greedy: 512
+greedy: 514
+greedy: 516
+greedy: 518
+greedy: 520
+greedy: 522
+greedy: 524
+greedy: 526
+greedy: 528
+greedy: 530
+greedy: 532
+greedy: 534
+greedy: 536
+greedy: 538
+greedy: 540
+greedy: 542
+greedy: 544
+greedy: 546
+greedy: 548
+greedy: 550
+greedy: 552
+greedy: 554
+greedy: 556
+greedy: 558
+greedy: 560
+greedy: 562
+greedy: 564
+greedy: 566
+greedy: 568
+greedy: 570
+greedy: 572
+greedy: 574
+greedy: 576
+greedy: 578
+greedy: 580
+greedy: 582
+greedy: 584
+greedy: 586
+greedy: 588
+greedy: 590
+greedy: 592
+greedy: 594
+greedy: 596
+greedy: 598
+greedy: 600
+greedy: 602
+greedy: 604
+greedy: 606
+greedy: 608
+greedy: 610
+greedy: 612
+greedy: 614
+greedy: 616
+greedy: 618
+greedy: 620
+greedy: 622
+greedy: 624
+greedy: 626
+greedy: 628
+greedy: 630
+greedy: 632
+greedy: 634
+greedy: 636
+greedy: 638
+greedy: 640
+greedy: 642
+greedy: 644
+greedy: 646
+greedy: 648
+greedy: 650
+greedy: 652
+greedy: 654
+greedy: 656
+greedy: 658
+greedy: 660
+greedy: 662
+greedy: 664
+greedy: 666
+greedy: 668
+greedy: 670
+greedy: 672
+greedy: 674
+greedy: 676
+greedy: 678
+greedy: 680
+greedy: 682
+greedy: 684
+greedy: 686
+greedy: 688
+greedy: 690
+greedy: 692
+greedy: 694
+greedy: 696
+greedy: 698
+greedy: 700
+greedy: 702
+greedy: 704
+greedy: 706
+greedy: 708
+greedy: 710
+greedy: 712
+greedy: 714
+greedy: 716
+greedy: 718
+greedy: 720
+greedy: 722
+greedy: 724
+greedy: 726
+greedy: 728
+greedy: 730
+greedy: 732
+greedy: 734
+greedy: 736
+greedy: 738
+greedy: 740
+greedy: 742
+greedy: 744
+greedy: 746
+greedy: 748
+greedy: 750
+greedy: 752
+greedy: 754
+greedy: 756
+greedy: 758
+greedy: 760
+greedy: 762
+greedy: 764
+greedy: 766
+greedy: 768
+greedy: 770
+greedy: 772
+greedy: 774
+greedy: 776
+greedy: 778
+greedy: 780
+greedy: 782
+greedy: 784
+greedy: 786
+greedy: 788
+greedy: 790
+greedy: 792
+greedy: 794
+greedy: 796
+greedy: 798
+greedy: 800
+greedy: 802
+greedy: 804
+greedy: 806
+greedy: 808
+greedy: 810
+greedy: 812
+greedy: 814
+greedy: 816
+greedy: 818
+greedy: 820
+greedy: 822
+greedy: 824
+greedy: 826
+greedy: 828
+greedy: 830
+greedy: 832
+greedy: 834
+greedy: 836
+greedy: 838
+greedy: 840
+greedy: 842
+greedy: 844
+greedy: 846
+greedy: 848
+greedy: 850
+greedy: 852
+greedy: 854
+greedy: 856
+greedy: 858
+greedy: 860
+greedy: 862
+greedy: 864
+greedy: 866
+greedy: 868
+greedy: 870
+greedy: 872
+greedy: 874
+greedy: 876
+greedy: 878
+greedy: 880
+greedy: 882
+greedy: 884
+greedy: 886
+greedy: 888
+greedy: 890
+greedy: 892
+greedy: 894
+greedy: 896
+greedy: 898
+greedy: 900
+greedy: 902
+greedy: 904
+greedy: 906
+greedy: 908
+greedy: 910
+greedy: 912
+greedy: 914
+greedy: 916
+greedy: 918
+greedy: 920
+greedy: 922
+greedy: 924
+greedy: 926
+greedy: 928
+greedy: 930
+greedy: 932
+greedy: 934
+greedy: 936
+greedy: 938
+greedy: 940
+greedy: 942
+greedy: 944
+greedy: 946
+greedy: 948
+greedy: 950
+greedy: 952
+greedy: 954
+greedy: 956
+greedy: 958
+greedy: 960
+greedy: 962
+greedy: 964
+greedy: 966
+greedy: 968
+greedy: 970
+greedy: 972
+greedy: 974
+greedy: 976
+greedy: 978
+simulating range 3 of 3 in repetition 1 of 1
+greedy: 980
+greedy: 982
+greedy: 984
+greedy: 986
+greedy: 988
+greedy: 990
+greedy: 992
+greedy: 994
+greedy: 996
+greedy: 998
+greedy: 1000
+greedy: 1002
+greedy: 1004
+greedy: 1006
+greedy: 1008
+greedy: 1010
+greedy: 1012
+greedy: 1014
+greedy: 1016
+greedy: 1018
+greedy: 1020
+greedy: 1022
+greedy: 1024
+greedy: 1026
+greedy: 1028
+greedy: 1030
+greedy: 1032
+greedy: 1034
+greedy: 1036
+greedy: 1038
+greedy: 1040
+greedy: 1042
+greedy: 1044
+greedy: 1046
+greedy: 1048
+greedy: 1050
+greedy: 1052
+greedy: 1054
+greedy: 1056
+greedy: 1058
+greedy: 1060
+greedy: 1062
+greedy: 1064
+greedy: 1066
+greedy: 1068
+greedy: 1070
+greedy: 1072
+greedy: 1074
+greedy: 1076
+greedy: 1078
+greedy: 1080
+greedy: 1082
+greedy: 1084
+greedy: 1086
+greedy: 1088
+greedy: 1090
+greedy: 1092
+greedy: 1094
+greedy: 1096
+greedy: 1098
+greedy: 1100
+greedy: 1102
+greedy: 1104
+greedy: 1106
+greedy: 1108
+greedy: 1110
+greedy: 1112
+greedy: 1114
+greedy: 1116
+greedy: 1118
+greedy: 1120
+greedy: 1122
+greedy: 1124
+greedy: 1126
+greedy: 1128
+greedy: 1130
+greedy: 1132
+greedy: 1134
+greedy: 1136
+greedy: 1138
+greedy: 1140
+greedy: 1142
+greedy: 1144
+greedy: 1146
+greedy: 1148
+greedy: 1150
+greedy: 1152
+greedy: 1154
+greedy: 1156
+greedy: 1158
+greedy: 1160
+greedy: 1162
+greedy: 1164
+greedy: 1166
+greedy: 1168
+greedy: 1170
+greedy: 1172
+greedy: 1174
+greedy: 1176
+greedy: 1178
+greedy: 1180
+greedy: 1182
+greedy: 1184
+greedy: 1186
+greedy: 1188
+greedy: 1190
+greedy: 1192
+greedy: 1194
+greedy: 1196
+greedy: 1198
+greedy: 1200
+greedy: 1202
+greedy: 1204
+greedy: 1206
+greedy: 1208
+greedy: 1210
+greedy: 1212
+greedy: 1214
+greedy: 1216
+greedy: 1218
+greedy: 1220
+greedy: 1222
+greedy: 1224
+greedy: 1226
+greedy: 1228
+greedy: 1230
+greedy: 1232
+greedy: 1234
+greedy: 1236
+greedy: 1238
+greedy: 1240
+greedy: 1242
+greedy: 1244
+greedy: 1246
+greedy: 1248
+greedy: 1250
+greedy: 1252
+greedy: 1254
+greedy: 1256
+greedy: 1258
+greedy: 1260
+greedy: 1262
+greedy: 1264
+greedy: 1266
+greedy: 1268
+greedy: 1270
+greedy: 1272
+greedy: 1274
+greedy: 1276
+greedy: 1278
+greedy: 1280
+greedy: 1282
+greedy: 1284
+greedy: 1286
+greedy: 1288
+greedy: 1290
+greedy: 1292
+greedy: 1294
+greedy: 1296
+greedy: 1298
+greedy: 1300
+greedy: 1302
+greedy: 1304
+greedy: 1306
+greedy: 1308
+greedy: 1310
+greedy: 1312
+greedy: 1314
+greedy: 1316
+greedy: 1318
+greedy: 1320
+greedy: 1322
+greedy: 1324
+greedy: 1326 78%|███████▊  | 78/100 [05:34<01:39,  4.53s/it] 79%|███████▉  | 79/100 [05:39<01:36,  4.58s/it] 80%|████████  | 80/100 [05:43<01:32,  4.62s/it] 81%|████████  | 81/100 [05:48<01:27,  4.63s/it] 82%|████████▏ | 82/100 [05:53<01:22,  4.58s/it] 83%|████████▎ | 83/100 [05:55<01:06,  3.91s/it] 84%|████████▍ | 84/100 [05:59<01:05,  4.07s/it] 85%|████████▌ | 85/100 [06:04<01:03,  4.22s/it] 86%|████████▌ | 86/100 [06:06<00:50,  3.64s/it] 87%|████████▋ | 87/100 [06:11<00:51,  3.94s/it] 88%|████████▊ | 88/100 [06:15<00:48,  4.07s/it] 89%|████████▉ | 89/100 [06:18<00:39,  3.56s/it] 90%|█████████ | 90/100 [06:22<00:37,  3.79s/it] 91%|█████████ | 91/100 [06:28<00:41,  4.62s/it] 92%|█████████▏| 92/100 [06:33<00:36,  4.57s/it] 93%|█████████▎| 93/100 [06:37<00:31,  4.55s/it] 94%|█████████▍| 94/100 [06:42<00:27,  4.56s/it] 95%|█████████▌| 95/100 [06:46<00:22,  4.48s/it] 96%|█████████▌| 96/100 [06:51<00:17,  4.44s/it] 97%|█████████▋| 97/100 [06:55<00:13,  4.42s/it] 98%|█████████▊| 98/100 [06:59<00:08,  4.35s/it] 99%|█████████▉| 99/100 [07:04<00:04,  4.37s/it]100%|██████████| 100/100 [07:08<00:00,  4.31s/it]100%|██████████| 100/100 [07:08<00:00,  4.28s/it]
+
+greedy: 1328
+greedy: 1330
+greedy: 1332
+greedy: 1334
+greedy: 1336
+greedy: 1338
+greedy: 1340
+greedy: 1342
+greedy: 1344
+greedy: 1346
+greedy: 1348
+greedy: 1350
+greedy: 1352
+greedy: 1354
+greedy: 1356
+greedy: 1358
+greedy: 1360
+greedy: 1362
+greedy: 1364
+greedy: 1366
+greedy: 1368
+greedy: 1370
+greedy: 1372
+greedy: 1374
+greedy: 1376
+greedy: 1378
+greedy: 1380
+greedy: 1382
+greedy: 1384
+greedy: 1386
+greedy: 1388
+greedy: 1390
+greedy: 1392
+greedy: 1394
+greedy: 1396
+greedy: 1398
+greedy: 1400
+greedy: 1402
+greedy: 1404
+greedy: 1406
+greedy: 1408
+greedy: 1410
+greedy: 1412
+greedy: 1414
+greedy: 1416
+greedy: 1418
+greedy: 1420
+greedy: 1422
+greedy: 1424
+greedy: 1426
+greedy: 1428
+greedy: 1430
+greedy: 1432
+greedy: 1434
+greedy: 1436
+greedy: 1438
+greedy: 1440

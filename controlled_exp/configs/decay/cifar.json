@@ -1,0 +1,33 @@
+{
+    "dataset": "cifar",
+    "intervals": [100, 100, 100],
+    "repeat": 1,
+    "local-set": [0,1],
+    "goal-set": [0,1,2,3,4],
+    "label-sets": [[2,3],[3,4,5],[4,5,6]],
+    "noise-label-set-size": 2,
+    "same-repeat": false,
+    "number-of-data-points": 150,
+    "noise-percentage": 100,
+    "strategies": {
+        "greedy": true,
+        "opportunistic": true,
+        "opportunistic-weighted": true,
+        "gradient replay not weighted": true,
+        "gradient replay": true
+    },
+    "pretrained-model": "../pretrained/pretrained_model_big_cnn_cifar_local_updates_epochs_100_data_20000_preprocess.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.0005,
+        "batch-size": 50,
+        "kappa": 7,
+        "offset": 0.96,
+        "apply-rate": 9,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.5,
+        "decay": 0.998
+    },
+    "test-data-per-label": 800
+}

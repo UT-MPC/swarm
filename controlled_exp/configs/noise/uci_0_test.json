@@ -1,0 +1,31 @@
+{
+    "dataset": "opportunity-uci",
+    "intervals": [10],
+    "local-set": [1,5],
+    "repeat": 1,
+    "goal-set": [1,5,7,11,17],
+    "label-sets": [[19, 0]],
+    "number-of-data-points": 50,
+    "noise-percentage": 0,
+    "noise-label-set-size": 3,
+    "strategies": {
+        "local": true,
+        "greedy": true,
+        "opportunistic": true,
+        "gradient replay": true
+    },
+    "pretrained-model": "../pretrained/deepConvLSTM_pretrained_10p.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.0005,
+        "batch-size": 50,
+        "kappa": 18,
+        "offset": 0.96,
+        "apply-rate": 6,
+        "test-data-per-label": 0,
+        "evaluation-metrics": "f1-score-weighted",
+        "similarity-threshold": 0.8,
+	"low-similarity-threshold": 0.6,
+        "decay": 0.998
+    },
+    "test-data-per-label": 0
+}

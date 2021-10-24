@@ -1,0 +1,16 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: 연결할 수 없습니다: Connection refused
+
+(droppcl_swarm_driver.py:23914): Gdk-CRITICAL **: 07:19:46.453: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+baseline == running DROppCLSwarm with DROppCLBaselineDevice
+swarm 1 of 4
+Traceback (most recent call last):
+  File "droppcl_swarm_driver.py", line 280, in <module>
+    main()
+  File "droppcl_swarm_driver.py", line 188, in main
+    test_swarms[i].run(parsed.upto, allowOverlap)
+  File "/home/seth/projects/fed-learn-experiment/swarm/droppcl_swarm.py", line 147, in run
+    self._evaluate_all()
+  File "/home/seth/projects/fed-learn-experiment/swarm/droppcl_swarm.py", line 132, in _evaluate_all
+    self.iteration_hist[i] = []
+AttributeError: 'DROppCLSwarm' object has no attribute 'iteration_hist'

@@ -1,0 +1,4 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: 연결할 수 없습니다: Connection refused
+
+(droppcl_swarm_driver.py:14949): Gdk-CRITICAL **: 07:41:45.334: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed

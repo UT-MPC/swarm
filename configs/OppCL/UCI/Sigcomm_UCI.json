@@ -1,0 +1,43 @@
+{
+    "dataset": "opportunity-uci",
+    "mobility-model": "sigcomm2009",
+    "client-num": 45,
+    "local-set-size": 2,
+    "local-data-size": 150,
+    "goal-set-size": 5,
+    "local-data-points": 150,
+    "noise-percentage": 50,
+    "strategies": {
+        "local": true,
+        "greedy": true,
+        "opportunistic": true,
+        "gradient replay": true
+    },
+    "pretrained-model": "pretrained/deepConvLSTM_pretrained_20p.pickle",
+    "pretrain-setup": {
+        "learning-rate": 0.01,
+        "data-size": 3600,
+        "epochs": 50,
+        "batch-size": 50
+    },
+    "enc-exp-config":{
+        "encounter-data-file": "encounter_data/sigcomm_new.pickle",
+        "communication-time": 3,
+        "train-time-per-step": 1,
+        "max-rounds": 3
+    },
+    "hyperparams" : {
+        "orig-lr": 0.001,
+        "batch-size": 50,
+        "kappa": 7,
+        "offset": 0.9,
+        "apply-rate": 12,
+        "test-data-per-label": 0,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.8,
+        "low-similarity-threshold": 0.5,
+        "num-rounds": 250,
+        "time-per-round": 100,
+	    "decay": 0.998
+    }
+}

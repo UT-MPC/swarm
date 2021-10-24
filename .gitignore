@@ -1,0 +1,16 @@
+hist/
+*.ipynb
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+graphs/
+.vscode/
+data/
+logs/
+figs/
+controlled_exp/logs/
+controlled_exp/figs/
+active-semi-supervised-learning/
+qkeras/
+*.pickle
+outputs/

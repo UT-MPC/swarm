@@ -1,0 +1,41 @@
+{
+    "dataset": "mnist",
+    "mobility-model": "levy-walk",
+    "client-num": 45,
+    "local-set-size": 2,
+    "local-data-size": 160,
+    "goal-set-size": 5,
+    "local-data-points": 120,
+    "noise-percentage": 50,
+    "strategies": {
+        "nodup-momentum": false,
+        "momentum": true,
+        "local": false,
+        "momentum-wo-decay": false,
+        "greedy-sim": true,
+        "greedy-no-sim": false
+    },
+    "pretrained-model": "pretrained/test_base_2nn_mnist.pickle",
+    "pretrain-setup": {
+        "learning-rate": 0.001,
+        "data-size": 3600,
+        "epochs": 50,
+        "batch-size": 50
+    },
+    "enc-exp-config":{
+        "encounter-data-file": "encounter_data/random_enc_3000.pickle",
+        "send-duration": 0.1,
+        "train-duration": 2,
+        "max-delegations": 1
+    },
+    "hyperparams" : {
+        "orig-lr": 0.01,
+        "batch-size": 50,
+        "kappa": 7,
+        "offset": 0.96,
+        "apply-rate": 1,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.2
+    }
+}

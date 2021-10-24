@@ -1,0 +1,99 @@
+{
+    "dataset": "svhn",
+    "intervals": [20],
+    "repeat": 10,
+    "device-power-interval": [10,3,10,3,10,3,10,3,10,3],
+ 
+    "local-set": [0,1],
+    "goal-set": [0,1,2,3,4,5,6,7,8,9],
+    "label-sets": [[0,1,2,3,4,5,6,7,8,9]],
+    "noise-label-set-size": 2,
+    "same-repeat": true,
+    "number-of-data-points": 100,
+    "noise-percentage": 0,
+    "strategies": {
+        "c_DROppCL Auto": true,
+        "c_DROppCL": true,
+        "c_only dropout": true,
+        "c_only quant": true,
+        "no dropout nor Q.": true
+    },
+    "strategy-variants": {
+        "c_DROppCL Auto": [
+                            {
+                                "model-size": 3,
+                                "downto": 2,
+                                "bits": 3,
+                                "optimizer": "adam",
+                                "optimizer-params" : {
+                                    "learning_rate": 0.001
+                                }
+                            }
+                            ],
+                "c_DROppCL": [
+                                {
+                                    "model-size": 3,
+                                    "downto": 2,
+                                    "bits": 3,
+                                    "optimizer": "adam",
+                                    "optimizer-params" : {
+                                        "learning_rate": 0.001
+                                    }
+                                }
+                                ],
+        "c_only dropout": [
+                            {
+                                "model-size": 3,
+                                "downto": 2,
+                                "optimizer": "adam",
+                                "optimizer-params" : {
+                                    "learning_rate": 0.001
+                                }
+                            }
+                            ],
+        "c_only quant": [
+                            {
+                                "model-size": 3,
+                                "bits": 3,
+                                "optimizer": "adam",
+                                "optimizer-params" : {
+                                    "learning_rate": 0.001
+                                }
+                            }
+                            ],
+        "no dropout nor Q.": [{
+                            "model-size": 3,
+                            "downto": 3,
+                            "optimizer": "adam",
+                            "optimizer-params" : {
+                                "learning_rate": 0.001
+                            }
+                         }
+                        ]
+
+    },
+    "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
+    "hyperparams" : {
+        "orig-lr": 0.01,
+        "batch-size": 50,
+        "kappa": 12,
+        "offset": 0.96,
+        "apply-rate": 3,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.4,
+        "decay": 0.997,
+        "hetero-lower-bound": 1,
+        "hetero-upper-bound": 3,
+        "hetero-distribution": "uniform",
+        "duration-lower-bound": 1,
+        "duration-upper-bound": 6,
+        "duration-distribution": "uniform",
+        "device-duration-interval": [10,3,10,3,10,3,10,3,10,3],
+        "optimizer-params" : {
+            "learning_rate": 0.001
+        }
+    },
+    "test-data-per-label": 800
+}
