@@ -20,7 +20,6 @@ import argparse
 from swarm import Swarm
 import data_process as dp
 from swarm_utils import get_time
-import data_process as dp
 import boto3
 from cfg_utils import setup_env, LOG_FOLDER, FIG_FOLDER, HIST_FOLDER
 from pathlib import PurePath, Path
