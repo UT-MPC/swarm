@@ -10,14 +10,6 @@ from pathlib import Path
 SIZE_X = 28
 SIZE_Y = 28
 
-def download_uci_opportunity():
-    client = boto3.client('s3')
-    S3_BUCKET_NAME = 'opfl-sim-models'
-    DATA_PATH = 'data/opportunity-uci'
-    FILE_NAME = 'oppChallenge_gestures.data'
-    Path(DATA_PATH).mkdir(parents=True, exist_ok=True)
-    client.download_file(S3_BUCKET_NAME, FILE_NAME, DATA_PATH + '/' + FILE_NAME)
-
 # get X and Y data from a list of files
 # returns: list of numpy arrays (num_samples_from_user, num_pixels)
 def get_data(filenames):
@@ -413,6 +405,39 @@ class DataProvider():
     def get_random(self, size):
         p = np.random.permutation(len(self.x_train))
         return self.x_train[p][:size], self.y_train[p][:size]
+
+
+class IndicedDataProvider():
+    def __init__(self, x_train, y_train, labels):
+        self.task_num = 0
+        self.x_train =  copy.deepcopy(x_train)
+        self.y_train = copy.deepcopy(y_train)
+        self.total_data_size = len(self.y_train)
+        self.num_classes = len(np.unique(y_train))
+
+        if labels != None:
+            self.setup(labels)
+
+    def setup(self, labels):
+        self.data_filter = np.zeros(self.total_data_size, dtype=bool)
+        label_mask = np.zeros(self.total_data_size, dtype=bool)
+        self.chosen = np.array([], dtype='int')
+        
+        for l in labels.keys():
+            indices = np.where(self.y_train == l)[0]
+            chosen_per_label = np.random.choice(indices, size=labels[l], replace=False)
+            self.chosen = np.concatenate((self.chosen, chosen_per_label))
+
+    def set_chosen(self, chosen):
+        self.chosen = np.array(chosen)
+
+    def get_chosen(self):
+        return self.chosen.tolist()
+    
+    def fetch(self):
+        x_filtered = self.x_train[self.chosen]
+        y_filtered = self.y_train[self.chosen]
+        return x_filtered, y_filtered
 
 def filter_cifar100_binary(x_train, y_train, task, data_size):
     """
