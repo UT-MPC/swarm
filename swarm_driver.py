@@ -13,7 +13,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import models as custom_models
 from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_dataset
-from clients import get_client_class, LocalClient
+from get_device import get_device_class
+import device.exp_device
 import pickle
 import argparse
 from swarm import Swarm
@@ -170,7 +171,7 @@ def main():
 
     orig_swarm = Swarm(model_fn,
                        keras.optimizers.SGD,
-                       LocalClient,
+                       device.exp_device.LocalDevice,
                        CLIENT_NUM,
                        init_weights,
                        x_train,
@@ -189,7 +190,7 @@ def main():
     for k in config['strategies'].keys():
         if config['strategies'][k]:
             swarm_names.append(k)
-            client_class = get_client_class(k)
+            client_class = get_device_class(k)
             test_swarms.append(
                 Swarm(
                     model_fn,

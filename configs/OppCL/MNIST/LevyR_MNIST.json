@@ -1,7 +1,7 @@
 {
     "dataset": "mnist",
     "mobility-model": "levy-walk",
-    "client-num": 45,
+    "client-num": 12,
     "local-set-size": 2,
     "local-data-size": 150,
     "goal-set-size": 5,

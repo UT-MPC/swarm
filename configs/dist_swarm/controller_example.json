@@ -1,0 +1,14 @@
+{
+    "dataset": "mnist",
+    "swarm_config": {
+        "number_of_devices": 10,
+        "local_set_size": 2,
+        "local_data_size": 150,
+        "goal_set_size": 5,
+        "district_9": [[1,2], [3,4], [5,6],
+                       [7,8], [9,0], [1,2],
+                       [4,5], [6,7], [8,9]]
+    },
+    "device_config": "device-specific config goes here",
+    "__comment__": "This is an examplar json that is used by controller"
+}
