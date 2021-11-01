@@ -16,8 +16,15 @@ NB_SENSOR_CHANNELS = 113
 NUM_UNITS_LSTM = 128
 NUM_CLASSES = 18
 
+def get_2nn_mnist_model():
+    model = Sequential()
+    model.add(Flatten(input_shape=(28,28,1)))
+    model.add(Dense(200, activation='relu', name='dense_0'))
+    model.add(Dense(200, activation='relu', name='dense_1'))
+    model.add(Dense(10, activation='softmax', name='softmax_logits'))
+    return model
 
-def get_2nn_mnist_model(compressed_ver=0, size=10):
+def get_hetero_2nn_mnist_model(compressed_ver=0, size=10):
     if compressed_ver == 1:
         return get_compressed_2nn_mnist_model()
     elif compressed_ver == 2:

@@ -1,0 +1,4 @@
+nohup python3 droppcl_swarm_driver.py --cfg configs/DROppCL/SVHN/configs/DROppCL/SVHN/Hyccups_SVHN_quantize.json --tag seth_hyccups_hymn_quantize > hss0.log &
+nohup python3 droppcl_swarm_driver.py --cfg configs/DROppCL/SVHN/configs/DROppCL/SVHN/Hyccups_SVHN_baseline.json --tag seth_hyccups_hymn_baseline > hss1.log &
+# nohup python3 droppcl_swarm_driver.py --cfg configs/DROppCL/SVHN/configs/DROppCL/SVHN/Hyccups_SVHN_dropout.json --tag seth_hyccups_hymn_dropout > hss2.log &
+# nohup python3 droppcl_swarm_driver.py --cfg configs/DROppCL/SVHN/configs/DROppCL/SVHN/Hyccups_SVHN_droppcl.json --tag seth_hyccups_hymn_droppcl > hss3.log &

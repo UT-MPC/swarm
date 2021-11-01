@@ -13,4 +13,5 @@ controlled_exp/figs/
 active-semi-supervised-learning/
 qkeras/
 *.pickle
+active-semi-supervised-clustering/
 outputs/

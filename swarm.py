@@ -7,7 +7,6 @@ import pickle
 import data_process as dp
 import datetime
 import logging
-import numpy as np
 from tqdm import tqdm
 
 # data frame column names for encounter data

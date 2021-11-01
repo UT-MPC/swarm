@@ -5,6 +5,7 @@ import device.tmc_exp_device
 import device.federated_device
 import device.quantization_device
 import device.droppcl_device
+import device.gr_device
 
 def get_device_class(class_name):
     ### Hetero & Dropout
@@ -73,68 +74,20 @@ def get_device_class(class_name):
         
     #####################
     if class_name == 'greedy':
-        client_class = device.exp_device.GreedyWOSimDevice
+        return device.exp_device.GreedyWOSimDevice
     elif class_name == 'local':
-        client_class = device.exp_device.LocalDevice
+        return device.exp_device.LocalDevice
     elif class_name == 'opportunistic':
-        client_class = device.opportunistic_device.JSDOppDevice
+        return device.opportunistic_device.JSDOppDevice
     elif class_name == 'opportunistic-weighted':
-        client_class = device.tmc_exp_device.JSDOppWeightedDevice
+        return device.tmc_exp_device.JSDOppWeightedDevice
     elif class_name == 'opportunistic (low thres.)':
-        client_class = device.opportunistic_device.LowJSDOppDevice
+        return device.opportunistic_device.LowJSDOppDevice
     elif class_name == 'federated':
-        client_class = device.federated_device.FederatedDevice
+        return device.federated_device.FederatedDevice
     elif class_name == 'federated (opportunistic)':
-        client_class = device.federated_device.FederatedJSDGreedyDevice
+        return device.federated_device.FederatedJSDGreedyDevice
     elif class_name == 'gradient replay':
-        client_class = device.gr_device.JSDGradientReplayDevice
-    # elif class_name == 'gradient replay no decay':
-    #     client_class = JSDGradientReplayNoDecayClient
-    # elif class_name == 'gradient replay not weighted':
-    #     client_class = JSDGradientReplayNoWeightingClient
-    # elif class_name == 'gradient replay decay':
-    #     client_class = JSDGradientReplayDecayClient
-    # elif class_name == 'gradient replay (low thres.)':
-    #     client_class = HighJSDGradientReplayClient
-    # # 'cecay': Client-specific dECAY
-    # elif class_name == 'greedy-cecay':
-    #     client_class = GreedyNoSimCecayClient
-    # elif class_name == 'opportunistic-cecay':
-    #     client_class = JSDGreedySimCecayClient
-    # elif class_name == 'gradient replay cecay':
-    #     client_class = JSDGradientReplayCecayClient
-    # elif class_name == 'greedy ':
-    #     client_class = OnlyOtherGreedyClient
-    # elif class_name == 'oracle':
-    #     client_class = OracleClient
-    # elif class_name == 'task-aware':
-    #     client_class = TaskAwareClient
-    # elif class_name == 'compressed':
-    #     client_class = CompressedTaskAwareClient
-    # elif class_name == 'compressed-v2':
-    #     client_class = V2CompressedTaskAwareClient
-    # elif class_name == 'task-aware GR':
-    #     client_class = TaskAwareGradientReplayClient
-    # ### CIFAR 100 versions
-    # elif class_name == 'oracle ':
-    #     client_class = Cifar100OracleClient
-    # elif class_name == 'compressed ':
-    #     client_class = CompressedCNNTaskAwareClient
-    # elif class_name == 'compressed-v2 ':
-    #     client_class = V2CompressedCNNTaskAwareClient
+        return device.gr_device.JSDGradientReplayDevice
 
-    # ### Knowledge Distillation
-    # elif class_name == 'only data':
-    #     client_class = TrainOnDataClient
-    # elif class_name == 'only model':
-    #     client_class = TrainOnModelClient
-    # elif class_name == 'data model half half':
-    #     client_class = TrainOnDataAndModelClient
-
-    # ### clients for checking encounters
-    # elif class_name == 'oppo check':
-    #     client_class = OpportunisticCheckClient
-    # elif class_name == 'oppo local check':
-    #     client_class = OpportunisticLocalCheckClient
-    # elif class_name == 'oppo check low':
-    #     client_class = LowThresOpportunisticCheckClient
+    raise ValueError('Cannot find device name {}'.format(class_name))

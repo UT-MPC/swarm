@@ -88,7 +88,7 @@
         "hetero-upper-bound": 10,
         "hetero-distribution": "1/x",
         "optimizer-params" : {
-            "learning_rate": 0.001
+            "learning_rate": 0.0002
         }
     },
     "test-data-per-label": 800

@@ -5,6 +5,8 @@ import numpy as np
 from utils.har.sliding_window import sliding_window
 from scipy.io import loadmat
 import _pickle as cp
+import boto3
+from pathlib import Path
 
 def get_mnist_dataset():
     # import dataset
@@ -75,6 +77,11 @@ def get_cifar100_dataset(label_mode='fine'):
     return x_train, y_train_orig, x_test, y_test_orig
 
 def get_svhn_dataset(path):
+    filepath = Path(path + 'train_32x32.mat')
+    if not filepath.is_file():
+        download_svhn()
+        print('downloading dataset...')
+
     train_raw = loadmat(path + 'train_32x32.mat')
     test_raw = loadmat(path + 'test_32x32.mat')
     train_images = np.array(train_raw['X'])
@@ -96,6 +103,11 @@ def get_svhn_dataset(path):
 
 def get_opp_uci_dataset(filename, sliding_window_length, sliding_window_step):
     # from https://github.com/STRCWearlab/DeepConvLSTM
+
+    filepath = Path(filename)
+    if not filepath.is_file():
+        download_uci_opportunity()
+        print('downloading dataset...')
 
     with open(filename, 'rb') as f:
         data = cp.load(f)
@@ -122,3 +134,16 @@ def opp_sliding_window(data_x, data_y, ws, ss):
     data_x = sliding_window(data_x,(ws,data_x.shape[1]),(ss,1))
     data_y = np.asarray([[i[-1]] for i in sliding_window(data_y,ws,ss)])
     return data_x.astype(np.float32), data_y.reshape(len(data_y)).astype(np.uint8)
+
+def download_from_s3(bucket_name, data_path, file_name):
+    client = boto3.client('s3')
+    Path(data_path).mkdir(parents=True, exist_ok=True)
+    client.download_file(bucket_name, file_name, data_path + '/' + file_name)
+
+
+def download_uci_opportunity():
+    download_from_s3('opfl-sim-models', 'data/opportunity-uci', 'oppChallenge_gestures.data')
+
+def download_svhn():
+    download_from_s3('opfl-sim-models', 'data/svhn', 'train_32x32.mat')
+    download_from_s3('opfl-sim-models', 'data/svhn', 'test_32x32.mat')

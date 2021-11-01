@@ -39,6 +39,9 @@ class Device():
         self._id_num = _id
         self._model_fn = model_fn
         self._opt_fn = opt_fn
+        if init_weights == None:
+            m = model_fn()
+            init_weights = m.get_weights()
         self._weights = init_weights
         self._y_train_orig = y_train
         self.train_data_provider = train_data_provider
@@ -82,7 +85,6 @@ class Device():
         ii = np.nonzero(bc)[0]
         self._local_data_dist = dict(zip(ii, bc[ii]/len(y_train)))
         self._local_data_count = dict(zip(ii, bc[ii]))
-        x_train, y_train = shuffle(x_train, y_train)
         self._x_train = x_train
         self._y_train_orig = y_train
         self._y_train = keras.utils.to_categorical(y_train, self._num_classes)

@@ -108,8 +108,8 @@ class DROppCLDevice(device.base_device.Device):
         iteration, n = self.get_q_and_iteration(d_l, time_duration)
         
         ####### compute gradients and update the model
-        for _ in range(iteration):
-            self.fit_w_drop_quant(other, epoch, d_l, pow(2, n))
+        # for _ in range(iteration):
+        #     self.fit_w_drop_quant(other, epoch, d_l, pow(2, n))
         
         return iteration, d_l, n
 
@@ -216,8 +216,9 @@ class DROppCLOnlyDropoutDevice(DROppCLDevice):
 
         # only do training when can send with 64 bits 
         if n >= 6:
-            for _ in range(iteration):
-                self.fit_w_drop_quant(other, epoch, d_l, pow(2, 6))
+            pass
+            # for _ in range(iteration):
+            #     self.fit_w_drop_quant(other, epoch, d_l, pow(2, 6))
         else:
             return (0, 0, 0)
 

@@ -13,8 +13,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import models as custom_models
 from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_dataset
-from get_device import get_device_class
-import device.exp_device
 import pickle
 import argparse
 from swarm import Swarm
@@ -25,6 +23,8 @@ from cfg_utils import setup_env, LOG_FOLDER, FIG_FOLDER, HIST_FOLDER
 from pathlib import PurePath, Path
 import logging
 import sys
+from get_device import get_device_class
+import device.exp_device
 
 # hyperparams for uci dataset
 SLIDING_WINDOW_LENGTH = 24
