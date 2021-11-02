@@ -1,22 +1,21 @@
 {
     "dataset": "mnist",
+    "tag": "__tag_name_goes_here__",
     "device_strategy": "greedy",
     "id": 0,
     "pretrained_model": "pretrained/test_base_2nn_mnist.pickle",
     "model_size": 10,
     "device_power": 8,
+    "test_data_per_label": 80,
     "encounter_config": {
-        "encounter-data-file": "encounter_data/hyccups_v4.csv",
-        "computation-time": 0.24,
-        "communication-rate": 2000000
+        "encounter_data_file": "encounter_data/hyccups_v4.csv",
+        "computation_time": 0.24,
+        "communication_rate": 2000000
     },
-    "swarm_config": {
-        "device_sizes": {
-            "model_sizes": [10, 10, 8, 6, 4],
-            "device_powers": [10, 8, 6, 4, 2]
-        },
-        "local_dists": "TBD",
-        "goal_dists": "TBD"
+    "train_config": {
+        "__comment__": "formerly called hyperparams",
+        "batch_size": 50,
+        "max_rounds": 3
     },
     "__comment__": "This is an examplar json that is sent to simulate_device_services"
 }

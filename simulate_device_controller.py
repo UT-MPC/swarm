@@ -6,7 +6,7 @@ import numpy as np
 import data_process as dp
 import get_dataset
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, LOCAL_DIST, DATA_INDICES
+from dynamo_db import DEVICE_ID, GOAL_DIST, LOCAL_DIST, DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX
 
 # hyperparams for uci dataset
 SLIDING_WINDOW_LENGTH = 24
@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--tag', dest='tag',
                     type=str, default='default_tag', help='tag')
     parser.add_argument('--cfg', dest='config_file',
-                        type=str, default='toy_realworld_mnist_cfg.json', help='name of the config file')
+                        type=str, default='configs/dist_swarm/controller_example.json', help='name of the config file')
 
     parsed = parser.parse_args()
     # load config file
@@ -62,7 +62,8 @@ def main():
         table = dynamodb.Table(parsed.tag)
         with table.batch_writer() as batch:
             batch.put_item(Item={DEVICE_ID: idnum, GOAL_DIST: convert_to_map(goal_dist),
-                LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx})
+                LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
+                EVAL_HIST_LOSS: {}, EVAL_HIST_METRIC: {}, ENC_IDX: -1})
 
     # deploy workers
 

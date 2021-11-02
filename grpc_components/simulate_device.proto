@@ -1,0 +1,62 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.simulatedevice";
+option java_outer_classname = "SimulateDeviceProto";
+option objc_class_prefix = "SD";
+
+package simulatedeivce;
+
+// Interface exported by the server.
+service SimulateDevice {
+  // A simple RPC.
+  //
+  // Initializes the Devices.
+  rpc InitDevice(Config) returns (Status) {}
+
+  // Starts the OppCL simulation.
+  rpc StartOppCL(Empty) returns (Status) {}
+
+  // Checks the Status of the Devices.
+  rpc CheckDevice(Empty) returns (Status) {}
+
+  // Checks the Status of the Devices.
+  rpc GetResult(Empty) returns (stream Result) {}
+
+}
+
+// empty message
+message Empty {
+
+}
+
+// Config: device-specific config file
+message Config {
+  string config = 1;
+}
+
+// Status: device-specific config file
+message Status {
+    int32 config = 1;
+  }
+
+// Result: device-specific config file
+// metric: accuracy or F1-score
+message Result {
+    int32 loss = 1;
+    int32 metric = 2;
+  }
