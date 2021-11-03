@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\037io.grpc.examples.simulatedeviceB\023SimulateDeviceProtoP\001\242\002\002SD',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"\x18\n\x06Status\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\x05\"&\n\x06Result\x12\x0c\n\x04loss\x18\x01 \x01(\x05\x12\x0e\n\x06metric\x18\x02 \x01(\x05\x32\x8f\x02\n\x0eSimulateDevice\x12>\n\nInitDevice\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12=\n\nStartOppCL\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12>\n\x0b\x43heckDevice\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12>\n\tGetResult\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Result\"\x00\x30\x01\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
+  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"\x18\n\x06Status\x12\x0e\n\x06status\x18\x01 \x01(\t\"&\n\x06Result\x12\x0c\n\x04loss\x18\x01 \x01(\x05\x12\x0e\n\x06metric\x18\x02 \x01(\x05\x32\x8f\x02\n\x0eSimulateDevice\x12>\n\nInitDevice\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12=\n\nStartOppCL\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12>\n\x0b\x43heckDevice\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12>\n\tGetResult\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Result\"\x00\x30\x01\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
 )
 
 
@@ -91,9 +91,9 @@ _STATUS = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='config', full_name='simulatedeivce.Status.config', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='status', full_name='simulatedeivce.Status.status', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),

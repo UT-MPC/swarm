@@ -3,8 +3,11 @@ import threading
 import time
 
 class ThreadEx():
+    def init(self):
+        self.name = 'mythread'
+
     def thread_function(self, name):
-        logging.info("Thread %s: starting", name)
+        logging.info("Thread %s: starting", self.name)
         time.sleep(2)
         logging.info("Thread %s: finishing", name)
 
@@ -23,4 +26,5 @@ class ThreadEx():
 
 if __name__ == "__main__":
     te = ThreadEx()
+    te.init()
     te.start_test()

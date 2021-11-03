@@ -3,6 +3,7 @@ sys.path.insert(0,'..')
 import copy
 
 import numpy as np
+import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras import backend as K
 from sklearn.metrics import f1_score
@@ -35,11 +36,11 @@ class Device():
             train_config: dict of params for training
             eval_config: dict of params for evaluation
         """
-        # print('device: {} allocated'.format(_id))
+        # @TODO make routine for making a dummy device
         self._id_num = _id
         self._model_fn = model_fn
         self._opt_fn = opt_fn
-        if init_weights == None:
+        if init_weights == None and model_fn != None:
             m = model_fn()
             init_weights = m.get_weights()
         self._weights = init_weights
@@ -48,18 +49,20 @@ class Device():
         self.test_data_provider = test_data_provider
         self._num_classes = test_data_provider.num_classes
         self._hyperparams = hyperparams
-        self._evaluation_metrics = hyperparams['evaluation-metrics']
-        if 'similarity-threshold' in hyperparams:
-            self._similarity_threshold = hyperparams['similarity-threshold']
-        if 'low-similarity-threshold' in hyperparams:
-            self._low_similarity_threshold = hyperparams['low-similarity-threshold']
-        self.task_num = train_data_provider.task_num
+        if hyperparams != None:
+            self._evaluation_metrics = hyperparams['evaluation-metrics']
+            if 'similarity-threshold' in hyperparams:
+                self._similarity_threshold = hyperparams['similarity-threshold']
+            if 'low-similarity-threshold' in hyperparams:
+                self._low_similarity_threshold = hyperparams['low-similarity-threshold']
+            self.task_num = train_data_provider.task_num
 
-        self.last_batch_num = {} # keeps the last batch num of the other client that this client was trained on
-        self.total_num_batches = int(len(y_train) / hyperparams['batch-size'])
-        if len(y_train) / hyperparams['batch-size'] - self.total_num_batches != 0:
-            raise ValueError('batch-size has to divide local data size without remainders')
+            self.last_batch_num = {} # keeps the last batch num of the other client that this client was trained on
+            self.total_num_batches = int(len(y_train) / hyperparams['batch-size'])
+            if len(y_train) / hyperparams['batch-size'] - self.total_num_batches != 0:
+                raise ValueError('batch-size has to divide local data size without remainders')
 
+        self.optimizer_weights = None
         ratio_per_label = 1./(len(target_labels))
         self._desired_data_dist = {}
         for l in target_labels:
@@ -354,20 +357,50 @@ class Device():
             self.last_batch_num[other._id_num] = 0
         return self.last_batch_num[other._id_num]
 
+    def _get_optimizer(self, model):
+        opt = self._opt_fn(**self._hyperparams['optimizer-params'])
+        zero_grads = [tf.zeros_like(w) for w in model.trainable_variables]
+        opt.apply_gradients(zip(zero_grads, model.trainable_variables))
+
+        if self.optimizer_weights != None:
+            opt.set_weights(self.optimizer_weights)
+        else:
+            self.optimizer_weights = opt.get_weights()
+
+        del model
+        return opt
+
     def fit_to(self, other, epoch):
         """
         fit the model to others data for "epoch" epochs
         one epoch only corresponds to a single batch
         """
-        model = self._get_model()
-        
-        model.fit(**self.get_train_config(other, epoch, self.get_batch_num(other)))
-        weights = copy.deepcopy(model.get_weights())
+        model = self._model_fn()
+        X = other._x_train
+        y = other._y_train
+        with tf.GradientTape() as tape:
+            pred = model(X)
+            loss = keras.metrics.categorical_crossentropy(y, pred)
+        grads = tape.gradient(loss, model.trainable_variables)
+        opt = self._get_optimizer(model)
+        opt.apply_gradients(zip(grads, model.trainable_variables))
+        self._weights = model.get_weights()
+
+        # save optimizer state
+        self.optimizer_weights = opt.get_weights()
         K.clear_session()
-        del model
-        return weights
+        return self._weights
+
+        # model = self._get_model()
+        
+        # model.fit(**self.get_train_config(other, epoch, self.get_batch_num(other)))
+        # weights = copy.deepcopy(model.get_weights())
+        # K.clear_session()
+        # del model
+        # return weights
 
     def fit_to_labels_in_my_goal(self, other, epoch):
+
         model = self._get_model()
         self._train_config['epochs'] = 1
         x, y = dp.filter_data(other._x_train, other._y_train_orig, self._desired_data_dist.keys())

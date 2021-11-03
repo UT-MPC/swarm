@@ -6,7 +6,9 @@ import numpy as np
 import data_process as dp
 import get_dataset
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, LOCAL_DIST, DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX
+from dynamo_db import DEVICE_ID, GOAL_DIST, LOCAL_DIST, \
+    DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS
+from grpc_components.status import STOPPED
 
 # hyperparams for uci dataset
 SLIDING_WINDOW_LENGTH = 24
@@ -61,7 +63,8 @@ def main():
         chosen_data_idx = train_data_provider.get_chosen()
         table = dynamodb.Table(parsed.tag)
         with table.batch_writer() as batch:
-            batch.put_item(Item={DEVICE_ID: idnum, GOAL_DIST: convert_to_map(goal_dist),
+            batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: {},
+                GOAL_DIST: convert_to_map(goal_dist),
                 LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
                 EVAL_HIST_LOSS: {}, EVAL_HIST_METRIC: {}, ENC_IDX: -1})
 

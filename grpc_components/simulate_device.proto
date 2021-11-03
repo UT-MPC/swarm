@@ -51,7 +51,7 @@ message Config {
 
 // Status: device-specific config file
 message Status {
-    int32 config = 1;
+    string status = 1;
   }
 
 // Result: device-specific config file

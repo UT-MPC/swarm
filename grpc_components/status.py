@@ -1,5 +1,5 @@
 IDLE = "Idle"
 RUNNING = "Running"
+FINISHED = "Finished"
 ERROR = "Error"
-
-STATUS = [IDLE, RUNNING, ERROR]
+STOPPED = "Stopped"
