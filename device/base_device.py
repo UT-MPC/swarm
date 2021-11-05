@@ -376,6 +376,7 @@ class Device():
         one epoch only corresponds to a single batch
         """
         model = self._model_fn()
+        model.set_weights(self._weights)
         X = other._x_train
         y = other._y_train
         with tf.GradientTape() as tape:
