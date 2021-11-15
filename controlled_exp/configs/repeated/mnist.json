@@ -10,10 +10,15 @@
     "number-of-data-points": 150,
     "noise-percentage": 100,
     "strategies": {
-        "local": true,
-        "greedy": true,
-        "opportunistic": true,
-        "gradient replay": true
+        "greedy": true
+    },
+    "strategy-variants": {
+        "greedy": [{
+            "optimizer": "sgd",
+            "optimizer-params": {
+                "learning_rate": 0.01
+            }
+        }]
     },
     "pretrained-model": "../pretrained/test_base_2nn_mnist.pickle",
     "hyperparams" : {
@@ -24,8 +29,12 @@
         "apply-rate": 12,
         "test-data-per-label": 800,
         "evaluation-metrics": "loss-and-accuracy",
-        "similarity-threshold": 0.2,
-        "decay": 0.998
+        "similarity-threshold": 0.5,
+        "low-similarity-threshold": 0.2,
+        "decay": 0.998,
+        "optimizer-params": {
+            "learning_rate": 0.01
+        }
     },
     "test-data-per-label": 800
 }

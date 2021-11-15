@@ -385,7 +385,6 @@ class Device():
         grads = tape.gradient(loss, model.trainable_variables)
         opt = self._get_optimizer(model)
         opt.apply_gradients(zip(grads, model.trainable_variables))
-        self._weights = model.get_weights()
 
         # save optimizer state
         self.optimizer_weights = opt.get_weights()

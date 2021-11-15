@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0,'..')
+sys.path.insert(0,'../grpc_components')
 import grpc
 import logging
 from concurrent import futures

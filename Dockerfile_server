@@ -1,0 +1,7 @@
+FROM sethlee0111/private_swarm:server
+EXPOSE 50050
+ENTRYPOINT ["/bin/bash", "-t", "-c", "sleep infinity"]
+# ENTRYPOINT ["/bin/bash", "-t", "-l", "-c", "./run_server.sh"]
+RUN ["echo", "hello, server"]
+
+

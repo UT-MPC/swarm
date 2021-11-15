@@ -10,3 +10,5 @@ EVAL_HIST_METRIC = "EvalHistMetric"
 ENC_IDX = "EncIdx"
 
 DEV_STATUS = "DeviceStatus"
+
+ERROR_TRACE = "ErrorTrace"

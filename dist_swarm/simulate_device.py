@@ -19,7 +19,7 @@ from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_datase
 from get_device import get_device_class
 import data_process as dp
 from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
-            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS
+            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE
 import grpc_components.simulate_device_pb2_grpc
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 from grpc_components.simulate_device_pb2 import Status
@@ -45,9 +45,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             self._set_device_status(IDLE)
             return self._str_to_status(IDLE)
         except Exception as e:
-            logging.error(e)
-            self._set_device_status(ERROR)
-            return self._str_to_status(ERROR)
+            return self._handle_error(e)
 
     def StartOppCL(self, request, context):
         if self.status == ERROR:
@@ -58,8 +56,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             oppcl_thread.start()
             return self._str_to_status(RUNNING)
         except Exception as e:
-            logging.error(e)
-            return self._str_to_status(ERROR)
+            return self._handle_error(e)
 
     def _start_oppcl(self):
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/' + self.device_config['encounter_config']['encounter_data_file'])
@@ -156,6 +153,20 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                 # @TODO for sync device, upload model to S3 here
 
         self._set_device_status(FINISHED)
+
+    def _handle_error(self, e):
+        self._set_device_status(ERROR)
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.config['device_config']['id']},
+                    ExpressionAttributeNames={
+                        "#error": ERROR_TRACE
+                    },
+                    ExpressionAttributeValues={
+                        ":error": str(e)
+                    },
+                    UpdateExpression="SET #error = :error",
+                )
+        return self._str_to_status(ERROR)
 
     def _str_to_status(self, st):
         return Status(status=st)
