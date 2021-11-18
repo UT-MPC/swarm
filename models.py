@@ -8,6 +8,8 @@ import numpy as np
 import tensorflow as tf
 # from qkeras import QDense, quantized_bits, QActivation
 
+import models
+
 # hyperparams for uci dataset
 NUM_FILTERS = 64
 FILTER_SIZE = 5
@@ -15,6 +17,23 @@ SLIDING_WINDOW_LENGTH = 24
 NB_SENSOR_CHANNELS = 113
 NUM_UNITS_LSTM = 128
 NUM_CLASSES = 18
+
+def get_model(dataset):
+    if dataset == 'mnist':
+        return models.get_2nn_mnist_model
+    elif dataset == 'cifar':
+        num_classes = 10
+        model_fn = models.get_hetero_cnn_cifar_model
+        x_train, y_train_orig, x_test, y_test_orig = get_cifar_dataset()
+    elif dataset == 'svhn':
+        num_classes = 10
+        model_fn = models.get_hetero_cnn_cifar_model
+        x_train, y_train_orig, x_test, y_test_orig = get_svhn_dataset('data/svhn/')
+    elif dataset == 'opportunity-uci':
+        model_fn = models.get_deep_conv_lstm_model
+        x_train, y_train_orig, x_test, y_test_orig = get_opp_uci_dataset('data/opportunity-uci/oppChallenge_gestures.data',
+                                                                        config['dataset_config']['sliding_window_length'],
+                                                                        config['dataset_config']['sliding_window_step'])
 
 def get_2nn_mnist_model():
     model = Sequential()

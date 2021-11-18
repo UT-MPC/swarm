@@ -8,6 +8,26 @@ import _pickle as cp
 import boto3
 from pathlib import Path
 
+# hyperparams for uci dataset
+SLIDING_WINDOW_LENGTH = 24
+SLIDING_WINDOW_STEP = 12
+
+def get_dataset(name):
+    """
+    returns x_train, y_train_orig, x_test, y_test_orig 
+    """
+    if name == 'mnist':
+        return get_mnist_dataset()       
+    elif name == 'cifar':
+        return get_cifar_dataset()
+    elif name == 'svhn':
+        return get_svhn_dataset('data/svhn/')
+    elif name == 'opportunity-uci':
+        return get_opp_uci_dataset('data/opportunity-uci/oppChallenge_gestures.data',
+                                            SLIDING_WINDOW_LENGTH, SLIDING_WINDOW_STEP)
+    else:
+        raise ValueError('No such dataset: {}'.format(name))
+
 def get_mnist_dataset():
     # import dataset
     # input image dimensions

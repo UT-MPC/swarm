@@ -3,8 +3,6 @@ sys.path.insert(0,'./grpc_components')
 import os
 import tensorflow.keras as keras
 import pickle
-import boto3
-from boto3.dynamodb.conditions import Key
 import threading
 from pathlib import Path, PurePath
 from cfg_utils import OUTPUT_FOLDER
@@ -14,8 +12,8 @@ import json
 from io import StringIO
 from decimal import Decimal
 
-import models as custom_models
-from get_dataset import get_mnist_dataset, get_cifar_dataset, get_opp_uci_dataset, get_svhn_dataset
+from models import get_model
+from get_dataset import get_dataset
 from get_device import get_device_class
 import data_process as dp
 from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
@@ -23,6 +21,7 @@ from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
 import grpc_components.simulate_device_pb2_grpc
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 from grpc_components.simulate_device_pb2 import Status
+from device_in_db import DeviceInDB
 
 S3_BUCKET_NAME = 'simulate-device'
 
@@ -41,6 +40,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         self.device_config = parsed_config['device_config']
         try:
             self._initialize_dbs(self.config)
+            self.device_in_db = DeviceInDB(self.config['tag'], self.device_config['id'])
             self.device = self._initialize_device(self.config)
             self._set_device_status(IDLE)
             return self._str_to_status(IDLE)
@@ -79,13 +79,11 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
                 continue
 
-            resp = self.table.query(KeyConditionExpression=Key(DEVICE_ID).eq(other_id))
+            self.device_in_db.fetch_status()
 
             # get device info from dynamoDB
-            if len(resp['Items']) != 1:
-                raise ValueError('device Id: {} is multiple or not found with number of item : {}'.format(other_id, len(resp['Items'])))
-            other_chosen_list = [int(idx) for idx in resp['Items'][0][DATA_INDICES]]
-            other_goal_labels = [int(idx) for idx in resp['Items'][0][GOAL_DIST]]
+            other_chosen_list = self.device_in_db.get_local_labels()
+            other_goal_labels = self.device_in_db.get_goal_labels()
             
             other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
             other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
@@ -135,57 +133,18 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                 self.timestamps.append(last_end_time)
 
                 # report eval to dynamoDB @TODO catch error
-                resp = self.table.update_item(
-                    Key={DEVICE_ID: self.device._id_num},
-                    ExpressionAttributeNames={
-                        "#loss": EVAL_HIST_LOSS,
-                        "#metric": EVAL_HIST_METRIC,
-                        "#enc_idx": ENC_IDX,
-                    },
-                    ExpressionAttributeValues={
-                        ":loss": [Decimal(str(loss)) for loss in self.hist_loss],
-                        ":metric": [Decimal(str(metric)) for metric in self.hist_metric],
-                        ":enc_idx": index
-                    },
-                    UpdateExpression="SET #loss = :loss, #metric = :metric, #enc_idx = :enc_idx",
-                )
+                self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric)
 
                 # @TODO for sync device, upload model to S3 here
 
         self._set_device_status(FINISHED)
 
     def _handle_error(self, e):
-        self._set_device_status(ERROR)
-        resp = self.table.update_item(
-                    Key={DEVICE_ID: self.config['device_config']['id']},
-                    ExpressionAttributeNames={
-                        "#error": ERROR_TRACE
-                    },
-                    ExpressionAttributeValues={
-                        ":error": str(e)
-                    },
-                    UpdateExpression="SET #error = :error",
-                )
+        self.device_in_db.set_error(e)
         return self._str_to_status(ERROR)
 
     def _str_to_status(self, st):
         return Status(status=st)
-
-    def _set_device_status(self, status):
-        """
-        set device status on dynamoDB
-        """
-        self.status = status
-        resp = self.table.update_item(
-                    Key={DEVICE_ID: self.config['device_config']['id']},
-                    ExpressionAttributeNames={
-                        "#status": DEV_STATUS
-                    },
-                    ExpressionAttributeValues={
-                        ":status": self.status
-                    },
-                    UpdateExpression="SET #status = :status",
-                )
 
     def _initialize_dbs(self, config):
         if not hasattr(self, 'config'):
@@ -202,27 +161,8 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
 
     def _initialize_device(self, config):
         # get model and dataset
-        if config['dataset'] == 'mnist':
-            num_classes = 10
-            model_fn = custom_models.get_2nn_mnist_model
-            x_train, y_train_orig, x_test, y_test_orig = get_mnist_dataset()       
-        elif config['dataset'] == 'cifar':
-            num_classes = 10
-            model_fn = custom_models.get_hetero_cnn_cifar_model
-            x_train, y_train_orig, x_test, y_test_orig = get_cifar_dataset()
-        elif config['dataset'] == 'svhn':
-            num_classes = 10
-            model_fn = custom_models.get_hetero_cnn_cifar_model
-            x_train, y_train_orig, x_test, y_test_orig = get_svhn_dataset('data/svhn/')
-        elif config['dataset'] == 'opportunity-uci':
-            model_fn = custom_models.get_deep_conv_lstm_model
-            x_train, y_train_orig, x_test, y_test_orig = get_opp_uci_dataset('data/opportunity-uci/oppChallenge_gestures.data',
-                                                                            config['dataset_config']['sliding_window_length'],
-                                                                            config['dataset_config']['sliding_window_step'])
-        self.x_train = x_train
-        self.y_train_orig = y_train_orig
-        self.x_test = x_test
-        self.y_test_orig = y_test_orig
+        self.x_train, self.y_train_orig, self.x_test, self.y_test_orig = get_dataset(config['dataset'])
+        model_fn = get_model(config['dataset'])
 
         self.device_class = get_device_class(config['device_config']['device_strategy'])
 
@@ -234,16 +174,14 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         else:
             init_weights = None
 
-        train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, None)
-        test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, config['device_config']['train_config']['test-data-per-label'])
+        train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
+        test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, config['device_config']['train_config']['test-data-per-label'])
         
-        resp = self.table.query(KeyConditionExpression=Key(DEVICE_ID).eq(config['device_config']['id']))
+        self.device_in_db.fetch_status()
 
         # get device info from dynamoDB
-        if len(resp['Items']) != 1:
-            raise ValueError('device Id: {} is multiple or not found with number of item : {}'.format(config['device_config']['id'], len(resp['Items'])))
-        chosen_list = [int(idx) for idx in resp['Items'][0][DATA_INDICES]]
-        goal_labels = [int(idx) for idx in resp['Items'][0][GOAL_DIST]]
+        chosen_list = self.device_in_db.get_data_indices()
+        goal_labels = self.device_in_db.get_goal_labels()
         
         train_data_provider.set_chosen(chosen_list)
 

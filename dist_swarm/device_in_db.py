@@ -1,11 +1,14 @@
+import sys
+sys.path.insert(0,'./grpc_components')
 import boto3
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
 
 from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
             GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX
+from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
-class DeviceStatus():
+class DeviceInDB():
     def __init__(self, table_name, device_id):    
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
         self.table = self.dynamodb.Table(table_name)
@@ -54,6 +57,31 @@ class DeviceStatus():
                         ":enc_idx": enc_idx
                     },
                     UpdateExpression="SET #loss = :loss, #metric = :metric, #enc_idx = :enc_idx",
+                )
+
+    def set_error(self, e):
+        self.update_status(ERROR)
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.config['device_config']['id']},
+                    ExpressionAttributeNames={
+                        "#error": ERROR_TRACE
+                    },
+                    ExpressionAttributeValues={
+                        ":error": str(e)
+                    },
+                    UpdateExpression="SET #error = :error",
+                )
+
+    def update_status(self, status):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.config['device_config']['id']},
+                    ExpressionAttributeNames={
+                        "#status": DEV_STATUS
+                    },
+                    ExpressionAttributeValues={
+                        ":status": status
+                    },
+                    UpdateExpression="SET #status = :status",
                 )
 
 
