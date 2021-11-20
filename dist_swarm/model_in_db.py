@@ -6,3 +6,5 @@ class ModelInDB():
     def __init__(self, tag, id):
         self.s3 = boto3.client('s3')
         self.s3_model_path = PurePath(tag + '/' + str(id))
+
+    # @TODO implement rest of the class for sync. simulation

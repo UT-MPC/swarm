@@ -14,7 +14,7 @@ class DeviceInDB():
         self.table = self.dynamodb.Table(table_name)
         self.device_id = device_id
 
-        self.fetch_status(device_id)
+        self.fetch_status()
 
     def fetch_status(self):
         """
@@ -29,6 +29,7 @@ class DeviceInDB():
                         not found with number of item : {}'.format(self.device_id, len(resp['Items'])))
 
         self.device_status = resp['Items'][0]
+        self.status = resp['Items'][0][DEV_STATUS]
 
     # Getters
     def get_data_indices(self):
@@ -39,6 +40,9 @@ class DeviceInDB():
     
     def get_goal_labels(self):
         return [int(idx) for idx in self.device_status[GOAL_DIST]]
+
+    def get_status(self):
+        return self.status
 
     ########
 
@@ -62,7 +66,7 @@ class DeviceInDB():
     def set_error(self, e):
         self.update_status(ERROR)
         resp = self.table.update_item(
-                    Key={DEVICE_ID: self.config['device_config']['id']},
+                    Key={DEVICE_ID: self.device_id},
                     ExpressionAttributeNames={
                         "#error": ERROR_TRACE
                     },
@@ -74,7 +78,7 @@ class DeviceInDB():
 
     def update_status(self, status):
         resp = self.table.update_item(
-                    Key={DEVICE_ID: self.config['device_config']['id']},
+                    Key={DEVICE_ID: self.device_id},
                     ExpressionAttributeNames={
                         "#status": DEV_STATUS
                     },
@@ -83,6 +87,7 @@ class DeviceInDB():
                     },
                     UpdateExpression="SET #status = :status",
                 )
+        self.status = status
 
 
 

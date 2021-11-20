@@ -1,4 +1,6 @@
 import sys
+
+from dist_swarm.model_in_db import ModelInDB
 sys.path.insert(0,'./grpc_components')
 import os
 import tensorflow.keras as keras
@@ -16,14 +18,10 @@ from models import get_model
 from get_dataset import get_dataset
 from get_device import get_device_class
 import data_process as dp
-from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
-            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE
 import grpc_components.simulate_device_pb2_grpc
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 from grpc_components.simulate_device_pb2 import Status
 from device_in_db import DeviceInDB
-
-S3_BUCKET_NAME = 'simulate-device'
 
 # data frame column names for encounter data
 TIME_START="time_start"
@@ -38,17 +36,18 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         parsed_config = json.load(StringIO(request.config))
         self.config = parsed_config
         self.device_config = parsed_config['device_config']
+        
         try:
-            self._initialize_dbs(self.config)
+            self._initialize_model_in_db(self.config)
             self.device_in_db = DeviceInDB(self.config['tag'], self.device_config['id'])
             self.device = self._initialize_device(self.config)
-            self._set_device_status(IDLE)
+            self.device_in_db.update_status(IDLE)
             return self._str_to_status(IDLE)
         except Exception as e:
             return self._handle_error(e)
 
     def StartOppCL(self, request, context):
-        if self.status == ERROR:
+        if self.device_in_db.get_status() == ERROR:
             logging.error('device is in error state')
             return self._str_to_status(ERROR)
         try:
@@ -59,11 +58,11 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             return self._handle_error(e)
 
     def _start_oppcl(self):
-        enc_dataset_path = PurePath(os.path.dirname(__file__) +'/' + self.device_config['encounter_config']['encounter_data_file'])
+        enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + self.device_config['encounter_config']['encounter_data_file'])
         enc_df = read_pickle(enc_dataset_path)
         last_end_time = 0
         last_run_time = 0
-        self._set_device_status(RUNNING)
+        self.device_in_db.update_status(RUNNING)
         self.hist_loss = []
         self.hist_metric = []
         self.timestamps = []
@@ -133,11 +132,11 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                 self.timestamps.append(last_end_time)
 
                 # report eval to dynamoDB @TODO catch error
-                self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric)
+                self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric, index)
 
                 # @TODO for sync device, upload model to S3 here
 
-        self._set_device_status(FINISHED)
+        self.device_in_db.update_status(FINISHED)
 
     def _handle_error(self, e):
         self.device_in_db.set_error(e)
@@ -146,18 +145,15 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
     def _str_to_status(self, st):
         return Status(status=st)
 
-    def _initialize_dbs(self, config):
+    def _initialize_model_in_db(self, config):
         if not hasattr(self, 'config'):
             self.config = config
-        self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-        self.table = self.dynamodb.Table(config['tag'])
 
         # setup local path for storing model locally
         self.model_folder = OUTPUT_FOLDER + '/models'
         Path(self.model_folder).mkdir(parents=True, exist_ok=True)
         # setup S3
-        self.s3_model_path = PurePath(config['tag'] + '/' + str(config['device_config']['id']))
-        self.s3 = boto3.client('s3')
+        self.model_in_db = ModelInDB(config['tag'], config['device_config']['id'])
 
     def _initialize_device(self, config):
         # get model and dataset
