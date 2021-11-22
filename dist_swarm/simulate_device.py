@@ -39,6 +39,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         
         try:
             self._initialize_model_in_db(self.config)
+            logging.basicConfig(filename=self.config['tag'] + '.log', encoding='utf-8', level=logging.DEBUG)
             self.device_in_db = DeviceInDB(self.config['tag'], self.device_config['id'])
             self.device = self._initialize_device(self.config)
             self.device_in_db.update_status(IDLE)
@@ -60,86 +61,90 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             return self._handle_error(e)
 
     def _start_oppcl(self):
-        enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + self.device_config['encounter_config']['encounter_data_file'])
-        enc_df = read_pickle(enc_dataset_path)
-        last_end_time = 0
-        last_run_time = 0
-        self.device_in_db.update_status(RUNNING)
-        self.hist_loss = []
-        self.hist_metric = []
-        self.timestamps = []
+        try:
+            enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + self.device_config['encounter_config']['encounter_data_file'])
+            enc_df = read_pickle(enc_dataset_path)
+            last_end_time = 0
+            last_run_time = 0
+            self.device_in_db.update_status(RUNNING)
+            self.hist_loss = []
+            self.hist_metric = []
+            self.timestamps = []
 
-        for index, row in enc_df.iterrows():
-            if (int)(row[CLIENT1]) == self.device._id_num:
-                other_id = (int)(row[CLIENT2])
-            elif (int)(row[CLIENT2]) == self.device._id_num:
-                other_id = (int)(row[CLIENT1])
-            else:
-                continue
+            for index, row in enc_df.iterrows():
+                if (int)(row[CLIENT1]) == self.device._id_num:
+                    other_id = (int)(row[CLIENT2])
+                elif (int)(row[CLIENT2]) == self.device._id_num:
+                    other_id = (int)(row[CLIENT1])
+                else:
+                    continue
 
-            if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
-                continue
+                if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
+                    continue
 
-            other_device_in_db = DeviceInDB(self.config['tag'], other_id)
-            other_device_in_db.fetch_status()
+                other_device_in_db = DeviceInDB(self.config['tag'], other_id)
+                other_device_in_db.fetch_status()
 
-            # get device info from dynamoDB
-            other_chosen_list = other_device_in_db.get_local_labels()
-            other_goal_labels = other_device_in_db.get_goal_labels()
+                # get device info from dynamoDB
+                other_chosen_list = other_device_in_db.get_local_labels()
+                other_goal_labels = other_device_in_db.get_goal_labels()
+                
+                other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
+                other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
+                other_train_data_provider.set_chosen(other_chosen_list)
+
+                other_x_local, other_y_local_orig = other_train_data_provider.fetch()
+                    
+                other_device = self.device_class(other_id,
+                                                None, 
+                                                None,
+                                                None,
+                                                other_x_local,
+                                                other_y_local_orig,
+                                                other_train_data_provider,
+                                                other_test_data_provider,
+                                                other_goal_labels,
+                                                None,
+                                                None,
+                                                None)
+
+
+                if self.device.decide_delegation(other_device):
+                    # calculate time
+                    cur_t = row[TIME_START]
+                    end_t = row[TIME_END]
+                    time_left = end_t - cur_t
+                    if last_end_time > cur_t:
+                        continue
+                    
+                    # determine available rounds of training and conduct OppCL
+                    encounter_config = self.device_config['encounter_config']
+                    model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
+                    computation_time = encounter_config['computation_time']
+                    oppcl_time = 2 * model_send_time + computation_time
+                    rounds = (int) ((time_left) / oppcl_time)
+                    rounds = min(rounds, self.device_config['train_config']['max_rounds'])
+                    if rounds < 1:
+                        continue
+                    for r in range(rounds):
+                        self.device.delegate(other_device, 1, 1)
+                    last_end_time = cur_t + rounds * oppcl_time
+                    
+                    # evaluate
+                    hist = self.device.eval()
+                    self.hist_loss.append(hist[0])
+                    self.hist_metric.append(hist[1])
+                    self.timestamps.append(last_end_time)
+
+                    # report eval to dynamoDB @TODO catch error
+                    self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric, index)
+
+                    # @TODO for sync device, upload model to S3 here
+
+            self.device_in_db.update_status(FINISHED)
             
-            other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
-            other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
-            other_train_data_provider.set_chosen(other_chosen_list)
-
-            other_x_local, other_y_local_orig = other_train_data_provider.fetch()
-                
-            other_device = self.device_class(other_id,
-                                            None, 
-                                            None,
-                                            None,
-                                            other_x_local,
-                                            other_y_local_orig,
-                                            other_train_data_provider,
-                                            other_test_data_provider,
-                                            other_goal_labels,
-                                            None,
-                                            None,
-                                            None)
-
-
-            if self.device.decide_delegation(other_device):
-                # calculate time
-                cur_t = row[TIME_START]
-                end_t = row[TIME_END]
-                time_left = end_t - cur_t
-                if last_end_time > cur_t:
-                    continue
-                
-                # determine available rounds of training and conduct OppCL
-                encounter_config = self.device_config['encounter_config']
-                model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
-                computation_time = encounter_config['computation_time']
-                oppcl_time = 2 * model_send_time + computation_time
-                rounds = (int) ((time_left) / oppcl_time)
-                rounds = min(rounds, self.device_config['train_config']['max_rounds'])
-                if rounds < 1:
-                    continue
-                for r in range(rounds):
-                    self.device.delegate(other_device, 1, 1)
-                last_end_time = cur_t + rounds * oppcl_time
-                
-                # evaluate
-                hist = self.device.eval()
-                self.hist_loss.append(hist[0])
-                self.hist_metric.append(hist[1])
-                self.timestamps.append(last_end_time)
-
-                # report eval to dynamoDB @TODO catch error
-                self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric, index)
-
-                # @TODO for sync device, upload model to S3 here
-
-        self.device_in_db.update_status(FINISHED)
+        except Exception as e:
+            return self._handle_error(e)
 
     def _handle_error(self, e):
         self.device_in_db.set_error(e)
