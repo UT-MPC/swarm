@@ -108,7 +108,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                                                 None,
                                                 None)
 
-                logging.debug('encounter idx: {}'.format(index))
+                logging.debug('device: {}, encounter idx: {}'.format(self.device._id_num, index))
 
                 if self.device.decide_delegation(other_device):
                     # calculate time

@@ -41,6 +41,15 @@ class DistSwarm():
         # boto3 is the AWS SDK library for Python.
         # We can use the low-level client to make API calls to DynamoDB.
 
+        # if table already exists, delete it
+        try:
+            resp = client.delete_table(
+                TableName=tag,
+            )
+            print("Existing table {} deleted".format(tag))
+        except Exception as e:
+            print("generating new table..")
+
         try:
             resp = client.create_table(
                 TableName=tag,
