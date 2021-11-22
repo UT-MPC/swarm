@@ -108,6 +108,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                                                 None,
                                                 None)
 
+                logging.debug('encounter idx: {}'.format(index))
 
                 if self.device.decide_delegation(other_device):
                     # calculate time
@@ -142,7 +143,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                     # @TODO for sync device, upload model to S3 here
 
             self.device_in_db.update_status(FINISHED)
-            
+
         except Exception as e:
             return self._handle_error(e)
 

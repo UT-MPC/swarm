@@ -35,6 +35,7 @@ class DistSwarm():
                 stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
                 status = stub.SimulateOppCL(config)
                 print('device {}: {}'.format(device_id, status))
+            time.sleep(1)
 
     def _create_table(self, tag):
         # boto3 is the AWS SDK library for Python.
@@ -105,11 +106,8 @@ class DistSwarm():
             labels_not_in_local_set = np.setdiff1d(np.arange(num_classes), np.array(label_set))
             label_set.extend((np.random.choice(labels_not_in_local_set, 
                                         size=swarm_config['goal_set_size'] - swarm_config['local_set_size'], replace=False)).tolist())
-            print(label_set)
-            print(local_dist)
             for l in label_set:
                 goal_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
-            print(goal_dist)
 
             train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, local_dist)
             chosen_data_idx = train_data_provider.get_chosen()
