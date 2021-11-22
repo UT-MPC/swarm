@@ -80,11 +80,12 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
                 continue
 
-            self.device_in_db.fetch_status()
+            other_device_in_db = DeviceInDB(self.config['tag'], other_id)
+            other_device_in_db.fetch_status()
 
             # get device info from dynamoDB
-            other_chosen_list = self.device_in_db.get_local_labels()
-            other_goal_labels = self.device_in_db.get_goal_labels()
+            other_chosen_list = other_device_in_db.get_local_labels()
+            other_goal_labels = other_device_in_db.get_goal_labels()
             
             other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
             other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])

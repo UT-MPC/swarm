@@ -43,24 +43,24 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:device
+        image: sethlee0111/private_swarm:0.04
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
       imagePullSecrets:
       - name: regcred
 ---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ds-controller
-  labels:
-    role: controller
-spec:
-  containers:
-    - name: ds-device-controller
-      image: sethlee0111/private_swarm:server
-      imagePullPolicy: Always
-  imagePullSecrets:
-  - name: regcred
----
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: ds-controller
+#   labels:
+#     role: controller
+# spec:
+#   containers:
+#     - name: ds-device-controller
+#       image: sethlee0111/private_swarm:server
+#       imagePullPolicy: Always
+#   imagePullSecrets:
+#   - name: regcred
+# ---
