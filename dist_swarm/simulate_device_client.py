@@ -23,10 +23,7 @@ def run():
     with grpc.insecure_channel(parsed.target) as channel:
         stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
         config = simulate_device_pb2.Config(config=json.dumps(config_json))
-        status = stub.InitDevice(config)
-        print(status)
-        empty = simulate_device_pb2.Empty()
-        status = stub.StartOppCL(empty)
+        status = stub.SimulateOppCL(config)
         print(status)
 
 if __name__ == '__main__':

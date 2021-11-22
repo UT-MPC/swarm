@@ -22,18 +22,11 @@ def get_model(dataset):
     if dataset == 'mnist':
         return models.get_2nn_mnist_model
     elif dataset == 'cifar':
-        num_classes = 10
-        model_fn = models.get_hetero_cnn_cifar_model
-        x_train, y_train_orig, x_test, y_test_orig = get_cifar_dataset()
+        return models.get_hetero_cnn_cifar_model
     elif dataset == 'svhn':
-        num_classes = 10
-        model_fn = models.get_hetero_cnn_cifar_model
-        x_train, y_train_orig, x_test, y_test_orig = get_svhn_dataset('data/svhn/')
+        return models.get_hetero_cnn_cifar_model
     elif dataset == 'opportunity-uci':
-        model_fn = models.get_deep_conv_lstm_model
-        x_train, y_train_orig, x_test, y_test_orig = get_opp_uci_dataset('data/opportunity-uci/oppChallenge_gestures.data',
-                                                                        config['dataset_config']['sliding_window_length'],
-                                                                        config['dataset_config']['sliding_window_step'])
+        return models.get_deep_conv_lstm_model
 
 def get_2nn_mnist_model():
     model = Sequential()

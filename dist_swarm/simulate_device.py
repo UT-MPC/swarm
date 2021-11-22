@@ -32,7 +32,7 @@ ENC_IDX="encounter index"
 
 class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDeviceServicer):
     ### gRPC methods
-    def InitDevice(self, request, context):
+    def _init_device(self, request):
         parsed_config = json.load(StringIO(request.config))
         self.config = parsed_config
         self.device_config = parsed_config['device_config']
@@ -46,7 +46,9 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         except Exception as e:
             return self._handle_error(e)
 
-    def StartOppCL(self, request, context):
+    def SimulateOppCL(self, request, context):
+        self._init_device(request)
+
         if self.device_in_db.get_status() == ERROR:
             logging.error('device is in error state')
             return self._str_to_status(ERROR)

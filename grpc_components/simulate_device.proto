@@ -25,18 +25,11 @@ package simulatedeivce;
 service SimulateDevice {
   // A simple RPC.
   //
-  // Initializes the Devices.
-  rpc InitDevice(Config) returns (Status) {}
 
   // Starts the OppCL simulation.
-  rpc StartOppCL(Empty) returns (Status) {}
+  rpc SimulateOppCL(Config) returns (Status) {}
 
-  // Checks the Status of the Devices.
-  rpc CheckDevice(Empty) returns (Status) {}
-
-  // Checks the Status of the Devices.
-  rpc GetResult(Empty) returns (stream Result) {}
-
+  rpc GetDeviceInfo(Empty) returns (DeviceInfo) {}
 }
 
 // empty message
@@ -54,9 +47,8 @@ message Status {
     string status = 1;
   }
 
-// Result: device-specific config file
-// metric: accuracy or F1-score
-message Result {
-    int32 loss = 1;
-    int32 metric = 2;
+// DeviceInfo
+message DeviceInfo {
+    int32 id = 1;
+    string status = 2;
   }

@@ -7,6 +7,8 @@ import simulate_device_pb2 as simulate__device__pb2
 
 class SimulateDeviceStub(object):
     """Interface exported by the server.
+    A simple RPC.
+
     """
 
     def __init__(self, channel):
@@ -15,58 +17,33 @@ class SimulateDeviceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.InitDevice = channel.unary_unary(
-                '/simulatedeivce.SimulateDevice/InitDevice',
+        self.SimulateOppCL = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/SimulateOppCL',
                 request_serializer=simulate__device__pb2.Config.SerializeToString,
                 response_deserializer=simulate__device__pb2.Status.FromString,
                 )
-        self.StartOppCL = channel.unary_unary(
-                '/simulatedeivce.SimulateDevice/StartOppCL',
+        self.GetDeviceInfo = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/GetDeviceInfo',
                 request_serializer=simulate__device__pb2.Empty.SerializeToString,
-                response_deserializer=simulate__device__pb2.Status.FromString,
-                )
-        self.CheckDevice = channel.unary_unary(
-                '/simulatedeivce.SimulateDevice/CheckDevice',
-                request_serializer=simulate__device__pb2.Empty.SerializeToString,
-                response_deserializer=simulate__device__pb2.Status.FromString,
-                )
-        self.GetResult = channel.unary_stream(
-                '/simulatedeivce.SimulateDevice/GetResult',
-                request_serializer=simulate__device__pb2.Empty.SerializeToString,
-                response_deserializer=simulate__device__pb2.Result.FromString,
+                response_deserializer=simulate__device__pb2.DeviceInfo.FromString,
                 )
 
 
 class SimulateDeviceServicer(object):
     """Interface exported by the server.
+    A simple RPC.
+
     """
 
-    def InitDevice(self, request, context):
-        """A simple RPC.
-
-        Initializes the Devices.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def StartOppCL(self, request, context):
+    def SimulateOppCL(self, request, context):
         """Starts the OppCL simulation.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CheckDevice(self, request, context):
-        """Checks the Status of the Devices.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetResult(self, request, context):
-        """Checks the Status of the Devices.
-        """
+    def GetDeviceInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -74,25 +51,15 @@ class SimulateDeviceServicer(object):
 
 def add_SimulateDeviceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'InitDevice': grpc.unary_unary_rpc_method_handler(
-                    servicer.InitDevice,
+            'SimulateOppCL': grpc.unary_unary_rpc_method_handler(
+                    servicer.SimulateOppCL,
                     request_deserializer=simulate__device__pb2.Config.FromString,
                     response_serializer=simulate__device__pb2.Status.SerializeToString,
             ),
-            'StartOppCL': grpc.unary_unary_rpc_method_handler(
-                    servicer.StartOppCL,
+            'GetDeviceInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetDeviceInfo,
                     request_deserializer=simulate__device__pb2.Empty.FromString,
-                    response_serializer=simulate__device__pb2.Status.SerializeToString,
-            ),
-            'CheckDevice': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckDevice,
-                    request_deserializer=simulate__device__pb2.Empty.FromString,
-                    response_serializer=simulate__device__pb2.Status.SerializeToString,
-            ),
-            'GetResult': grpc.unary_stream_rpc_method_handler(
-                    servicer.GetResult,
-                    request_deserializer=simulate__device__pb2.Empty.FromString,
-                    response_serializer=simulate__device__pb2.Result.SerializeToString,
+                    response_serializer=simulate__device__pb2.DeviceInfo.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -103,10 +70,12 @@ def add_SimulateDeviceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class SimulateDevice(object):
     """Interface exported by the server.
+    A simple RPC.
+
     """
 
     @staticmethod
-    def InitDevice(request,
+    def SimulateOppCL(request,
             target,
             options=(),
             channel_credentials=None,
@@ -116,14 +85,14 @@ class SimulateDevice(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/InitDevice',
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/SimulateOppCL',
             simulate__device__pb2.Config.SerializeToString,
             simulate__device__pb2.Status.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def StartOppCL(request,
+    def GetDeviceInfo(request,
             target,
             options=(),
             channel_credentials=None,
@@ -133,42 +102,8 @@ class SimulateDevice(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/StartOppCL',
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/GetDeviceInfo',
             simulate__device__pb2.Empty.SerializeToString,
-            simulate__device__pb2.Status.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def CheckDevice(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/CheckDevice',
-            simulate__device__pb2.Empty.SerializeToString,
-            simulate__device__pb2.Status.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetResult(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/simulatedeivce.SimulateDevice/GetResult',
-            simulate__device__pb2.Empty.SerializeToString,
-            simulate__device__pb2.Result.FromString,
+            simulate__device__pb2.DeviceInfo.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
