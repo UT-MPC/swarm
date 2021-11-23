@@ -16,6 +16,7 @@ from decimal import Decimal
 
 from models import get_model
 from get_dataset import get_dataset
+from get_optimizer import get_optimizer
 from get_device import get_device_class
 import data_process as dp
 import grpc_components.simulate_device_pb2_grpc
@@ -62,11 +63,14 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
 
     def _start_oppcl(self):
         try:
-            enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + self.device_config['encounter_config']['encounter_data_file'])
-            if enc_dataset_path.split('.')[-1] == 'pickle':
-                enc_df = read_pickle(enc_dataset_path)
+            enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
+            enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
+            if enc_dataset_filename.split('.')[-1] == 'pickle':
+                with open(enc_dataset_path,'rb') as pfile:
+                    enc_df = read_pickle(pfile)
             else:
-                enc_df = read_csv(enc_dataset_path)
+                with open(enc_dataset_path,'rb') as pfile:
+                    enc_df = read_csv(pfile)
             last_end_time = 0
             last_run_time = 0
             self.device_in_db.update_status(RUNNING)
@@ -89,7 +93,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                 other_device_in_db.fetch_status()
 
                 # get device info from dynamoDB
-                other_chosen_list = other_device_in_db.get_local_labels()
+                other_chosen_list = other_device_in_db.get_data_indices()
                 other_goal_labels = other_device_in_db.get_goal_labels()
                 
                 other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
@@ -110,7 +114,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                                                 None,
                                                 None,
                                                 None)
-
+                
                 logging.debug('device: {}, encounter idx: {}'.format(self.device._id_num, index))
 
                 if self.device.decide_delegation(other_device):
@@ -131,6 +135,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                     if rounds < 1:
                         continue
                     for r in range(rounds):
+                        print('in rounds')
                         self.device.delegate(other_device, 1, 1)
                     last_end_time = cur_t + rounds * oppcl_time
                     
@@ -138,6 +143,8 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                     hist = self.device.eval()
                     self.hist_loss.append(hist[0])
                     self.hist_metric.append(hist[1])
+                    print('current loss: {}'.format(hist[0]))
+                    print('current metric: {}'.format(hist[1]))
                     self.timestamps.append(last_end_time)
 
                     # report eval to dynamoDB @TODO catch error
@@ -148,6 +155,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
             self.device_in_db.update_status(FINISHED)
 
         except Exception as e:
+            print(e)
             return self._handle_error(e)
 
     def _handle_error(self, e):
@@ -201,7 +209,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
 
         device = self.device_class(config['device_config']['id'],
                                     model_fn, 
-                                    keras.optimizers.SGD,
+                                    get_optimizer(config['device_config']['train_config']['optimizer']),
                                     init_weights,
                                     x_local,
                                     y_local_orig,
