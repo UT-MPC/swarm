@@ -22,7 +22,7 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_walk_client_45_epi_500_dur_50.pickle",
+            "encounter_data_file": "encounter_data/cli_10_test.pickle",
             "computation_time": 0.24,
             "communication_rate": 2000000
         },

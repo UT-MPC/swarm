@@ -63,7 +63,10 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
     def _start_oppcl(self):
         try:
             enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + self.device_config['encounter_config']['encounter_data_file'])
-            enc_df = read_pickle(enc_dataset_path)
+            if enc_dataset_path.split('.')[-1] == 'pickle':
+                enc_df = read_pickle(enc_dataset_path)
+            else:
+                enc_df = read_csv(enc_dataset_path)
             last_end_time = 0
             last_run_time = 0
             self.device_in_db.update_status(RUNNING)
