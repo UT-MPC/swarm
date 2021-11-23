@@ -12,7 +12,7 @@ from decimal import Decimal
 import data_process as dp
 from get_dataset import get_dataset
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, LOCAL_DIST, \
+from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, \
     DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
@@ -146,7 +146,7 @@ class DistSwarm():
                 batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: {},
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
-                    EVAL_HIST_LOSS: {}, EVAL_HIST_METRIC: {}, ENC_IDX: -1, ERROR_TRACE: {}})
+                    EVAL_HIST_LOSS: {}, EVAL_HIST_METRIC: {}, ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
 
 def convert_to_map(dist):
     new_dist = {}

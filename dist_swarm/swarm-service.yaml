@@ -43,7 +43,7 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.08
+        image: sethlee0111/private_swarm:0.02
         imagePullPolicy: Always
         ports:
         - containerPort: 50051

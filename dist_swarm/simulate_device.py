@@ -1,4 +1,5 @@
 import sys
+import os
 
 from dist_swarm.model_in_db import ModelInDB
 sys.path.insert(0,'./grpc_components')
@@ -57,6 +58,7 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         try:
             oppcl_thread = threading.Thread(target=self._start_oppcl, args=())
             oppcl_thread.start()
+            self.device_in_db.set_hostname(os.environ['HOSTNAME'])
             return self._str_to_status(RUNNING)
         except Exception as e:
             return self._handle_error(e)

@@ -14,8 +14,8 @@ class DistSwarmTests(unittest.TestCase):
     # def test_empty(self):
     #     pass
 
-    # def test_run(self):
-    #     self.swarm.run()
+    def test_run(self):
+        self.swarm.run()
 
 if __name__ == '__main__':
     unittest.main()

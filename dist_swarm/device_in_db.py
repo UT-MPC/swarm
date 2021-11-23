@@ -4,7 +4,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
 
-from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, \
+from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
             GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
@@ -89,5 +89,16 @@ class DeviceInDB():
                 )
         self.status = status
 
+    def set_hostname(self, hostname):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.device_id},
+                    ExpressionAttributeNames={
+                        "#hostname": HOSTNAME
+                    },
+                    ExpressionAttributeValues={
+                        ":hostname": hostname
+                    },
+                    UpdateExpression="SET #hostname = :hostname",
+                )
 
 
