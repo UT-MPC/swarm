@@ -379,17 +379,25 @@ class Device():
         model.set_weights(self._weights)
         X = other._x_train
         y = other._y_train
+
+        CL = 0.01
         with tf.GradientTape() as tape:
             pred = model(X)
+            for i in range(0,len(model.trainable_variables)):
+                if i==0:
+                    l2_loss = CL * tf.nn.l2_loss(model.trainable_variables[i])
+                if i>=1:
+                    l2_loss = l2_loss+ CL * tf.nn.l2_loss(model.trainable_variables[i])
             loss = keras.metrics.categorical_crossentropy(y, pred)
+            loss += l2_loss
         grads = tape.gradient(loss, model.trainable_variables)
         opt = self._get_optimizer(model)
         opt.apply_gradients(zip(grads, model.trainable_variables))
 
         # save optimizer state
         self.optimizer_weights = opt.get_weights()
-        K.clear_session()
-        return self._weights
+        self._weights = model.get_weights()
+        return model.get_weights()
 
         # model = self._get_model()
         

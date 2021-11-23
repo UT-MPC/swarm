@@ -3,7 +3,7 @@ import os
 
 from dist_swarm.model_in_db import ModelInDB
 sys.path.insert(0,'./grpc_components')
-import os
+import socket
 import tensorflow.keras as keras
 import pickle
 import threading
@@ -55,10 +55,10 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
         if self.device_in_db.get_status() == ERROR:
             logging.error('device is in error state')
             return self._str_to_status(ERROR)
+        self.device_in_db.set_hostname(socket.gethostname())
         try:
             oppcl_thread = threading.Thread(target=self._start_oppcl, args=())
             oppcl_thread.start()
-            self.device_in_db.set_hostname(os.environ['HOSTNAME'])
             return self._str_to_status(RUNNING)
         except Exception as e:
             return self._handle_error(e)
@@ -137,7 +137,6 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                     if rounds < 1:
                         continue
                     for r in range(rounds):
-                        print('in rounds')
                         self.device.delegate(other_device, 1, 1)
                     last_end_time = cur_t + rounds * oppcl_time
                     
@@ -145,8 +144,6 @@ class SimulateDeviceServicer(grpc_components.simulate_device_pb2_grpc.SimulateDe
                     hist = self.device.eval()
                     self.hist_loss.append(hist[0])
                     self.hist_metric.append(hist[1])
-                    print('current loss: {}'.format(hist[0]))
-                    print('current metric: {}'.format(hist[1]))
                     self.timestamps.append(last_end_time)
 
                     # report eval to dynamoDB @TODO catch error

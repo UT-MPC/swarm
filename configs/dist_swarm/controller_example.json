@@ -22,7 +22,7 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/cli_10_test.pickle",
+            "encounter_data_file": "encounter_data/sigcomm_new_5000.pickle",
             "computation_time": 0.24,
             "communication_rate": 2000000
         },
@@ -41,8 +41,9 @@
             "num-rounds": 250,
             "time-per-round": 100,
             "decay": 0.998,
+            "optimizer": "adam",
             "optimizer-params": {
-                "learning_rate": 0.01
+                "learning_rate": 0.001
             }
         },
         "__comment__": "This is an examplar json that is sent to simulate_device_services"
