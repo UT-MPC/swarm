@@ -7,6 +7,7 @@ import argparse
 import json
 import numpy as np
 import time
+from decimal import Decimal
 
 import data_process as dp
 from get_dataset import get_dataset
@@ -41,15 +42,6 @@ class DistSwarm():
         # boto3 is the AWS SDK library for Python.
         # We can use the low-level client to make API calls to DynamoDB.
 
-        # if table already exists, delete it
-        try:
-            resp = client.delete_table(
-                TableName=tag,
-            )
-            print("Existing table {} deleted".format(tag))
-        except Exception as e:
-            print("generating new table..")
-
         try:
             resp = client.create_table(
                 TableName=tag,
@@ -80,6 +72,35 @@ class DistSwarm():
         except Exception as e:
             print("Error creating table:")
             print(e)
+
+        # # delete all the existing items in the db
+        try:
+            table = dynamodb.Table(tag)
+            #get the table keys
+            tableKeyNames = [key.get("AttributeName") for key in table.key_schema]
+
+            #Only retrieve the keys for each item in the table (minimize data transfer)
+            projectionExpression = ", ".join('#' + key for key in tableKeyNames)
+            expressionAttrNames = {'#'+key: key for key in tableKeyNames}
+
+            counter = 0
+            page = table.scan(ProjectionExpression=projectionExpression, ExpressionAttributeNames=expressionAttrNames)
+            with table.batch_writer() as batch:
+                while page["Count"] > 0:
+                    counter += page["Count"]
+                    # Delete items in batches
+                    for itemKeys in page["Items"]:
+                        batch.delete_item(Key=itemKeys)
+                    # Fetch the next page
+                    if 'LastEvaluatedKey' in page:
+                        page = table.scan(
+                            ProjectionExpression=projectionExpression, ExpressionAttributeNames=expressionAttrNames,
+                            ExclusiveStartKey=page['LastEvaluatedKey'])
+                    else:
+                        break
+            print(f"Deleted {counter}")
+        except:
+            print("new table; nothing to delete")
 
 
     def _config_client(self, ip):
