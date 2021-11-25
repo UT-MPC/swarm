@@ -36,7 +36,7 @@ class DistDevice():
         
         try:
             self._initialize_model_in_db(self.config)
-            logging.basicConfig(filename=self.config['tag'] + '.log', encoding='utf-8', level=logging.DEBUG)
+            logging.debug('device {} initializing'.format(self.device_config['id']))
             self.device_in_db = DeviceInDB(self.config['tag'], self.device_config['id'])
             self.device = self._initialize_device(self.config)
             self.device_in_db.update_status(IDLE)
@@ -73,6 +73,7 @@ class DistDevice():
             self.timestamps = []
 
             for index, row in enc_df.iterrows():
+                logging.info('index {}'.format(index))
                 if (int)(row[CLIENT1]) == self.device._id_num:
                     other_id = (int)(row[CLIENT2])
                 elif (int)(row[CLIENT2]) == self.device._id_num:
@@ -143,6 +144,7 @@ class DistDevice():
 
                     # @TODO for sync device, upload model to S3 here
 
+            logging.info('simulation complete.')
             self.device_in_db.update_status(FINISHED)
 
         except Exception as e:
