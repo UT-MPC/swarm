@@ -73,7 +73,6 @@ class DistDevice():
             self.timestamps = []
 
             for index, row in enc_df.iterrows():
-                logging.info('device: {}, index {}'.format(self.device._id_num, index))
                 if (int)(row[CLIENT1]) == self.device._id_num:
                     other_id = (int)(row[CLIENT2])
                 elif (int)(row[CLIENT2]) == self.device._id_num:
@@ -139,6 +138,7 @@ class DistDevice():
 
                     
                     # report eval to dynamoDB @TODO catch error
+                    logging.info('device: {}, index {}'.format(self.device._id_num, index))
                     self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
 
                     # @TODO for sync device, upload model to S3 here

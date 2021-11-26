@@ -22,8 +22,8 @@ client = boto3.client('dynamodb', region_name=REGION)
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 
 class DistSwarm():
-    def __init__(self, config_file, tag, ip) -> None:
-        self._config_db(config_file, tag)
+    def __init__(self, config_file, ip) -> None:
+        self._config_db(config_file)
         self._config_client(ip)
         
     # deploy and run workers
@@ -106,12 +106,13 @@ class DistSwarm():
     def _config_client(self, ip):
         self.loadbalancer_ip = ip
 
-    def _config_db(self, config_file, tag):
+    def _config_db(self, config_file):
         # load config file
         with open(config_file, 'rb') as f:
             config_json = f.read()
         config = json.loads(config_json)
         self.config = config
+        tag = config['tag']
         swarm_config = config['swarm_config']
 
         x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
