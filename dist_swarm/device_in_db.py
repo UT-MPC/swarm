@@ -47,7 +47,7 @@ class DeviceInDB():
     ########
 
     # Setters
-    def update_loss_and_metric(self, loss_hist, metric_hist, enc_idx):
+    def update_loss_and_metric(self, loss, metric, enc_idx):
         resp = self.table.update_item(
                     Key={DEVICE_ID: self.device_id},
                     ExpressionAttributeNames={
@@ -56,11 +56,12 @@ class DeviceInDB():
                         "#enc_idx": ENC_IDX,
                     },
                     ExpressionAttributeValues={
-                        ":loss": [Decimal(str(loss)) for loss in loss_hist],
-                        ":metric": [Decimal(str(metric)) for metric in metric_hist],
+                        ":loss": [Decimal(loss)],
+                        ":metric": [Decimal(metric)],
                         ":enc_idx": enc_idx
                     },
-                    UpdateExpression="SET #loss = :loss, #metric = :metric, #enc_idx = :enc_idx",
+                    UpdateExpression="SET #loss = list_append(#loss, :loss), \
+                    #metric = list_append(#metric, :metric), #enc_idx = :enc_idx",
                 )
 
     def set_error(self, e):

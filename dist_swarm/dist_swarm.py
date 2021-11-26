@@ -146,7 +146,7 @@ class DistSwarm():
                 batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: {},
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
-                    EVAL_HIST_LOSS: {}, EVAL_HIST_METRIC: {}, ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
+                    EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
 
 def convert_to_map(dist):
     new_dist = {}
@@ -159,3 +159,6 @@ def convert_from_map(m):
     for k in m:
         dist[int(m)] = m[k]
     return dist
+
+if __name__ == '__main__':
+    dist_swarm = DistSwarm('../configs/dist_swarm/controller_example.json', 'unittest', '')

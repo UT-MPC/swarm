@@ -73,7 +73,7 @@ class DistDevice():
             self.timestamps = []
 
             for index, row in enc_df.iterrows():
-                logging.info('index {}'.format(index))
+                logging.info('device: {}, index {}'.format(self.device._id_num, index))
                 if (int)(row[CLIENT1]) == self.device._id_num:
                     other_id = (int)(row[CLIENT2])
                 elif (int)(row[CLIENT2]) == self.device._id_num:
@@ -110,8 +110,6 @@ class DistDevice():
                                                 None,
                                                 None)
                 
-                logging.debug('device: {}, encounter idx: {}'.format(self.device._id_num, index))
-
                 if self.device.decide_delegation(other_device):
                     # calculate time
                     cur_t = row[TIME_START]
@@ -132,19 +130,20 @@ class DistDevice():
                     for r in range(rounds):
                         self.device.delegate(other_device, 1, 1)
                     last_end_time = cur_t + rounds * oppcl_time
-                    
+
                     # evaluate
                     hist = self.device.eval()
                     self.hist_loss.append(hist[0])
                     self.hist_metric.append(hist[1])
                     self.timestamps.append(last_end_time)
 
+                    
                     # report eval to dynamoDB @TODO catch error
-                    self.device_in_db.update_loss_and_metric(self.hist_loss, self.hist_metric, index)
+                    self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
 
                     # @TODO for sync device, upload model to S3 here
 
-            logging.info('simulation complete.')
+            logging.info('device: {}: simulation complete.'.format(self.device._id_num))
             self.device_in_db.update_status(FINISHED)
 
         except Exception as e:
