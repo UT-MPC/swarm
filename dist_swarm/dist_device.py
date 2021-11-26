@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0,'..')
 import os
-
+import time
 from dist_swarm.model_in_db import ModelInDB
 import socket
 import tensorflow.keras as keras
@@ -72,6 +72,8 @@ class DistDevice():
             self.hist_metric = []
             self.timestamps = []
 
+            prev_sys_time = time.time()
+
             for index, row in enc_df.iterrows():
                 if (int)(row[CLIENT1]) == self.device._id_num:
                     other_id = (int)(row[CLIENT2])
@@ -139,7 +141,12 @@ class DistDevice():
                     
                     # report eval to dynamoDB @TODO catch error
                     logging.info('device: {}, index {}'.format(self.device._id_num, index))
-                    self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
+                    # self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
+                    cur_sys_time = time.time()
+                    timediff = cur_sys_time - prev_sys_time
+                    if timediff > 2:
+                        self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, index)
+                        prev_sys_time = time.time()
 
                     # @TODO for sync device, upload model to S3 here
 

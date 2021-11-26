@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0,'./grpc_components')
 import boto3
 from boto3.dynamodb.conditions import Key
+import time
 from decimal import Decimal
 
 from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
@@ -62,6 +63,22 @@ class DeviceInDB():
                     },
                     UpdateExpression="SET #loss = list_append(#loss, :loss), \
                     #metric = list_append(#metric, :metric), #enc_idx = :enc_idx",
+                )
+
+    def update_loss_and_metric_in_bulk(self, loss_hist, metric_hist, enc_idx):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.device_id},
+                    ExpressionAttributeNames={
+                        "#loss": EVAL_HIST_LOSS,
+                        "#metric": EVAL_HIST_METRIC,
+                        "#enc_idx": ENC_IDX,
+                    },
+                    ExpressionAttributeValues={
+                        ":loss": [Decimal(str(loss)) for loss in loss_hist],
+                        ":metric": [Decimal(str(metric)) for metric in metric_hist],
+                        ":enc_idx": enc_idx
+                    },
+                    UpdateExpression="SET #loss = :loss, #metric = :metric, #enc_idx = :enc_idx",
                 )
 
     def set_error(self, e):
