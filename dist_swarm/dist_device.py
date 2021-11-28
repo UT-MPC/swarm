@@ -71,6 +71,7 @@ class DistDevice():
             self.hist_loss = []
             self.hist_metric = []
             self.timestamps = []
+            self.other_device_cache = {}
 
             prev_sys_time = time.time()
 
@@ -84,20 +85,25 @@ class DistDevice():
 
                 if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
                     continue
-
-                other_device_in_db = DeviceInDB(self.config['tag'], other_id)
-                other_device_in_db.fetch_status() #TODO cache status. currently it is too read heavy
-
-                # get device info from dynamoDB
-                other_chosen_list = other_device_in_db.get_data_indices()
-                other_goal_labels = other_device_in_db.get_goal_labels()
                 
+                if other_id not in self.other_device_cache:
+                    other_device_in_db = DeviceInDB(self.config['tag'], other_id)
+                    other_device_in_db.fetch_status() #TODO cache status. currently it is too read heavy
+
+                    # get device info from dynamoDB and cache them 
+                    self.other_device_cache[other_id] = {}
+                    self.other_device_cache[other_id]['chosen_list']  = other_device_in_db.get_data_indices()
+                    self.other_device_cache[other_id]['goal_labels'] = other_device_in_db.get_goal_labels()
+
+                other_chosen_list = self.other_device_cache[other_id]['chosen_list']
+                other_goal_labels = self.other_device_cache[other_id]['goal_labels']
+
                 other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
                 other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
                 other_train_data_provider.set_chosen(other_chosen_list)
 
                 other_x_local, other_y_local_orig = other_train_data_provider.fetch()
-                    
+
                 other_device = self.device_class(other_id,
                                                 None, 
                                                 None,

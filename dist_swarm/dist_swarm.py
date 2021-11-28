@@ -62,8 +62,8 @@ class DistSwarm():
                 # ProvisionedThroughput controls the amount of data you can read or write to DynamoDB per second.
                 # You can control read and write capacity independently.
                 ProvisionedThroughput={
-                    "ReadCapacityUnits": 20,
-                    "WriteCapacityUnits": 10
+                    "ReadCapacityUnits": 70,
+                    "WriteCapacityUnits": 40
                 }
                 # BillingMode='PAY_PER_REQUEST'
             )
