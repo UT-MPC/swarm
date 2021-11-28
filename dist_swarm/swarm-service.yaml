@@ -22,7 +22,7 @@ metadata:
   labels:
     app: dist-swarm
 spec:
-  replicas: 5
+  replicas: 3
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -44,7 +44,7 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.02
+        image: sethlee0111/private_swarm:0.03
         imagePullPolicy: Always
         ports:
         - containerPort: 50051

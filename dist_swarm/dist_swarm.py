@@ -62,8 +62,8 @@ class DistSwarm():
                 # ProvisionedThroughput controls the amount of data you can read or write to DynamoDB per second.
                 # You can control read and write capacity independently.
                 ProvisionedThroughput={
-                    "ReadCapacityUnits": 5,
-                    "WriteCapacityUnits": 5
+                    "ReadCapacityUnits": 20,
+                    "WriteCapacityUnits": 10
                 }
                 # BillingMode='PAY_PER_REQUEST'
             )
@@ -145,7 +145,7 @@ class DistSwarm():
             chosen_data_idx = train_data_provider.get_chosen()
             table = dynamodb.Table(tag)
             with table.batch_writer() as batch:
-                batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: {},
+                batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
                     EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
@@ -163,4 +163,4 @@ def convert_from_map(m):
     return dist
 
 if __name__ == '__main__':
-    dist_swarm = DistSwarm('../configs/dist_swarm/controller_example.json', 'unittest', '')
+    dist_swarm = DistSwarm('../configs/dist_swarm/controller_example.json', '')

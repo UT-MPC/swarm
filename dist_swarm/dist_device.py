@@ -86,7 +86,7 @@ class DistDevice():
                     continue
 
                 other_device_in_db = DeviceInDB(self.config['tag'], other_id)
-                other_device_in_db.fetch_status()
+                other_device_in_db.fetch_status() #TODO cache status. currently it is too read heavy
 
                 # get device info from dynamoDB
                 other_chosen_list = other_device_in_db.get_data_indices()
@@ -146,6 +146,7 @@ class DistDevice():
                     timediff = cur_sys_time - prev_sys_time
                     if timediff > 2:
                         self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, index)
+                        self.device_in_db.update_timestamps_in_bulk(self.timestamps)
                         prev_sys_time = time.time()
 
                     # @TODO for sync device, upload model to S3 here
