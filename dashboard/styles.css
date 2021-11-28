@@ -1,5 +1,5 @@
 body{
-    color: #CCCAC2;
+    color: #F3F4F5;
     background-color: #1F2430;
     font-family: 'Nunito Sans', sans-serif;
   }
@@ -15,11 +15,24 @@ body{
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 23px;
 }
-#swarm-info-text{
+#swarm-info-text, #swarm-graph-text {
   color: #F3F4F5;
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 20px;
   padding: 10px;
+}
+
+#welcome {
+  margin: 40px;
+  text-align: center;
+}
+
+#devices-table tr:hover {
+  opacity: 0.65
+}
+
+#swarm-chart {
+  color: #CCCAC2 !important;
 }
 
 .nav-pills {
