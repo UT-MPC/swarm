@@ -9,6 +9,7 @@ EVAL_HIST_LOSS = "EvalHistLoss"
 EVAL_HIST_METRIC = "EvalHistMetric"
 ENC_IDX = "EncIdx"
 HOSTNAME = "Hostname"
+TOTAL_ENC_IDX = "TotalEncIdx"
 
 DEV_STATUS = "DeviceStatus"
 

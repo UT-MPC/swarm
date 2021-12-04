@@ -158,6 +158,7 @@ class DistDevice():
                     # @TODO for sync device, upload model to S3 here
 
             logging.info('device: {}: simulation complete.'.format(self.device._id_num))
+            self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, len(enc_df.index)-1)
             self.device_in_db.update_status(FINISHED)
 
         except Exception as e:

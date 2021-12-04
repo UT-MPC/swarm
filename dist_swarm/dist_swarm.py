@@ -1,6 +1,7 @@
 import sys
 sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
+import os
 import boto3
 import grpc
 import argparse
@@ -8,11 +9,13 @@ import json
 import numpy as np
 import time
 from decimal import Decimal
+from pathlib import Path, PurePath
+from pandas import read_pickle, read_csv
 
 import data_process as dp
 from get_dataset import get_dataset
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, \
+from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, TOTAL_ENC_IDX,\
     DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
@@ -62,8 +65,8 @@ class DistSwarm():
                 # ProvisionedThroughput controls the amount of data you can read or write to DynamoDB per second.
                 # You can control read and write capacity independently.
                 ProvisionedThroughput={
-                    "ReadCapacityUnits": 70,
-                    "WriteCapacityUnits": 40
+                    "ReadCapacityUnits": 30,
+                    "WriteCapacityUnits": 30
                 }
                 # BillingMode='PAY_PER_REQUEST'
             )
@@ -121,6 +124,15 @@ class DistSwarm():
 
         self._create_table(tag)
 
+        enc_dataset_filename = self.config['device_config']['encounter_config']['encounter_data_file']
+        enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
+        if enc_dataset_filename.split('.')[-1] == 'pickle':
+            with open(enc_dataset_path,'rb') as pfile:
+                enc_df = read_pickle(pfile)
+        else:
+            with open(enc_dataset_path,'rb') as pfile:
+                enc_df = read_csv(pfile)
+
         # store local data dist, goal dist, and trining data indices in the table
         for idnum in range(swarm_config['number_of_devices']):
             print('init db for device {}.'.format(idnum))
@@ -147,7 +159,7 @@ class DistSwarm():
             with table.batch_writer() as batch:
                 batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
                     GOAL_DIST: convert_to_map(goal_dist),
-                    LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx,
+                    LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx, TOTAL_ENC_IDX: len(enc_df.index),
                     EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
 
 def convert_to_map(dist):

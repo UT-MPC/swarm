@@ -1,8 +1,8 @@
 {
     "dataset": "mnist",
-    "tag": "unittest",
+    "tag": "hyccups_gr",
     "swarm_config": {
-        "number_of_devices": 3,
+        "number_of_devices": 10,
         "local_set_size": 2,
         "local_data_size": 150,
         "goal_set_size": 5,
@@ -22,9 +22,9 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/sigcomm_new_5000.pickle",
+            "encounter_data_file": "encounter_data/hyccups_v4.csv",
             "computation_time": 0.24,
-            "communication_rate": 2000000
+            "communication_rate": 16000000
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
@@ -34,7 +34,7 @@
             "evaluation-metrics": "loss-and-accuracy",
             "kappa": 7,
             "offset": 0.96,
-            "apply-rate": 9,
+            "apply-rate": 5,
             "test-data-per-label": 800,
             "similarity-threshold": 0.5,
             "low-similarity-threshold": 0.5,
