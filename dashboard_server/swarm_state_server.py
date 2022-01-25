@@ -36,7 +36,26 @@ def swarm_metric():
     resp = {}
     resp['times'] = times
     resp['accs_list'] = loss_list
+
+    # sample 128 points evenly from all points
+    if len(resp['times']) >= 100:
+
     return resp
+
+def even_sampling(orig, num):
+    itvl = len(orig)/num
+    if itvl < 1:
+        return orig
+    idx = 0
+    lst = []
+    while (idx < len(orig)):
+        lst.append(orig[int(idx)])
+        idx += itvl
+
+    if int(idx) != len(orig) - 1:
+        lst.append(orig[-1])    
+
+    return lst
 
 def get_paginator_itr():
     swarm_name = request.args.get('swarm-name')
@@ -57,17 +76,19 @@ def get_all_devices(remove_keys):
 
     return resp
 
+@app.route("/get-all-hist")
 def get_all_devices_as_hist():
     # @TODO interpoloate dots when there are too many
     resp = get_all_devices([])
     hist = {}
     hist['dummy_key'] = {}
     for dev in resp['devices']:
-        hist['dummy_key'][dev['DeviceId']['N']] = []
+        hist['dummy_key'][int(dev['DeviceId']['N'])] = []
         for i in range(len(dev['TimeStamps']['L'])):
-            hist['dummy_key'][dev['DeviceId']['N']].append([float(dev['TimeStamps']['L'][i]['N']), 
+            hist['dummy_key'][int(dev['DeviceId']['N'])].append([float(dev['TimeStamps']['L'][i]['N']),
             [float(dev['EvalHistLoss']['L'][i]['N']), float(dev['EvalHistMetric']['L'][i]['N'])]])
-
+        if len(hist['dummy_key'][int(dev['DeviceId']['N'])]) == 0:
+            hist['dummy_key'][int(dev['DeviceId']['N'])].append([0, [1, 0]])
     return hist
     
 def get_accs_over_time(loaded_hist, key):
@@ -75,11 +96,10 @@ def get_accs_over_time(loaded_hist, key):
     for k in loaded_hist[key].keys():
         i = 0
         for t, h in loaded_hist[key][k]:
-            if t != 0:
+            if i != 0:
                 loss_diff_at_time.append((t, loaded_hist[key][k][i][1][1] - loaded_hist[key][k][i-1][1][1]))
             i += 1
     loss_diff_at_time.sort(key=lambda x: x[0])
-
     # concatenate duplicate time stamps
     ldat_nodup = []
     for lt in loss_diff_at_time:
@@ -94,11 +114,11 @@ def get_accs_over_time(loaded_hist, key):
     accum = []
     for c in loaded_hist[key].keys():
         accum.append(loaded_hist[key][c][0][1][1])
-        
+
     loss_list.append(sum(accum)/len(accum))
     for i in range(1, len(ldat_nodup)):
         times.append(ldat_nodup[i][0])
         loss_list.append(loss_list[i-1] + ldat_nodup[i][1]/len(loaded_hist[key]))
-        
+
     return times, loss_list
 

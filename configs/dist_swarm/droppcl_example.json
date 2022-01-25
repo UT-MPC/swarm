@@ -1,6 +1,6 @@
 {
     "dataset": "mnist",
-    "tag": "levy_l",
+    "tag": "hyccups_gr",
     "swarm_config": {
         "number_of_devices": 45,
         "local_set_size": 2,
@@ -15,14 +15,14 @@
                         }
     },
     "device_config": {
-        "device_strategy": "greedy",
+        "device_strategy": "c_only dropout",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_walk_client_45_epi_1000_dur_50.pickle",
+            "encounter_data_file": "encounter_data/hyccups_v4.csv",
             "computation_time": 0.24,
             "communication_rate": 16000000
         },
@@ -44,6 +44,22 @@
             "optimizer": "adam",
             "optimizer-params": {
                 "learning_rate": 0.001
+            },
+            "enc-exp-config":{
+                "client-sizes": {
+                    "model-sizes": [10, 10, 8, 6, 4],
+                    "device-powers": [10, 8, 6, 4, 2]
+                },
+                "model-params": {"1": 8070,
+                    "2": 16330,
+                    "3": 24790,
+                    "4": 33450,
+                    "5": 42310,
+                    "6": 51370,
+                    "7": 60630,
+                    "8": 70090,
+                    "9": 79750,
+                    "10": 89610}
             }
         },
         "__comment__": "This is an examplar json that is sent to simulate_device_services"

@@ -104,6 +104,7 @@ class DistDevice():
 
                 other_x_local, other_y_local_orig = other_train_data_provider.fetch()
 
+                hyperparams = self.config['device_config']['train_config']
                 other_device = self.device_class(other_id,
                                                 None, 
                                                 None,
@@ -115,7 +116,7 @@ class DistDevice():
                                                 other_goal_labels,
                                                 None,
                                                 None,
-                                                None)
+                                                hyperparams)
                 
                 if self.device.decide_delegation(other_device):
                     # calculate time
