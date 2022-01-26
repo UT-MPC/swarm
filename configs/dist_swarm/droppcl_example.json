@@ -46,6 +46,10 @@
             "optimizer-params": {
                 "learning_rate": 0.001
             },
+            "computation-time": 0.24,
+            "communication-rate": 2000000,
+            "max-iteration": 3,
+            "minimum-bits-to" : 3,
             "enc-exp-config":{
                 "client-sizes": {
                     "model-sizes": [10, 10, 8, 6, 4],
