@@ -127,7 +127,7 @@ class DistDevice():
                     if last_end_time > cur_t:
                         continue
                     
-                    if is_hetero_strategy(self.config['device_config']['train_config']['device_strategy']):
+                    if is_hetero_strategy(self.config['device_config']['device_strategy']):
                         self.device.hetero_delegate(other_device, 1, time_left)
                         last_end_time = end_t
                     else:
