@@ -1,8 +1,8 @@
 {
     "dataset": "mnist",
-    "tag": "hyccups_gr",
+    "tag": "droppcl",
     "swarm_config": {
-        "number_of_devices": 45,
+        "number_of_devices": 10,
         "local_set_size": 2,
         "local_data_size": 150,
         "goal_set_size": 5,
@@ -15,7 +15,7 @@
                         }
     },
     "device_config": {
-        "device_strategy": "c_only dropout",
+        "device_strategy": "dropout",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
@@ -28,6 +28,7 @@
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
+            "dataset": "mnist",
             "batch-size": 50,
             "orig-lr": 0.1,
             "max_rounds": 3,

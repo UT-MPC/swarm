@@ -20,6 +20,7 @@ import data_process as dp
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 from grpc_components.simulate_device_pb2 import Status
 from device_in_db import DeviceInDB
+from device.check_device_type import is_hetero_strategy
 
 # data frame column names for encounter data
 TIME_START="time_start"
@@ -126,18 +127,22 @@ class DistDevice():
                     if last_end_time > cur_t:
                         continue
                     
-                    # determine available rounds of training and conduct OppCL
-                    encounter_config = self.device_config['encounter_config']
-                    model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
-                    computation_time = encounter_config['computation_time']
-                    oppcl_time = 2 * model_send_time + computation_time
-                    rounds = (int) ((time_left) / oppcl_time)
-                    rounds = min(rounds, self.device_config['train_config']['max_rounds'])
-                    if rounds < 1:
-                        continue
-                    for r in range(rounds):
-                        self.device.delegate(other_device, 1, 1)
-                    last_end_time = cur_t + rounds * oppcl_time
+                    if is_hetero_strategy(self.config['device_config']['train_config']['device_strategy']):
+                        self.device.hetero_delegate(other_device, 1, time_left)
+                        last_end_time = end_t
+                    else:
+                        # determine available rounds of training and conduct OppCL
+                        encounter_config = self.device_config['encounter_config']
+                        model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
+                        computation_time = encounter_config['computation_time']
+                        oppcl_time = 2 * model_send_time + computation_time
+                        rounds = (int) ((time_left) / oppcl_time)
+                        rounds = min(rounds, self.device_config['train_config']['max_rounds'])
+                        if rounds < 1:
+                            continue
+                        for r in range(rounds):
+                            self.device.delegate(other_device, 1, 1)
+                        last_end_time = cur_t + rounds * oppcl_time
 
                     # evaluate
                     hist = self.device.eval()
@@ -145,7 +150,6 @@ class DistDevice():
                     self.hist_metric.append(hist[1])
                     self.timestamps.append(last_end_time)
 
-                    
                     # report eval to dynamoDB @TODO catch error
                     logging.info('device: {}, index {}'.format(self.device._id_num, index))
                     # self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
@@ -155,8 +159,9 @@ class DistDevice():
                         self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, index)
                         self.device_in_db.update_timestamps_in_bulk(self.timestamps)
                         prev_sys_time = time.time()
-
+                    
                     # @TODO for sync device, upload model to S3 here
+                    
 
             logging.info('device: {}: simulation complete.'.format(self.device._id_num))
             self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, len(enc_df.index)-1)

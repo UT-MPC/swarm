@@ -60,7 +60,7 @@ def main():
     allowOverlap = parsed.allowOverlap
 
     if parsed.config_file == None or parsed.tag == None:
-        print('Config file and the tag has to be specified. Run \'python delegation_swarm_driver.py -h\' for help/.')
+        print('Config file and the tag has to be specified. Run \'python delegation_.py -h\' for help/.')
         
     LOG_FILE_PATH = Path(LOG_FOLDER, parsed.tag + '.log')
     ch = logging.StreamHandler()
