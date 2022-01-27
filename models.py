@@ -46,8 +46,8 @@ def get_hetero_2nn_mnist_model(compressed_ver=0, size=10):
         return get_v2_compressed_2nn_mnist_model()
     model = Sequential()
     model.add(Flatten(input_shape=(28,28,1)))
-    model.add(Dense(10 * size, activation='relu', name='dense_0'))
-    model.add(Dense(10 * size, activation='relu', name='dense_1'))
+    model.add(Dense(20 * size, activation='relu', name='dense_0'))
+    model.add(Dense(20 * size, activation='relu', name='dense_1'))
     model.add(Dense(10, activation='softmax', name='softmax_logits'))
     return model
 
