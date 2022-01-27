@@ -28,13 +28,16 @@ def get_model(dataset):
     elif dataset == 'opportunity-uci':
         return models.get_deep_conv_lstm_model
 
-def get_2nn_mnist_model():
-    model = Sequential()
-    model.add(Flatten(input_shape=(28,28,1)))
-    model.add(Dense(200, activation='relu', name='dense_0'))
-    model.add(Dense(200, activation='relu', name='dense_1'))
-    model.add(Dense(10, activation='softmax', name='softmax_logits'))
-    return model
+def get_2nn_mnist_model(size=-1):
+    if size <= 0:
+        model = Sequential()
+        model.add(Flatten(input_shape=(28,28,1)))
+        model.add(Dense(200, activation='relu', name='dense_0'))
+        model.add(Dense(200, activation='relu', name='dense_1'))
+        model.add(Dense(10, activation='softmax', name='softmax_logits'))
+        return model
+
+    return get_hetero_2nn_mnist_model(size)
 
 def get_hetero_2nn_mnist_model(compressed_ver=0, size=10):
     if compressed_ver == 1:
