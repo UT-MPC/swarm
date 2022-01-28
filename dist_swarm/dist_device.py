@@ -79,9 +79,9 @@ class DistDevice():
 
             repeat = 1
             if 'repeat' in self.config['swarm_config']:
-                repeat = self.config['swarm_config']['repeat']
+                repeat = int(self.config['swarm_config']['repeat'])
             
-            for _ in range(repeat):
+            for rep in range(repeat):
                 for index, row in enc_df.iterrows():
                     if (int)(row[CLIENT1]) == self.device._id_num:
                         other_id = (int)(row[CLIENT2])
@@ -127,8 +127,8 @@ class DistDevice():
                     
                     if self.device.decide_delegation(other_device):
                         # calculate time
-                        cur_t = row[TIME_START]
-                        end_t = row[TIME_END]
+                        cur_t = row[TIME_START] + last_run_time
+                        end_t = row[TIME_END] + last_run_time
                         time_left = end_t - cur_t
                         if last_end_time > cur_t:
                             continue
@@ -167,6 +167,7 @@ class DistDevice():
                             prev_sys_time = time.time()
                         
                         # @TODO for sync device, upload model to S3 here
+                    last_run_time = last_end_time
                         
 
             logging.info('device: {}: simulation complete.'.format(self.device._id_num))
