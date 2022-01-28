@@ -24,7 +24,7 @@ def get_model(dataset):
     elif dataset == 'cifar':
         return models.get_hetero_cnn_cifar_model
     elif dataset == 'svhn':
-        return models.get_hetero_cnn_cifar_model
+        return models.get_2nn_svhn_model
     elif dataset == 'opportunity-uci':
         return models.get_deep_conv_lstm_model
 
