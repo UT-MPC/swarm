@@ -30,7 +30,7 @@ class DROppCLDevice(device.base_device.Device):
         elif self._hyperparams['dataset'] == 'cifar':
             self.weight_selector = MomentumSelectWeightsConv()
         elif self._hyperparams['dataset'] == 'svhn':
-            self.weight_selector = MomentumSelectWeightsConv()
+            self.weight_selector = MomentumSelectWeights()
 
         # downsample from init_weights to meet with model_size
         if self._model_fn is not None:
