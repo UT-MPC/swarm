@@ -11,6 +11,7 @@ from pathlib import Path, PurePath
 from cfg_utils import OUTPUT_FOLDER
 from pandas import read_pickle, read_csv
 import logging
+import traceback
 
 from models import get_model
 from get_dataset import get_dataset
@@ -169,7 +170,7 @@ class DistDevice():
 
         except Exception as e:
             print(e)
-            return self._handle_error(e)
+            return self._handle_error(traceback.format_exc())
 
     def _handle_error(self, e):
         self.device_in_db.set_error(e)
