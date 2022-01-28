@@ -37,7 +37,7 @@ def get_2nn_mnist_model(size=-1):
         model.add(Dense(10, activation='softmax', name='softmax_logits'))
         return model
 
-    return get_hetero_2nn_mnist_model(size)
+    return get_hetero_2nn_mnist_model(size=size)
 
 def get_hetero_2nn_mnist_model(compressed_ver=0, size=10):
     if compressed_ver == 1:
