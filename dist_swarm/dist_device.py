@@ -77,92 +77,97 @@ class DistDevice():
 
             prev_sys_time = time.time()
 
-            for index, row in enc_df.iterrows():
-                if (int)(row[CLIENT1]) == self.device._id_num:
-                    other_id = (int)(row[CLIENT2])
-                elif (int)(row[CLIENT2]) == self.device._id_num:
-                    other_id = (int)(row[CLIENT1])
-                else:
-                    continue
+            repeat = 1
+            if 'repeat' in self.config['swarm_config']:
+                repeat = self.config['swarm_config']['repeat']
+            
+            for _ in range(repeat):
+                for index, row in enc_df.iterrows():
+                    if (int)(row[CLIENT1]) == self.device._id_num:
+                        other_id = (int)(row[CLIENT2])
+                    elif (int)(row[CLIENT2]) == self.device._id_num:
+                        other_id = (int)(row[CLIENT1])
+                    else:
+                        continue
 
-                if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
-                    continue
-                
-                if other_id not in self.other_device_cache:
-                    other_device_in_db = DeviceInDB(self.config['tag'], other_id)
-                    other_device_in_db.fetch_status() #TODO cache status. currently it is too read heavy
-
-                    # get device info from dynamoDB and cache them 
-                    self.other_device_cache[other_id] = {}
-                    self.other_device_cache[other_id]['chosen_list']  = other_device_in_db.get_data_indices()
-                    self.other_device_cache[other_id]['goal_labels'] = other_device_in_db.get_goal_labels()
-
-                other_chosen_list = self.other_device_cache[other_id]['chosen_list']
-                other_goal_labels = self.other_device_cache[other_id]['goal_labels']
-
-                other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
-                other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
-                other_train_data_provider.set_chosen(other_chosen_list)
-
-                other_x_local, other_y_local_orig = other_train_data_provider.fetch()
-
-                hyperparams = self.config['device_config']['train_config']
-                other_device = self.device_class(other_id,
-                                                None, 
-                                                None,
-                                                None,
-                                                other_x_local,
-                                                other_y_local_orig,
-                                                other_train_data_provider,
-                                                other_test_data_provider,
-                                                other_goal_labels,
-                                                None,
-                                                None,
-                                                hyperparams)
-                
-                if self.device.decide_delegation(other_device):
-                    # calculate time
-                    cur_t = row[TIME_START]
-                    end_t = row[TIME_END]
-                    time_left = end_t - cur_t
-                    if last_end_time > cur_t:
+                    if other_id == self.device._id_num or other_id >= self.config['swarm_config']['number_of_devices']:
                         continue
                     
-                    if is_hetero_strategy(self.config['device_config']['device_strategy']):
-                        self.device.hetero_delegate(other_device, 1, time_left)
-                        last_end_time = end_t
-                    else:
-                        # determine available rounds of training and conduct OppCL
-                        encounter_config = self.device_config['encounter_config']
-                        model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
-                        computation_time = encounter_config['computation_time']
-                        oppcl_time = 2 * model_send_time + computation_time
-                        rounds = (int) ((time_left) / oppcl_time)
-                        rounds = min(rounds, self.device_config['train_config']['max_rounds'])
-                        if rounds < 1:
+                    if other_id not in self.other_device_cache:
+                        other_device_in_db = DeviceInDB(self.config['tag'], other_id)
+                        other_device_in_db.fetch_status() #TODO cache status. currently it is too read heavy
+
+                        # get device info from dynamoDB and cache them 
+                        self.other_device_cache[other_id] = {}
+                        self.other_device_cache[other_id]['chosen_list']  = other_device_in_db.get_data_indices()
+                        self.other_device_cache[other_id]['goal_labels'] = other_device_in_db.get_goal_labels()
+
+                    other_chosen_list = self.other_device_cache[other_id]['chosen_list']
+                    other_goal_labels = self.other_device_cache[other_id]['goal_labels']
+
+                    other_train_data_provider = dp.IndicedDataProvider(self.x_train, self.y_train_orig, None)
+                    other_test_data_provider = dp.StableTestDataProvider(self.x_test, self.y_test_orig, self.device_config['train_config']['test-data-per-label'])
+                    other_train_data_provider.set_chosen(other_chosen_list)
+
+                    other_x_local, other_y_local_orig = other_train_data_provider.fetch()
+
+                    hyperparams = self.config['device_config']['train_config']
+                    other_device = self.device_class(other_id,
+                                                    None, 
+                                                    None,
+                                                    None,
+                                                    other_x_local,
+                                                    other_y_local_orig,
+                                                    other_train_data_provider,
+                                                    other_test_data_provider,
+                                                    other_goal_labels,
+                                                    None,
+                                                    None,
+                                                    hyperparams)
+                    
+                    if self.device.decide_delegation(other_device):
+                        # calculate time
+                        cur_t = row[TIME_START]
+                        end_t = row[TIME_END]
+                        time_left = end_t - cur_t
+                        if last_end_time > cur_t:
                             continue
-                        for r in range(rounds):
-                            self.device.delegate(other_device, 1, 1)
-                        last_end_time = cur_t + rounds * oppcl_time
+                        
+                        if is_hetero_strategy(self.config['device_config']['device_strategy']):
+                            self.device.hetero_delegate(other_device, 1, time_left)
+                            last_end_time = end_t
+                        else:
+                            # determine available rounds of training and conduct OppCL
+                            encounter_config = self.device_config['encounter_config']
+                            model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
+                            computation_time = encounter_config['computation_time']
+                            oppcl_time = 2 * model_send_time + computation_time
+                            rounds = (int) ((time_left) / oppcl_time)
+                            rounds = min(rounds, self.device_config['train_config']['max_rounds'])
+                            if rounds < 1:
+                                continue
+                            for r in range(rounds):
+                                self.device.delegate(other_device, 1, 1)
+                            last_end_time = cur_t + rounds * oppcl_time
 
-                    # evaluate
-                    hist = self.device.eval()
-                    self.hist_loss.append(hist[0])
-                    self.hist_metric.append(hist[1])
-                    self.timestamps.append(last_end_time)
+                        # evaluate
+                        hist = self.device.eval()
+                        self.hist_loss.append(hist[0])
+                        self.hist_metric.append(hist[1])
+                        self.timestamps.append(last_end_time)
 
-                    # report eval to dynamoDB @TODO catch error
-                    logging.info('device: {}, index {}'.format(self.device._id_num, index))
-                    # self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
-                    cur_sys_time = time.time()
-                    timediff = cur_sys_time - prev_sys_time
-                    if timediff > 2:
-                        self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, index)
-                        self.device_in_db.update_timestamps_in_bulk(self.timestamps)
-                        prev_sys_time = time.time()
-                    
-                    # @TODO for sync device, upload model to S3 here
-                    
+                        # report eval to dynamoDB @TODO catch error
+                        logging.info('device: {}, index {}'.format(self.device._id_num, index))
+                        # self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
+                        cur_sys_time = time.time()
+                        timediff = cur_sys_time - prev_sys_time
+                        if timediff > 2:
+                            self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, index)
+                            self.device_in_db.update_timestamps_in_bulk(self.timestamps)
+                            prev_sys_time = time.time()
+                        
+                        # @TODO for sync device, upload model to S3 here
+                        
 
             logging.info('device: {}: simulation complete.'.format(self.device._id_num))
             self.device_in_db.update_loss_and_metric_in_bulk(self.hist_loss, self.hist_metric, len(enc_df.index)-1)
