@@ -43,7 +43,7 @@ class DistDevice():
             self.device = self._initialize_device(self.config)
             self.device_in_db.update_status(IDLE)
         except Exception as e:
-            self._handle_error(e)
+            self._handle_error(traceback.format_exc())
 
     def run(self):
         if self.device_in_db.get_status() == ERROR:
@@ -55,7 +55,7 @@ class DistDevice():
             oppcl_thread.start()
             return self._str_to_status(RUNNING)
         except Exception as e:
-            return self._handle_error(e)
+            return self._handle_error(traceback.format_exc())
 
     def _start_oppcl(self):
         try:
