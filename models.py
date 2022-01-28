@@ -227,8 +227,6 @@ def get_all_cnn_c_model(size=10):
 
 def get_hetero_cnn_cifar_model(size = 3):
     model = Sequential()
-    if size > 3:
-        raise ValueError('Invalid model size')
     if size == 3:
         model.add(Conv2D(32, (3, 3), padding='same',
                         input_shape=(32,32,3)))
