@@ -1,0 +1,60 @@
+{
+    "dataset": "svhn",
+    "tag": "hyccups_svhn_baseline",
+    "swarm_config": {
+        "number_of_devices": 10,
+        "local_set_size": 10,
+        "local_data_size": 150,
+        "goal_set_size": 10,
+        "repeat": 1
+    },
+    "device_config": {
+        "device_strategy": "baseline",
+        "id": 0,
+        "pretrained_model": "none",
+        "model_size": 10,
+        "model_size_in_bits": 6224000,
+        "device_power": 8,
+        "encounter_config": {
+            "encounter_data_file": "encounter_data/hyccups_v4.csv",
+            "computation_time": 0.24,
+            "communication_rate": 16000000
+        },
+        "train_config": {
+            "__comment__": "formerly called hyperparams",
+            "dataset": "svhn",
+            "batch-size": 50,
+            "orig-lr": 0.1,
+            "max_rounds": 3,
+            "evaluation-metrics": "loss-and-accuracy",
+            "kappa": 7,
+            "offset": 0.96,
+            "apply-rate": 5,
+            "test-data-per-label": 800,
+            "similarity-threshold": 0.5,
+            "low-similarity-threshold": 0.5,
+            "num-rounds": 250,
+            "time-per-round": 100,
+            "decay": 0.998,
+            "optimizer": "adam",
+            "optimizer-params": {
+                "learning_rate": 0.001
+            },
+            "computation-time": 0.24,
+            "communication-rate": 2000000,
+            "max-iteration": 3,
+            "minimum-bits-to" : 3,
+            "enc-exp-config":{
+                "client-sizes": {
+                    "model-sizes":   [3, 3, 2, 1, 2],
+                    "device-powers": [3, 2, 1, 0, 1]
+                },
+                "model-params": {"1": 310714,
+                    "2": 614874,
+                    "3": 1250858}
+            }
+        },
+        "__comment__": "This is an examplar json that is sent to simulate_device_services"
+    },
+    "__comment__": "This is an examplar json that is used by controller"
+}
