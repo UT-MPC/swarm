@@ -31,6 +31,10 @@ class DROppCLDevice(device.base_device.Device):
             self.weight_selector = MomentumSelectWeightsConv()
         elif self._hyperparams['dataset'] == 'svhn':
             self.weight_selector = MomentumSelectWeightsConv()
+
+        # downsample from init_weights to meet with model_size
+        my_model = self._model_fn(size=self.model_size)
+        self._weights = self.weight_selector.select_weights(self._weights, my_model.get_weights())
     
     def _get_optimizer(self, model):
         opt = self._opt_fn(**self._hyperparams['optimizer-params'])
