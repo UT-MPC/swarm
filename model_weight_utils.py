@@ -116,9 +116,9 @@ class SelectWeightsAdv():
         self.select = copy.deepcopy(select)
         self.target = copy.deepcopy(target)
         
-        if len(self.count) == 0:
-            for w in target:
-                self.count.append(np.zeros(w.shape))
+        # if len(self.count) == 0:
+        #     for w in target:
+        #         self.count.append(np.zeros(w.shape))
         # reset mask
         self.masks = []
         
@@ -163,8 +163,8 @@ class SelectWeightsAdv():
                 self.select[i] = self.target[i][mask]
             
             self.masks.append(mask)
-        for i in range(len(self.masks)):
-            self.count[i] += self.masks[i]
+        # for i in range(len(self.masks)):
+        #     self.count[i] += self.masks[i]
         
         return self.select
     
