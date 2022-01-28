@@ -15,7 +15,7 @@
                         }
     },
     "device_config": {
-        "device_strategy": "dropout",
+        "device_strategy": "baseline",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,

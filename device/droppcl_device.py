@@ -216,9 +216,8 @@ class DROppCLOnlyDropoutDevice(DROppCLDevice):
 
         # only do training when can send with 64 bits 
         if n >= 6:
-            pass
-            # for _ in range(iteration):
-            #     self.fit_w_drop_quant(other, epoch, d_l, pow(2, 6))
+            for _ in range(iteration):
+                self.fit_w_drop_quant(other, epoch, d_l, pow(2, 6))
         else:
             return (0, 0, 0)
 
