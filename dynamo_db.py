@@ -4,6 +4,8 @@ GOAL_DIST = "GoalDist"
 LOCAL_DIST = "LocalDist"
 DATA_INDICES = "DataIndices"
 
+MODEL_INFO = "ModelInfo"
+
 TIMESTAMPS = "TimeStamps"
 EVAL_HIST_LOSS = "EvalHistLoss"
 EVAL_HIST_METRIC = "EvalHistMetric"

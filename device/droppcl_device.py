@@ -36,7 +36,8 @@ class DROppCLDevice(device.base_device.Device):
         if self._model_fn is not None:
             my_model = self._model_fn(size=self.model_size)
             self._weights = self.weight_selector.select_weights(self._weights, my_model.get_weights())
-    
+        K.clear_session()
+
     def _get_optimizer(self, model):
         opt = self._opt_fn(**self._hyperparams['optimizer-params'])
         zero_grads = [tf.zeros_like(w) for w in model.trainable_variables]

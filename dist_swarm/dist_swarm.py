@@ -15,8 +15,8 @@ from pandas import read_pickle, read_csv
 import data_process as dp
 from get_dataset import get_dataset
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, TOTAL_ENC_IDX,\
-    DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE
+from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, MODEL_INFO, TOTAL_ENC_IDX,\
+    DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, MODEL_INFO
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from aws_settings import REGION
@@ -160,7 +160,7 @@ class DistSwarm():
                 batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx, TOTAL_ENC_IDX: len(enc_df.index),
-                    EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A'})
+                    EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
 
 def convert_to_map(dist):
     new_dist = {}
