@@ -84,6 +84,11 @@ class DistDevice():
             
             for rep in range(repeat):
                 for index, row in enc_df.iterrows():
+                    # check status and exit if not running
+                    self.device_in_db.fetch_status()
+                    if self.device_in_db.get_status() != RUNNING:
+                        raise RuntimeError('Process force stopped')
+
                     if (int)(row[CLIENT1]) == self.device._id_num:
                         other_id = (int)(row[CLIENT2])
                     elif (int)(row[CLIENT2]) == self.device._id_num:

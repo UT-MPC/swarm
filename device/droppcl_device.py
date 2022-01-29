@@ -53,6 +53,8 @@ class DROppCLDevice(device.base_device.Device):
         return opt
 
     def _get_model(self):
+        tf.compat.v1.reset_default_graph()
+        K.clear_session()
         model = self._model_fn(size=self.model_size)
         model.set_weights(self._weights)
         self._compile_config['optimizer'] = self._opt_fn(lr=self._hyperparams['orig-lr'])
