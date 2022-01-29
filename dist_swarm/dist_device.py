@@ -241,4 +241,7 @@ class DistDevice():
                                     train_config,
                                     hyperparams)
 
+        if is_hetero_strategy(self.config['device_config']['device_strategy']):
+            self.device_in_db.update_model_info('model_size: {}, device_power:{}'.format(device.model_size, device.device_power))
+
         return device
