@@ -232,7 +232,7 @@ def get_hetero_cnn_cifar_model(size = 3):
     RAND_MAX = 999999
     if size == 3:
         model.add(Conv2D(32, (3, 3), padding='same',
-                        input_shape=(32,32,3), name='layer_{}'.format(random.randint(RAND_MAX))))
+                        input_shape=(32,32,3), name='layer_{}'.format(0, random.randint(RAND_MAX))))
         model.add(Activation('relu'), name='layer_{}'.format(0, random.randint(RAND_MAX)))
         model.add(Conv2D(32, (3, 3), name='layer_{}'.format(0, random.randint(RAND_MAX))))
         model.add(Activation('relu'), name='layer_{}'.format(0, random.randint(RAND_MAX)))
