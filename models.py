@@ -4,6 +4,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Activation
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras import backend as K
+import random
 import numpy as np
 import tensorflow as tf
 # from qkeras import QDense, quantized_bits, QActivation
@@ -172,27 +173,28 @@ def get_bin_cnn_cifar_model():
 
 def get_big_cnn_cifar_model():
     model = Sequential()
+    RAND_MAX = 9999999
     model.add(Conv2D(32, (3, 3), padding='same',
-                    input_shape=(32,32,3)))
-    model.add(Activation('relu'))
-    model.add(Conv2D(32, (3, 3)))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+                    input_shape=(32,32,3), name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Activation('relu'), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Conv2D(32, (3, 3), name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Activation('relu'), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Dropout(0.25), name='layer_{}'.format(random.randint(RAND_MAX)))
 
-    model.add(Conv2D(64, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv2D(64, (3, 3)))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Conv2D(64, (3, 3), padding='same', name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Activation('relu'), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Conv2D(64, (3, 3), name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Activation('relu'), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(RAND_MAX))))
+    model.add(Dropout(0.25), name='layer_{}'.format(random.randint(RAND_MAX)))
 
-    model.add(Flatten())
-    model.add(Dense(512))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(10))
-    model.add(Activation('softmax'))
+    model.add(Flatten(), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Dense(512), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Activation('relu'), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Dropout(0.5), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Dense(10), name='layer_{}'.format(random.randint(RAND_MAX)))
+    model.add(Activation('softmax'), name='layer_{}'.format(random.randint(RAND_MAX)))
     return model
 
 def get_all_cnn_c_model(size=10):
