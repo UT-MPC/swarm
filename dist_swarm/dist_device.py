@@ -70,6 +70,7 @@ class DistDevice():
             last_end_time = 0
             last_run_time = 0
             self.device_in_db.update_status(RUNNING)
+
             self.hist_loss = []
             self.hist_metric = []
             self.timestamps = []
@@ -157,7 +158,7 @@ class DistDevice():
                         self.timestamps.append(last_end_time)
 
                         # report eval to dynamoDB @TODO catch error
-                        logging.info('device: {}, index {}'.format(self.device._id_num, index))
+                        # logging.info('device: {}, index {}'.format(self.device._id_num, index))
                         # self.device_in_db.update_loss_and_metric(hist[0], hist[1], index)
                         cur_sys_time = time.time()
                         timediff = cur_sys_time - prev_sys_time

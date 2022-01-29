@@ -6,7 +6,7 @@ import time
 from decimal import Decimal
 
 from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
-            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX
+            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX, MODEL_INFO
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
 class DeviceInDB():
@@ -118,6 +118,18 @@ class DeviceInDB():
                     UpdateExpression="SET #status = :status",
                 )
         self.status = status
+
+    def update_model_info(self, info):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.device_id},
+                    ExpressionAttributeNames={
+                        "#modelinfo": MODEL_INFO
+                    },
+                    ExpressionAttributeValues={
+                        ":modelinfo": info
+                    },
+                    UpdateExpression="SET #modelinfo = :modelinfo",
+                )
 
     def set_hostname(self, hostname):
         resp = self.table.update_item(

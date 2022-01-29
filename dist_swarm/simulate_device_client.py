@@ -14,7 +14,7 @@ def run():
     parser.add_argument('--target', dest='target',
                         type=str, default='localhost:50051', help='target ip addr and port')
 
-    with open('../configs/dist_swarm/droppcl_example.json', 'rb') as f:
+    with open('../configs/dist_swarm/droppcl_svhn.json', 'rb') as f:
         config_json = f.read()
     config_json = json.loads(config_json)
 
