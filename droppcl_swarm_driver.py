@@ -198,6 +198,12 @@ def main():
     matplotlib.rcParams['pdf.fonttype'] = 42
     matplotlib.rcParams['ps.fonttype'] = 42
 
+    # upload to S3 storage
+    upload_log_path = PurePath(wsinfo['workstation-name'], 'logs/' + parsed.tag + '.log')
+    client.upload_file(str(LOG_FILE_PATH), S3_BUCKET_NAME, str(upload_log_path))
+    upload_hist_path = PurePath(wsinfo['workstation-name'], 'hists/' + parsed.tag + '.pickle')
+    client.upload_file(str(hist_file_path), S3_BUCKET_NAME, str(upload_hist_path))
+
     processed_hists = {}
     for k in hists.keys():
         # if 'federated' in k:
@@ -223,11 +229,6 @@ def main():
 
     logging.info('Simulation completed successfully.')
 
-    # upload to S3 storage
-    upload_log_path = PurePath(wsinfo['workstation-name'], 'logs/' + parsed.tag + '.log')
-    client.upload_file(str(LOG_FILE_PATH), S3_BUCKET_NAME, str(upload_log_path))
-    upload_hist_path = PurePath(wsinfo['workstation-name'], 'hists/' + parsed.tag + '.pickle')
-    client.upload_file(str(hist_file_path), S3_BUCKET_NAME, str(upload_hist_path))
     upload_graph_path = PurePath(wsinfo['workstation-name'], 'figs/' + parsed.tag + '.pdf')
     client.upload_file(str(graph_file_path), S3_BUCKET_NAME, str(upload_graph_path))
 
