@@ -1,8 +1,8 @@
 {
-    "dataset": "svhn",
-    "tag": "hyccups_svhn_baseline",
+    "dataset": "mnist",
+    "tag": "hyccups_mnist_baseline",
     "swarm_config": {
-        "number_of_devices": 10,
+        "number_of_devices": 45,
         "local_set_size": 10,
         "local_data_size": 150,
         "goal_set_size": 10,
@@ -10,7 +10,7 @@
                         "model_sizes": [10, 10, 8, 6, 4],
                         "device_powers": [10, 8, 6, 4, 2]
                         },
-        "repeat": 1
+        "repeat": 4
     },
     "device_config": {
         "device_strategy": "baseline",
@@ -26,7 +26,7 @@
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
-            "dataset": "svhn",
+            "dataset": "mnist",
             "batch-size": 50,
             "orig-lr": 0.1,
             "max_rounds": 3,
@@ -42,7 +42,7 @@
             "decay": 0.998,
             "optimizer": "adam",
             "optimizer-params": {
-                "learning_rate": 0.001
+                "learning_rate": 0.0002
             },
             "computation-time": 0.24,
             "communication-rate": 2000000,

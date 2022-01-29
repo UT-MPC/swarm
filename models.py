@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras import backend as K
 import random
+import time
 import numpy as np
 import tensorflow as tf
 # from qkeras import QDense, quantized_bits, QActivation
@@ -227,68 +228,74 @@ def get_all_cnn_c_model(size=10):
     model.add(Activation('softmax'))
     return model
 
+def get_rand_layer_name():
+    RAND_MAX = 999999
+    cur_t = time.time()
+    randnum = random.randint(0,RAND_MAX) + cur_t
+    return 'layer_{}'.format(randnum)
+
 def get_hetero_cnn_cifar_model(size = 3):
     model = Sequential()
     RAND_MAX = 999999
     if size == 3:
         model.add(Conv2D(32, (3, 3), padding='same',
-                        input_shape=(32,32,3), name='layer_{}'.format(random.randint(0, RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(32, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+                        input_shape=(32,32,3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(32, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Conv2D(64, (3, 3), padding='same', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(64, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Conv2D(64, (3, 3), padding='same', name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(64, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Flatten( name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(512, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(10, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('softmax', name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Flatten( name=get_rand_layer_name()))
+        model.add(Dense(512, name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Dense(10, name=get_rand_layer_name()))
+        model.add(Activation('softmax', name=get_rand_layer_name()))
         
     elif size == 2:
         model.add(Conv2D(32, (3, 3), padding='same',
-                        input_shape=(32,32,3), name='layer_{}'.format(random.randint(0, RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(32, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+                        input_shape=(32,32,3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(32, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Conv2D(48, (3, 3), padding='same', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(48, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Conv2D(48, (3, 3), padding='same', name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(48, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Flatten( name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(512, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(10, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('softmax', name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Flatten( name=get_rand_layer_name()))
+        model.add(Dense(512, name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Dense(10, name=get_rand_layer_name()))
+        model.add(Activation('softmax', name=get_rand_layer_name()))
         
     elif size == 1:
         model.add(Conv2D(32, (3, 3), padding='same',
-                        input_shape=(32,32,3), name='layer_{}'.format(random.randint(0, RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(32, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+                        input_shape=(32,32,3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(32, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Conv2D(32, (3, 3), padding='same', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Conv2D(32, (3, 3), name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(MaxPooling2D(pool_size=(2, 2), name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Conv2D(32, (3, 3), padding='same', name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Conv2D(32, (3, 3), name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(MaxPooling2D(pool_size=(2, 2), name=get_rand_layer_name()))
 
-        model.add(Flatten( name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(256, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('relu', name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Dense(10, name='layer_{}'.format(random.randint(0,RAND_MAX))))
-        model.add(Activation('softmax', name='layer_{}'.format(random.randint(0,RAND_MAX))))
+        model.add(Flatten( name=get_rand_layer_name()))
+        model.add(Dense(256, name=get_rand_layer_name()))
+        model.add(Activation('relu', name=get_rand_layer_name()))
+        model.add(Dense(10, name=get_rand_layer_name()))
+        model.add(Activation('softmax', name=get_rand_layer_name()))
     else:
         raise ValueError("size {} is not supported cnn model size".format(size))
     
