@@ -191,8 +191,12 @@ def main():
             os.remove(PurePath(HIST_FOLDER, 'partial_{}_'.format(i-1) + parsed.tag + '.pickle'))
         if i == len(test_swarms) - 1:
             hist_file_path = PurePath(HIST_FOLDER, parsed.tag + '.pickle')
-        with open(hist_file_path, 'wb') as handle:
-            pickle.dump(hists, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+        try:
+            with open(hist_file_path, 'wb') as handle:
+                pickle.dump(hists, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        except:
+            print('failed to store swarm file')
 
     print('drawing graph...')
     matplotlib.rcParams['pdf.fonttype'] = 42

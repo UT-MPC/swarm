@@ -1,0 +1,16 @@
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ds-controller
+  labels:
+    role: controller
+spec:
+  containers:
+    - name: ds-device-controller
+      image: sethlee0111/private_swarm:server
+      imagePullPolicy: Always
+  imagePullSecrets:
+  - name: regcred
+---

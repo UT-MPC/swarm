@@ -35,11 +35,27 @@ class DistSwarm():
         for device_id in range(int(self.config['swarm_config']['number_of_devices'])):
             self.config['device_config']['id'] = device_id
             config = simulate_device_pb2.Config(config=json.dumps(self.config))
-            with grpc.insecure_channel(self.loadbalancer_ip) as channel:
-                stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
-                status = stub.SimulateOppCL(config)
-                print('device {}: {}'.format(device_id, status))
+            self.send_request_rep(config, device_id, 10)
             time.sleep(1)
+
+    def send_request_rep(self, config, device_id, failure_num):
+        succeeded = False
+    
+        while not succeeded and failure_num > 0:
+            try:
+                self.send_request(config, device_id)
+                failure_num -= 1
+                succeeded = True
+            except grpc._channel._InactiveRpcError:
+                pass
+            else:
+                succeeded = True
+
+    def send_request(self, config, device_id):
+        with grpc.insecure_channel(self.loadbalancer_ip, options=(('grpc.enable_http_proxy', 0),)) as channel:
+            stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+            status = stub.SimulateOppCL(config)
+            print('device {}: {}'.format(device_id, status))
 
     def _create_table(self, tag):
         # boto3 is the AWS SDK library for Python.
