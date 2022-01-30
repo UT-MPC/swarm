@@ -183,7 +183,7 @@ def main():
         print('-------------- Elasped Time --------------')
         print(end - start)
         hists[swarm_names[i]] = copy.deepcopy(cur_swarm.hist)
-        save_swarm(cur_swarm, i, swarm_filename_prefix, parsed.tag)
+        # save_swarm(cur_swarm, i, swarm_filename_prefix, parsed.tag)
         del cur_swarm
 
         hist_file_path = PurePath(HIST_FOLDER, 'partial_{}_'.format(i) + parsed.tag + '.pickle')
@@ -192,13 +192,9 @@ def main():
         if i == len(test_swarms) - 1:
             hist_file_path = PurePath(HIST_FOLDER, parsed.tag + '.pickle')
 
-        try:
-            with open(hist_file_path, 'wb') as handle:
-                pickle.dump(hists, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        except:
-            print('failed to store swarm file')
+        with open(hist_file_path, 'wb') as handle:
+            pickle.dump(hists, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    print('drawing graph...')
     matplotlib.rcParams['pdf.fonttype'] = 42
     matplotlib.rcParams['ps.fonttype'] = 42
 
@@ -208,6 +204,9 @@ def main():
     upload_hist_path = PurePath(wsinfo['workstation-name'], 'hists/' + parsed.tag + '.pickle')
     client.upload_file(str(hist_file_path), S3_BUCKET_NAME, str(upload_hist_path))
 
+    return
+
+    print('drawing graph...')
     processed_hists = {}
     for k in hists.keys():
         # if 'federated' in k:
