@@ -1,8 +1,8 @@
 {
     "dataset": "mnist",
-    "tag": "hyccups_mnist_test",
+    "tag": "hyccups_mnist_quant",
     "swarm_config": {
-        "number_of_devices": 10,
+        "number_of_devices": 45,
         "local_set_size": 10,
         "local_data_size": 150,
         "goal_set_size": 10,
@@ -13,7 +13,7 @@
         "repeat": 4
     },
     "device_config": {
-        "device_strategy": "dropout",
+        "device_strategy": "quantize",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
