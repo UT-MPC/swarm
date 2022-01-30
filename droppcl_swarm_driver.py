@@ -177,7 +177,8 @@ def main():
         else:
             cur_swarm = get_swarm(orig_swarm, test_swarms[i], model_fn, OPTIMIZER, CLIENT_NUM, x_train, y_train_orig,
                                 test_data_provider, config, enc_exp_config, hyperparams, log_callback)
-        for _ in range(parsed.repeat):
+        for rep in range(parsed.repeat):
+            log_callback('---------- rep {} ----------'.format(rep))
             cur_swarm.run(parsed.upto, allowOverlap)
         end = timer()
         print('-------------- Elasped Time --------------')

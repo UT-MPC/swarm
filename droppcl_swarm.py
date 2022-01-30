@@ -159,6 +159,7 @@ class DROppCLSwarm():
         cur_t = 0 # current time
         end_t = 0
         cur_idx = 0
+
         for index, row in self.enc_df.iterrows():
             self.hist['total_encs'] += 1
             print(self.hist['total_encs'])
@@ -191,14 +192,16 @@ class DROppCLSwarm():
             if iter1 != 0:
                 self._put_hist(self.dropout_hist, c1_idx, d_l_1)
                 self._put_hist(self.quantization_hist, c1_idx, n1)
-                # hist = c1.eval()
-                # self.hist['clients'][c1_idx].append((self.last_end_time[c1_idx] + self.last_run_time, hist, 0))
+                if index != 0 and index % 100 == 0:
+                    hist = c1.eval()
+                    self.hist['clients'][c1_idx].append((self.last_end_time[c1_idx] + self.last_run_time, hist, 0))
             
             if iter2 != 0:
                 self._put_hist(self.dropout_hist, c2_idx, d_l_2)
                 self._put_hist(self.quantization_hist, c2_idx, n2)
-                # hist = c2.eval()
-                # self.hist['clients'][c2_idx].append((self.last_end_time[c2_idx] + self.last_run_time, hist, 0))
+                if index != 0 and index % 100 == 0:
+                    hist = c2.eval()
+                    self.hist['clients'][c2_idx].append((self.last_end_time[c2_idx] + self.last_run_time, hist, 0))
 
             self.last_end_time[c1_idx] = cur_t + duration
             self.last_end_time[c2_idx] = cur_t + duration 
@@ -206,6 +209,10 @@ class DROppCLSwarm():
             self.hist['iteration_hist'] = self.iteration_hist
             self.hist['dropout_hist'] = self.dropout_hist
             self.hist['quantization_hist'] = self.quantization_hist 
+
+            if index != 0 and index % 100 == 0:
+                tot_loss, tot_acc = self._get_tot_loss_and_acc()
+                self.log_callback('[index {}]: tot_loss: {}, tot_acc: {}'.format(index, tot_loss, tot_acc))
             
             if index != 0 and index % 500 == 0:
                 elasped = datetime.datetime.now() - start_time
@@ -224,6 +231,20 @@ class DROppCLSwarm():
             self.hist['clients'][c._id_num].append((self.last_end_time[c._id_num], hist, 0))    
         
         self.last_run_time += end_t
+
+    def _get_tot_loss_and_acc(self):
+        tot_loss = 0
+        tot_acc = 0
+        
+        for c in self._clients:
+            tot_loss += self.hist['clients'][c._id_num][-1][1][0]
+        for c in self._clients:
+            tot_acc += self.hist['clients'][c._id_num][-1][1][1]
+
+        tot_loss /= len(self._clients)
+        tot_acc /= len(self._clients)
+
+        return tot_loss, tot_acc
 
     def _put_hist(self, dic, client_idx, val):
         if val not in dic[client_idx]:
