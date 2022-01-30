@@ -1,6 +1,6 @@
 {
     "dataset": "mnist",
-    "tag": "hyccups_mnist_quant",
+    "tag": "upb_mnist_baseline",
     "swarm_config": {
         "number_of_devices": 45,
         "local_set_size": 10,
@@ -13,14 +13,14 @@
         "repeat": 4
     },
     "device_config": {
-        "device_strategy": "quantize",
+        "device_strategy": "baseline",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/hyccups_v4.csv",
+            "encounter_data_file": "encounter_data/upb_0_5to3600_v1.csv",
             "computation_time": 0.24,
             "communication_rate": 16000000
         },

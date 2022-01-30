@@ -1,5 +1,5 @@
 {
-    "dataset": "mnist",
+    "dataset": "cifar",
     "client-num": 45,
     "local-data-size": 200,
     "strategies": {
