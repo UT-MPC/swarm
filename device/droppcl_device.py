@@ -117,8 +117,8 @@ class DROppCLDevice(device.base_device.Device):
         iteration, n = self.get_q_and_iteration(d_l, time_duration)
         
         ####### compute gradients and update the model
-        # for _ in range(iteration):
-        #     self.fit_w_drop_quant(other, epoch, d_l, pow(2, n))
+        for _ in range(iteration):
+            self.fit_w_drop_quant(other, epoch, d_l, pow(2, n))
         
         return iteration, d_l, n
 
@@ -128,7 +128,7 @@ class DROppCLDevice(device.base_device.Device):
         no dropout if d_l == my model size
         no quantization if q == 64
         """
-        # print('running training {}->{}'.format(self._id_num, other._id_num))
+        print('running training {}->{}'.format(self._id_num, other._id_num))
         if d_l >= self.model_size:
             d_l = self.model_size
         logging.info('d_l: {}'.format(d_l))

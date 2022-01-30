@@ -38,7 +38,7 @@
             "decay": 0.998,
             "optimizer": "adam",
             "optimizer-params": {
-                "learning_rate": 0.0002
+                "learning_rate": 0.001
             },
             "computation-time": 0.24,
             "communication-rate": 2000000,

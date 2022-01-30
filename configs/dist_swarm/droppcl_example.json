@@ -1,6 +1,6 @@
 {
     "dataset": "mnist",
-    "tag": "hyccups_mnist_baseline",
+    "tag": "hyccups_mnist_dropout",
     "swarm_config": {
         "number_of_devices": 45,
         "local_set_size": 10,
@@ -13,7 +13,7 @@
         "repeat": 4
     },
     "device_config": {
-        "device_strategy": "baseline",
+        "device_strategy": "dropout",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
