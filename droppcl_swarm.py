@@ -221,7 +221,7 @@ class DROppCLSwarm():
         # temp: evaluate only at last time to save simulation time
         for c in self._clients:
             hist = c.eval()
-            self.hist['clients'][c._id_num].append((self.last_end_time, hist, 0))    
+            self.hist['clients'][c._id_num].append((self.last_end_time[c._id_num], hist, 0))    
         
         self.last_run_time += end_t
 
