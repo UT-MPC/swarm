@@ -1,0 +1,35 @@
+{
+    "dataset": "cifar",
+    "client-num": 45,
+    "local-data-size": 200,
+    "strategies": {
+        "DROppCL test": false,
+        "baseline": false,
+        "dropout": true,
+        "quantize": false,
+        "DROppCL": false
+    },
+    "enc-exp-config":{
+        "encounter-data-file": "encounter_data/levy_walk_client_45_epi_1000_dur_50.pickle",
+        "client-sizes": {
+            "model-sizes":   [3, 3, 2, 1, 2],
+            "device-powers": [3, 2, 1, 0, 1]
+        },
+        "model-params": {"1": 310714,
+            "2": 614874,
+            "3": 1250858}
+    },
+    "hyperparams" : {
+        "orig-lr": 0.001,
+        "batch-size": 50,
+        "test-data-per-label": 800,
+        "evaluation-metrics": "loss-and-accuracy",
+        "computation-time": 1.35,
+        "communication-rate": 2000000,
+        "max-iteration": 1,
+        "optimizer-params" : {
+            "learning_rate": 0.0002
+        },
+        "minimum-bits-to" : 3
+    }
+}

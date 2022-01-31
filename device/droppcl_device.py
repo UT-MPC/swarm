@@ -150,7 +150,7 @@ class DROppCLDevice(device.base_device.Device):
                     l2_loss = CL * tf.nn.l2_loss(submodel.trainable_variables[i])
                 if i>=1:
                     l2_loss = l2_loss+ CL * tf.nn.l2_loss(submodel.trainable_variables[i])
-            loss = keras.metrics.categorical_crossentropy(y, pred)
+            loss = keras.metrics.mean_squared_error(y, pred)
             loss += l2_loss
 
         grads = tape.gradient(loss, submodel.trainable_variables)
