@@ -93,7 +93,8 @@ class Device():
         self._y_train = keras.utils.to_categorical(y_train, self._num_classes)
 
     def resample_local_data(self):
-        x, y = self.train_data_provider.peek(self._local_data_dist)
+        print(self._local_data_count)
+        x, y = self.train_data_provider.peek(self._local_data_count)
         self.set_local_data(x, y)
     
     def replace_local_data(self, ratio, new_x_train, new_y_train_orig):
