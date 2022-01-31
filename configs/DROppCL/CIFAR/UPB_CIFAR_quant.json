@@ -1,7 +1,7 @@
 {
     "dataset": "cifar",
     "client-num": 45,
-    "local-data-size": 200,
+    "local-data-size": 20,
     "strategies": {
         "DROppCL test": false,
         "baseline": false,
