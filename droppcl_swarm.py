@@ -213,6 +213,7 @@ class DROppCLSwarm():
             if index != 0 and index % 100 == 0:
                 tot_loss, tot_acc = self._get_tot_loss_and_acc()
                 self.log_callback('[index {}]: tot_loss: {}, tot_acc: {}'.format(index, tot_loss, tot_acc))
+                self.log_callback('[index {}]: tot_encs: {}'.format(index, self.hist['total_used_encs']))
             
             if index != 0 and index % 500 == 0:
                 elasped = datetime.datetime.now() - start_time

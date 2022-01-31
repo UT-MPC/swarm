@@ -4,7 +4,7 @@
     "swarm_config": {
         "number_of_devices": 45,
         "local_set_size": 10,
-        "local_data_size": 150,
+        "local_data_size": 200,
         "goal_set_size": 10,
         "device_sizes": {
                         "model_sizes": [10, 10, 8, 6, 4],
@@ -13,7 +13,7 @@
         "repeat": 4
     },
     "device_config": {
-        "device_strategy": "DROppCL",
+        "device_strategy": "droppcl",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,
