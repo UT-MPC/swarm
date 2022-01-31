@@ -128,6 +128,7 @@ class DROppCLDevice(device.base_device.Device):
         no dropout if d_l == my model size
         no quantization if q == 64
         """
+        return
         print('running training {}->{}'.format(self._id_num, other._id_num))
         if d_l >= self.model_size:
             d_l = self.model_size
