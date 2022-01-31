@@ -131,7 +131,7 @@ class DROppCLDevice(device.base_device.Device):
         print('running training {}->{}'.format(self._id_num, other._id_num))
         if d_l >= self.model_size:
             d_l = self.model_size
-        logging.info('d_l: {}'.format(d_l))
+        # logging.info('d_l: {}'.format(d_l))
         submodel = self._model_fn(size=d_l)
         sub_weights = self.weight_selector.select_weights(self._weights, submodel.get_weights())
         if q >= 64:
