@@ -150,7 +150,7 @@ class DROppCLDevice(device.base_device.Device):
                     l2_loss = CL * tf.nn.l2_loss(submodel.trainable_variables[i])
                 if i>=1:
                     l2_loss = l2_loss+ CL * tf.nn.l2_loss(submodel.trainable_variables[i])
-            loss = keras.metrics.mean_squared_error(y, pred)
+            loss = keras.metrics.categorical_crossentropy(y, pred)
             loss += l2_loss
 
         grads = tape.gradient(loss, submodel.trainable_variables)
@@ -172,6 +172,9 @@ class DROppCLDevice(device.base_device.Device):
         opt.apply_gradients(zip(big_grads, model.trainable_variables))
         self._weights = model.get_weights()
         self.optimizer_weights = opt.get_weights()
+
+        ########### @TODO change this
+        other.resample_local_data()
 
         tf.compat.v1.reset_default_graph()
         K.clear_session()

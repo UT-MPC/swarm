@@ -1,7 +1,7 @@
 {
-    "dataset": "svhn",
-    "intervals": [20],
-    "repeat": 10,
+    "dataset": "cifar",
+    "intervals": [100],
+    "repeat": 1,
     "device-power-interval": [10,3,10,3,10,3,10,3,10,3],
  
     "local-set": [0,1],
@@ -9,14 +9,14 @@
     "label-sets": [[0,1,2,3,4,5,6,7,8,9]],
     "noise-label-set-size": 2,
     "same-repeat": true,
-    "number-of-data-points": 100,
+    "number-of-data-points": 200,
     "noise-percentage": 0,
     "strategies": {
-        "c_DROppCL Auto": true,
-        "c_DROppCL": true,
+        "c_DROppCL Auto": false,
+        "c_DROppCL": false,
         "c_only dropout": true,
-        "c_only quant": true,
-        "no dropout nor Q.": true
+        "c_only quant": false,
+        "no dropout nor Q.": false
     },
     "strategy-variants": {
         "c_DROppCL Auto": [
@@ -33,7 +33,7 @@
                 "c_DROppCL": [
                                 {
                                     "model-size": 3,
-                                    "downto": 2,
+                                    "downto": 1,
                                     "bits": 3,
                                     "optimizer": "adam",
                                     "optimizer-params" : {
@@ -44,10 +44,10 @@
         "c_only dropout": [
                             {
                                 "model-size": 3,
-                                "downto": 2,
+                                "downto": 1,
                                 "optimizer": "adam",
                                 "optimizer-params" : {
-                                    "learning_rate": 0.001
+                                    "learning_rate": 0.0001
                                 }
                             }
                             ],
@@ -84,10 +84,10 @@
         "similarity-threshold": 0.5,
         "low-similarity-threshold": 0.4,
         "decay": 0.997,
-        "hetero-lower-bound": 1,
+        "hetero-lower-bound": 3,
         "hetero-upper-bound": 3,
         "hetero-distribution": "uniform",
-        "duration-lower-bound": 1,
+        "duration-lower-bound": 6,
         "duration-upper-bound": 6,
         "duration-distribution": "uniform",
         "device-duration-interval": [10,3,10,3,10,3,10,3,10,3],

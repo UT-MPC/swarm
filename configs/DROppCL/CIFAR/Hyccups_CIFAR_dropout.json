@@ -7,7 +7,7 @@
         "baseline": false,
         "dropout": true,
         "quantize": false,
-        "DROppCL": true
+        "DROppCL": false
     },
     "enc-exp-config":{
         "encounter-data-file": "encounter_data/hyccups_v4.csv",
