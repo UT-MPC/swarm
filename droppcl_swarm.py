@@ -192,16 +192,16 @@ class DROppCLSwarm():
             if iter1 != 0:
                 self._put_hist(self.dropout_hist, c1_idx, d_l_1)
                 self._put_hist(self.quantization_hist, c1_idx, n1)
-                if index != 0 and index % 100 == 0:
-                    hist = c1.eval()
-                    self.hist['clients'][c1_idx].append((self.last_end_time[c1_idx] + self.last_run_time, hist, 0))
+                # if index != 0 and index % 100 == 0:
+                #     hist = c1.eval()
+                #     self.hist['clients'][c1_idx].append((self.last_end_time[c1_idx] + self.last_run_time, hist, 0))
             
             if iter2 != 0:
                 self._put_hist(self.dropout_hist, c2_idx, d_l_2)
                 self._put_hist(self.quantization_hist, c2_idx, n2)
-                if index != 0 and index % 100 == 0:
-                    hist = c2.eval()
-                    self.hist['clients'][c2_idx].append((self.last_end_time[c2_idx] + self.last_run_time, hist, 0))
+                # if index != 0 and index % 100 == 0:
+                #     hist = c2.eval()
+                #     self.hist['clients'][c2_idx].append((self.last_end_time[c2_idx] + self.last_run_time, hist, 0))
 
             self.last_end_time[c1_idx] = cur_t + duration
             self.last_end_time[c2_idx] = cur_t + duration 

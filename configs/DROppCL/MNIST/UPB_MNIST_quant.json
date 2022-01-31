@@ -4,10 +4,10 @@
     "local-data-size": 100,
     "strategies": {
         "DROppCL test": false,
-        "baseline": true,
-        "dropout": true,
+        "baseline": false,
+        "dropout": false,
         "quantize": true,
-        "DROppCL": true
+        "DROppCL": false
     },
     "enc-exp-config":{
         "encounter-data-file": "encounter_data/upb_0_5to3600_v1.csv",
