@@ -210,10 +210,10 @@ class DROppCLSwarm():
             self.hist['dropout_hist'] = self.dropout_hist
             self.hist['quantization_hist'] = self.quantization_hist 
 
-            if index != 0 and index % 100 == 0:
+            if (index != 0 and index % 100 == 0) or index == len(self.enc_df.index) - 1:
                 tot_loss, tot_acc = self._get_tot_loss_and_acc()
                 self.log_callback('[index {}]: tot_loss: {}, tot_acc: {}'.format(index, tot_loss, tot_acc))
-                self.log_callback('[index {}]: tot_encs: {}'.format(index, self.hist['total_used_encs']))
+                self.log_callback('[index {}]: tot_encs: {}, tot_reqs: {}'.format(index, self.hist['total_used_encs'], self.hist['total_requests']))
             
             if index != 0 and index % 500 == 0:
                 elasped = datetime.datetime.now() - start_time
