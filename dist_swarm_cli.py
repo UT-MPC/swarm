@@ -4,16 +4,17 @@ import json
 import os
 from pathlib import Path, PurePath
 
-from dist_swarm.dist_swarm_controller import DistSwarmController
+# from dist_swarm.dist_swarm_controller import DistSwarmController
 
 class DistSwarmShell(cmd.Cmd):
     prompt = "[Swarm]$ "
 
     def preloop(self):
-        self.controller = DistSwarmController()
+        # self.controller = DistSwarmController()
 
         logo = "█▀ █░█░█ ▄▀█ █▀█ █▀▄▀█ \n▄█ ▀▄▀▄▀ █▀█ █▀▄ █░▀░█ v. 0.01"
         hr = '-------------------------------------'
+        print(hr)
         print(logo)
         print(hr)
 
@@ -22,14 +23,15 @@ class DistSwarmShell(cmd.Cmd):
         """
         create (config file for swarm, swarm)
         """
-        if len(inp) < 1:
+        args = inp.split(' ')
+        if len(args) < 1:
             print('specify what to create (create config, create swarm)')
-        if inp[0] == 'config':
-            self.controller.create_config(inp[1:])
-        elif inp[1] == 'swarm':
-            self.controller.create_swarm(inp[1:])
+        if args[0] == 'config':
+            self.create_config(args[1:])
+        elif args[0] == 'swarm':
+            self.create_swarm(args[1:])
         else:
-            print('invalid command: {}'.format('create ' + inp[0]))
+            print('invalid command: {}'.format('create ' + args[0]))
         
     def do_edit(self, inp):
         """
@@ -56,12 +58,18 @@ class DistSwarmShell(cmd.Cmd):
             print('invalid command: {}'.format('create ' + inp[0]))
 
     ### swarm commands    
-    def do_create_swarm(self, inp):
+    def create_swarm(self, inp):
         """
         create swarm from config file
         """
         parser = argparse.ArgumentParser(prog="config")
-        parser.add_argument('-c')
+        parser.add_argument('--config', dest='config_file', 
+                            default='configs/dist_swarm/controller_example.json')
+        parser.add_argument('--name', dest='name', 
+                            default='default_swarm')
+        parsed = parser.parse_args(inp)
+        print('created swarm {} with config file {}'.format(parsed.name, parsed.config_file))
+
 
     def do_config_swarm(self, inp):
         """
@@ -105,6 +113,9 @@ class DistSwarmShell(cmd.Cmd):
         show descriptions of a worker
         """
         raise NotImplementedError()
+
+    def do_exit(self, inp):
+        return True
 
     ### control logics
     

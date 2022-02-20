@@ -22,7 +22,7 @@ metadata:
   labels:
     app: dist-swarm
 spec:
-  replicas: 10
+  replicas: 2
   revisionHistoryLimit: 3
   selector:
     matchLabels:

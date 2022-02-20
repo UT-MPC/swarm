@@ -11,7 +11,7 @@ from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
 class DeviceInDB():
     def __init__(self, table_name, device_id):    
-        self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+        self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
         self.table = self.dynamodb.Table(table_name)
         self.device_id = device_id
 

@@ -37,10 +37,12 @@ def swarm_metric():
     resp['times'] = times
     resp['accs_list'] = loss_list
 
-    # sample 128 points evenly from all points
-    if len(resp['times']) >= 100:
-
-    return resp
+    # sample points evenly from all points
+    SAMPLE_NUM = 100
+    sampled = {}
+    sampled['times'] = even_sampling(resp['times'], SAMPLE_NUM)
+    sampled['accs_list'] = even_sampling(resp['accs_list'], SAMPLE_NUM)
+    return sampled
 
 def even_sampling(orig, num):
     itvl = len(orig)/num

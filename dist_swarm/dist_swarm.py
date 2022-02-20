@@ -47,6 +47,7 @@ class DistSwarm():
                 failure_num -= 1
                 succeeded = True
             except grpc._channel._InactiveRpcError:
+                print("Inactive RPC Error")
                 pass
             else:
                 succeeded = True
