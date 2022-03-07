@@ -1,6 +1,6 @@
 import boto3
 from decimal import Decimal
-from aws_settings import REGION
+from dist_swarm.aws_settings import REGION
 
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 

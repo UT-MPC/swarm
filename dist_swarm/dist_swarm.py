@@ -31,12 +31,12 @@ class DistSwarm():
         
     # deploy and run workers
     def run(self):
-        print('number of devices: {}'.format(self.config['swarm_config']['number_of_devices']))
+        # print('number of devices: {}'.format(self.config['swarm_config']['number_of_devices']))
         for device_id in range(int(self.config['swarm_config']['number_of_devices'])):
             self.config['device_config']['id'] = device_id
             config = simulate_device_pb2.Config(config=json.dumps(self.config))
             self.send_request_rep(config, device_id, 10)
-            time.sleep(1)
+            # time.sleep(1)
 
     def send_request_rep(self, config, device_id, failure_num):
         succeeded = False
@@ -56,7 +56,7 @@ class DistSwarm():
         with grpc.insecure_channel(self.loadbalancer_ip, options=(('grpc.enable_http_proxy', 0),)) as channel:
             stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
             status = stub.SimulateOppCL(config)
-            print('device {}: {}'.format(device_id, status))
+            # print('device {}: {}'.format(device_id, status))
 
     def _create_table(self, tag):
         # boto3 is the AWS SDK library for Python.
@@ -91,8 +91,9 @@ class DistSwarm():
             time.sleep(3)
 
         except Exception as e:
-            print("Error creating table:")
-            print(e)
+            pass
+            # print("Error creating table:")
+            # print(e)
 
         # # delete all the existing items in the db
         try:
@@ -119,10 +120,10 @@ class DistSwarm():
                             ExclusiveStartKey=page['LastEvaluatedKey'])
                     else:
                         break
-            print(f"Deleted {counter}")
+            # print(f"Deleted {counter}")
         except:
-            print("new table; nothing to delete")
-
+            # print("new table; nothing to delete")
+            pass
 
     def _config_client(self, ip):
         self.loadbalancer_ip = ip
@@ -152,7 +153,7 @@ class DistSwarm():
 
         # store local data dist, goal dist, and trining data indices in the table
         for idnum in range(swarm_config['number_of_devices']):
-            print('init db for device {}.'.format(idnum))
+            # print('init db for device {}.'.format(idnum))
             label_set = []
             goal_dist = {}
             local_dist = {}

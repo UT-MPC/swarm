@@ -5,8 +5,6 @@ resides in user side
 from kubernetes import client, config
 import logging
 
-from aws_settings import REGION
-
 class K8sController():
     """
     k8s controller for distributed swarm simulation. Uses AWS EKS.
@@ -24,7 +22,7 @@ class K8sController():
         self.pods = {}
         for i in ret.items:
             self.pods[i.metadata.name] = i.status.pod_ip
-            print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+            # print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
         logging.info('Total {} pods read'.format(len(self.pods)))
 
         ret = self.api.list_namespaced_pod(namespace=self.eks_controller.get_namespace(), label_selector='role=controller')
@@ -37,8 +35,13 @@ class K8sController():
 
     def list_namespace(self):
         ret = self.api.list_namespace()
+        names = []
+        
         for i in ret.items:
-            print('{}'.format(i.metadata.name))
+            if i.metadata.name.split('-')[-1] == 'namespace':
+                names.append('{}'.format(('-').join(i.metadata.name.split('-')[:-1])))
+
+        return names
 
     def update_pods(self, container_hash):
         """

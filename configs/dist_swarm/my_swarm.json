@@ -1,6 +1,6 @@
 {
     "dataset": "mnist",
-    "tag": "swarm_example",
+    "tag": "my_swarm",
     "swarm_config": {
         "number_of_devices": 10,
         "local_set_size": 10,

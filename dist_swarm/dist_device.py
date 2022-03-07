@@ -185,6 +185,7 @@ class DistDevice():
             return self._handle_error(traceback.format_exc())
 
     def _handle_error(self, e):
+        logging.error('error: {}'.format(e))
         self.device_in_db.set_error(e)
         return self._str_to_status(ERROR)
 

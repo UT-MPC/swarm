@@ -16,5 +16,5 @@ def serve():
     server.wait_for_termination()
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='server.log', level=logging.INFO)
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     serve()
