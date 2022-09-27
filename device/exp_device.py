@@ -1,6 +1,8 @@
 # devices for experiments -- TMC
-
+import sys
+sys.path.insert(0,'..')
 import device.base_device
+from dist_swarm.ovm_utils.dependency_utils import get_dependency_dict
 
 class LocalDevice(device.base_device.Device):
     def __init__(self, *args):
@@ -39,6 +41,15 @@ class GreedyWOSimDevice(device.base_device.Device):
         for _ in range(iteration):
             self._weights = self.fit_to(other, epoch)
             self._weights = self.fit_to(self, epoch)
+
+    def on_connect(self):
+        # simply returns the name of the function to be invoked
+        # when encountering other device
+        return "delegate"
+
+    @staticmethod
+    def get_dependency():
+        return get_dependency_dict(on_immutable=True, on_mutable=False)
 
 class OracleClient(device.base_device.Device):
     def __init__(self, *args):

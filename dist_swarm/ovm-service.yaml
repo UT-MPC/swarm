@@ -1,0 +1,76 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ds-service
+#   namespace: ds-namespace
+#   labels:
+#     app: dist-swarm
+# spec:
+#   selector:
+#     app: dist-swarm
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 50051
+#   type: LoadBalancer
+# ---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ds-deployment
+  namespace: ds-namespace
+  labels:
+    app: dist-swarm
+spec:
+  replicas: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: dist-swarm
+  template:
+    metadata:
+      labels:
+        app: dist-swarm
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+      containers:
+      - name: ds-device
+        image: sethlee0111/private_swarm:0.4
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
+      imagePullSecrets:
+      - name: regcred
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "my-storage-class"
+      resources:
+        requests:
+          storage: 1Gi
+---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: ds-controller
+#   labels:
+#     role: controller
+# spec:
+#   containers:
+#     - name: ds-device-controller
+#       image: sethlee0111/private_swarm:server
+#       imagePullPolicy: Always
+#   imagePullSecrets:
+#   - name: regcred
+# ---

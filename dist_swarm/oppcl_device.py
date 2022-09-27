@@ -30,10 +30,8 @@ CLIENT1="client1"
 CLIENT2="client2"
 ENC_IDX="encounter index"
 
-class DistDevice():
-    """
-    Device class for running a training task
-    """
+class OppCLDevice():
+    ### gRPC methods
     def __init__(self, json_config):
         self.config = json_config
         self.device_config = json_config['device_config']
@@ -202,7 +200,7 @@ class DistDevice():
         self.model_folder = OUTPUT_FOLDER + '/models'
         Path(self.model_folder).mkdir(parents=True, exist_ok=True)
         # setup S3
-        self.model_in_db = ModelInDB(config['tag'], config['device_config']['id'], self.model_folder + '/model.h5')
+        self.model_in_db = ModelInDB(config['tag'], config['device_config']['id'])
 
     def _initialize_device(self, config):
         # get model and dataset

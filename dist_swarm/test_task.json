@@ -1,0 +1,25 @@
+{
+    "swarm_name": "ovm_example",
+    "start": 10,
+    "end": 30,
+    "task_id": 0,
+    "learner": 0,
+    "neighbors": [1],
+    "load_config": {
+        "0": {
+            "load_model": true,
+            "load_dataset": true
+        }
+    },
+    "func_list": [
+        {
+            "func_name": "delegate",
+            "params": {
+                "epoch": 1,
+                "iteration": 1
+            }
+        },
+        {
+            "func_name": "!evaluate"
+        }]
+}

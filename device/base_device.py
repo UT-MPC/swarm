@@ -55,7 +55,7 @@ class Device():
                 self._similarity_threshold = hyperparams['similarity-threshold']
             if 'low-similarity-threshold' in hyperparams:
                 self._low_similarity_threshold = hyperparams['low-similarity-threshold']
-            self.task_num = train_data_provider.task_num
+            # self.task_num = train_data_provider.task_num
 
             self.last_batch_num = {} # keeps the last batch num of the other client that this client was trained on
             self.total_num_batches = int(len(y_train) / hyperparams['batch-size'])

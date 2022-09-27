@@ -64,6 +64,18 @@ class DeviceInDB():
                     UpdateExpression="SET #loss = list_append(#loss, :loss), \
                     #metric = list_append(#metric, :metric), #enc_idx = :enc_idx",
                 )
+    
+    def update_timestamp(self, timestamp):
+        resp = self.table.update_item(
+            Key={DEVICE_ID: self.device_id},
+            ExpressionAttributeNames={
+                "#timestamps": TIMESTAMPS,
+            },
+            ExpressionAttributeValues={
+                ":timestamps": [Decimal(timestamp)]
+            },
+            UpdateExpression="SET #timestamps = list_append(#timestamps, :timestamps)"
+        )
 
     def update_loss_and_metric_in_bulk(self, loss_hist, metric_hist, enc_idx):
         resp = self.table.update_item(

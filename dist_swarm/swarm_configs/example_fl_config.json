@@ -1,0 +1,19 @@
+{
+    "name": "fl",
+    "connection_data": "./connection_data/fl.pickle",
+    "device_groups": {
+        "server": {
+            "class": "swarm.devices.fl.Server",
+            "number": 1
+        },
+        "client": {
+            "class": "swarm.devices.fl.Client",
+            "number": 3,
+            "train_config": {
+                "epochs": 1,
+                "optimizer": "adam",
+                "local_data_size": 150
+            }
+        }
+    }
+}

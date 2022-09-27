@@ -1,8 +1,8 @@
 {
     "dataset": "mnist",
-    "tag": "swarm_example",
+    "tag": "percom_demo",
     "swarm_config": {
-        "number_of_devices": 10,
+        "number_of_devices": 45,
         "local_set_size": 10,
         "local_data_size": 200,
         "goal_set_size": 10,

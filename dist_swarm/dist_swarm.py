@@ -20,6 +20,7 @@ from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, LOCAL_DIST, MODEL_INFO, TO
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from aws_settings import REGION
+from get_model import get_model_fn
 
 client = boto3.client('dynamodb', region_name=REGION)
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
@@ -152,6 +153,7 @@ class DistSwarm():
                 enc_df = read_csv(pfile)
 
         # store local data dist, goal dist, and trining data indices in the table
+        s3 = boto3.resource('s3')
         for idnum in range(swarm_config['number_of_devices']):
             # print('init db for device {}.'.format(idnum))
             label_set = []
@@ -179,6 +181,17 @@ class DistSwarm():
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), DATA_INDICES: chosen_data_idx, TOTAL_ENC_IDX: len(enc_df.index),
                     EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
+            
+            # initialize and store model in S3
+            model = get_model_fn(config['model'])()
+            init_model_path = '.tmp/init_model.h5'
+            model.save(init_model_path)
+            s3.meta.client.upload_file(init_model_path, 
+                                      'opfl-sim-models', 
+                                       config['tag'] + '/' + 'model-' + str(idnum) + '.h5',
+                                       {'Metadata': {'enc-id': '-1'}})
+            del model
+
 
 def convert_to_map(dist):
     new_dist = {}

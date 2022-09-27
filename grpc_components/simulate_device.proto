@@ -25,11 +25,15 @@ package simulatedeivce;
 service SimulateDevice {
   // A simple RPC.
   //
+  rpc SetWorkerState(WorkerId) returns (Status) {}
+  rpc RunTask(Config) returns (Status) {}
+  rpc StopTask(Config) returns (Status) {}
+  rpc GetStatus(Empty) returns (Status) {}
+  rpc Ping(Empty) returns (Empty) {}
 
   // Starts the OppCL simulation.
   rpc SimulateOppCL(Config) returns (Status) {}
 
-  rpc GetDeviceInfo(Empty) returns (DeviceInfo) {}
 }
 
 // empty message
@@ -42,13 +46,12 @@ message Config {
   string config = 1;
 }
 
-// Status: device-specific config file
+// Status
 message Status {
-    string status = 1;
-  }
-
-// DeviceInfo
-message DeviceInfo {
     int32 id = 1;
     string status = 2;
   }
+
+message WorkerId {
+  int32 worker_id = 1;
+}

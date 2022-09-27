@@ -61,6 +61,10 @@ def get_2nn_svhn_model(size=10):
     model.add(Dense(10, activation='softmax', name='softmax_logits'))
     return model
 
+def get_mobilenetv2():
+    model = keras.applications.MobileNetV2(input_shape=(32,32,3), weights=None, classes=10)
+    return model
+
 # def get_Q_2nn_mnist_model(size=10):
 #     bits = 4
 #     integer = 0
