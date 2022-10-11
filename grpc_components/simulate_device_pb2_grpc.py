@@ -15,9 +15,9 @@ class SimulateDeviceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SetWorkerState = channel.unary_unary(
-                '/simulatedeivce.SimulateDevice/SetWorkerState',
-                request_serializer=simulate__device__pb2.WorkerId.SerializeToString,
+        self.SetWorkerInfo = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/SetWorkerInfo',
+                request_serializer=simulate__device__pb2.WorkerInfo.SerializeToString,
                 response_deserializer=simulate__device__pb2.Status.FromString,
                 )
         self.RunTask = channel.unary_unary(
@@ -51,7 +51,7 @@ class SimulateDeviceServicer(object):
     """Interface exported by the server.
     """
 
-    def SetWorkerState(self, request, context):
+    def SetWorkerInfo(self, request, context):
         """A simple RPC.
 
         """
@@ -93,9 +93,9 @@ class SimulateDeviceServicer(object):
 
 def add_SimulateDeviceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SetWorkerState': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetWorkerState,
-                    request_deserializer=simulate__device__pb2.WorkerId.FromString,
+            'SetWorkerInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetWorkerInfo,
+                    request_deserializer=simulate__device__pb2.WorkerInfo.FromString,
                     response_serializer=simulate__device__pb2.Status.SerializeToString,
             ),
             'RunTask': grpc.unary_unary_rpc_method_handler(
@@ -135,7 +135,7 @@ class SimulateDevice(object):
     """
 
     @staticmethod
-    def SetWorkerState(request,
+    def SetWorkerInfo(request,
             target,
             options=(),
             channel_credentials=None,
@@ -145,8 +145,8 @@ class SimulateDevice(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/SetWorkerState',
-            simulate__device__pb2.WorkerId.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/SetWorkerInfo',
+            simulate__device__pb2.WorkerInfo.SerializeToString,
             simulate__device__pb2.Status.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

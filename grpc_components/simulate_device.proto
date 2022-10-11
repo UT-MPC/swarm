@@ -25,11 +25,12 @@ package simulatedeivce;
 service SimulateDevice {
   // A simple RPC.
   //
-  rpc SetWorkerState(WorkerId) returns (Status) {}
+  rpc SetWorkerInfo(WorkerInfo) returns (Status) {}
   rpc RunTask(Config) returns (Status) {}
   rpc StopTask(Config) returns (Status) {}
   rpc GetStatus(Empty) returns (Status) {}
   rpc Ping(Empty) returns (Empty) {}
+  rpc ClearCache(Empty) returns (Empty) {}
 
   // Starts the OppCL simulation.
   rpc SimulateOppCL(Config) returns (Status) {}
@@ -52,6 +53,7 @@ message Status {
     string status = 2;
   }
 
-message WorkerId {
-  int32 worker_id = 1;
+message WorkerInfo {
+  string swarm_name = 1;
+  int32 worker_id = 2;
 }

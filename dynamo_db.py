@@ -37,4 +37,5 @@ TASK_END = "TaskEnd"
 
 # Done-tasks table
 TASK_ID = "TaskId"
+IS_FINISHED = "IsFinished"
 IS_PROCESSED = "IsProcessed"  # is it processed by overmind controller

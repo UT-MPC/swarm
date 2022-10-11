@@ -1,15 +1,22 @@
 # overmind controller
 # reads encounter data, creates tasks and build dependency graph
 import sys
+import grpc
 sys.path.insert(0,'..')
+sys.path.insert(0,'../grpc_components')
+from dist_swarm.db_bridge.worker_in_db import WorkerInDB
+from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
+from grpc_components.status import STOPPED
 import json
 import os
-import time
+import threading
+from time import sleep
+import typing
 from pathlib import PurePath
 from time import time
 from pandas import read_pickle, read_csv
 import boto3
-from dynamo_db import IS_PROCESSED, TASK_ID
+from dynamo_db import IS_FINISHED, IS_PROCESSED, TASK_ID
 from boto3.dynamodb.conditions import Key
 
 from ovm_swarm_initializer import OVMSwarmInitializer
@@ -32,7 +39,6 @@ class Task():
         self.learner_id = learner_id
         self.neighbor_id_list = neighbor_id_list
         self.load_config = {str(learner_id): self.get_new_load_config()}
-        self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
         
         for nbgr in neighbor_id_list:
             self.load_config[str(nbgr)] = self.get_new_load_config()
@@ -51,8 +57,8 @@ class Task():
         return {
             "swarm_name": self.swarm_name,
             "task_id": self.task_id,
-            "start": self.start,
-            "end": self.end,
+            "start": str(self.start),
+            "end": str(self.end),
             "learner": self.learner_id,
             "neighbors": self.neighbor_id_list,
             "load_config": self.load_config,
@@ -70,15 +76,16 @@ class Overmind():
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
-    def create_swarm(self, config_file, ip):
+    def create_swarm(self, config_file):
         with open(config_file, 'rb') as f:
             config_json = f.read()
         self.config = json.loads(config_json)
         self.device_config = self.config["device_config"]
         self.swarm_name = self.config['tag']
+        self.worker_nodes : typing.List[str] = self.config["worker_ips"]
 
         initializer = OVMSwarmInitializer()
-        initializer.initialize(config_file, ip)
+        initializer.initialize(config_file)
 
     def build_dep_graph(self):
         # read encounter dataset
@@ -172,25 +179,94 @@ class Overmind():
 
         self.finished_tasks_table = self.dynamodb.Table(self.swarm_name +'-finished-tasks')
     
+    def send_run_task_request(self, worker_id, task):
+        with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+            stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+            config = simulate_device_pb2.Config(config=json.dumps(task.get_config()))
+            status = stub.RunTask.future(config)
+            res = status.result()
+            if res == STOPPED:
+                print(f"rpc call for task {task.task_id} in {worker_id} returned")
+                return True
+            else:
+                return False
+    
     def run_swarm(self, polling_interval=10):
+        cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
+        task_queue = []
+        for task_id in self.tasks:
+            if self.indegrees[task_id] == 0:
+                task_queue.append(task_id)
+
         while self.task_num > 0:
-            resp = self.finished_tasks_table.query(
-                KeyConditionExpression=Key(IS_PROCESSED).eq(False)
-            )
-            task_queue = []
-            for newly_finished in resp['Items']:
+            resp = self.finished_tasks_table.scan()
+
+            # re-allocate failed tasks
+            for task_item in resp['Items']:
+                if not task_item[IS_FINISHED]:
+                    task_queue.append(task_item[TASK_ID])
+                    # TODO delete task item from DB
+
+            for task_item in resp['Items']:
                 # "process" the finished task, which is
-                # running tasks that are dependent on that task
-                task_id = newly_finished[TASK_ID]
-                for next_task in self.dep_graph[task_id]:
-                    self.indegrees[next_task] -= 1
-                    if self.indegrees[next_task] == 0:
-                        task_queue.append(next_task)
+                # decrementing indegrees of tasks that are dependent on that task
+                if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
+                    task_id = task_item[TASK_ID]
+                    for next_task in self.dep_graph[task_id]:
+                        print(f"next task {next_task}")
+                        self.indegrees[next_task] -= 1
+                        if self.indegrees[next_task] == 0:
+                            task_queue.append(next_task)
+
+                    self.finished_tasks_table.update_item(
+                        Key={TASK_ID: task_id},
+                        ExpressionAttributeNames={
+                            "#is_processed": IS_PROCESSED
+                        },
+                        ExpressionAttributeValues={
+                            ":is_processed": True
+                        },
+                        UpdateExpression="SET #is_processed = :is_processed",
+                    )
+                    self.task_num -= 1
             
-            # call RunTask asynchronously to all in task queue
+            # get "Stopped" workers and check if one of them holds recent device state
+            # TODO prevent worker_dbs to be initialized multiple times
+            worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
+            task_id_to_worker = {}
+            free_workers = [worker.worker_id for worker in worker_dbs if worker.status == STOPPED]
 
+            ## start assigning tasks to worker nodes (populate task_id_to_worker)
+            # first assign based on cached device state
+            for task_id in task_queue:
+                # @TODO support mutable neighbors
+                if self.tasks[task_id].learner_id in cached_devices_to_worker_nodes and task_id not in task_id_to_worker:
+                    target_worker_id = cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
+                    if worker_dbs[target_worker_id].status == STOPPED and target_worker_id in free_workers:
+                        task_id_to_worker[task_id] = target_worker_id
+                        free_workers.remove(target_worker_id)
 
-            time.sleep(polling_interval)
+            # assign remaining tasks to "Stopped" worker nodes
+            for task_id in task_queue:
+                if task_id not in task_id_to_worker:
+                    for worker in worker_dbs:
+                        if worker.status == STOPPED and worker.worker_id in free_workers:
+                            task_id_to_worker[task_id] = worker.worker_id
+                            free_workers.remove(worker.worker_id)
+
+            # delete assigned tasks from task queue
+            for task_id in task_id_to_worker:
+                task_queue.remove(task_id)
+
+            # call RunTask asynchronously 
+            for task_id in task_id_to_worker:
+                task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
+                task_thread.start()
+                cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
+
+            sleep(polling_interval)
+        
+        print(f"Overmind run finished successfully...")
 
         
 

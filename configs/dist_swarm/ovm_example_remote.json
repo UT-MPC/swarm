@@ -2,7 +2,13 @@
     "dataset": "mnist",
     "model": "2nn",
     "tag": "ovm_example",
-    "worker_ips": ["localhost:50051"],
+    "worker_ips": [
+        "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com",
+        "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com",
+        "a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com",
+        "a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com",
+        "acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com"
+    ],
     "swarm_config": {
         "number_of_devices": 5,
         "local_set_size": 2,

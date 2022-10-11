@@ -1,13 +1,16 @@
 import sys
+
+from dist_swarm.db_bridge.worker_in_db import WorkerInDB
 sys.path.insert(0,'..')
 import os
+import logging
 import json
 from io import StringIO
 
 from ovm_utils.task_runner import run_task
 from grpc_components import simulate_device_pb2_grpc
-from grpc_components.simulate_device_pb2 import Status
-from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
+from grpc_components.simulate_device_pb2 import Empty, Status
+from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED, STOPPED
 from oppcl_device import OppCLDevice
 
 # data frame column names for encounter data
@@ -20,18 +23,29 @@ ENC_IDX="encounter index"
 class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
     def __init__(self) -> None:
         super().__init__()
-        self.worker_status = IDLE
+        # temporarily hold device state in case the next task uses this.
+        # which means that this dict is erased whenever a task is ran
+        self.device_state_cache = {}  
 
     ### gRPC methods
-    def SetWorkerState(self, request, context):
+    def SetWorkerInfo(self, request, context):
         self.worker_id = request.worker_id
+        self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_id)
+        self.worker_status = self.worker_in_db.status
+        logging.info(f"worker id set to {self.worker_id}")
         return Status(status=self.worker_status)
 
     def RunTask(self, request, context):
         config = json.load(StringIO(request.config))
         # call the function to run a single training task
-        run_task(self.worker_id, config)
+        hist, device_state_cache = run_task(self.worker_status, self.worker_id, config, self.device_state_cache)
+        self.device_state_cache = device_state_cache
         # save the pointer to the thread
+        return Status(status=self.worker_status)
+    
+    def ClearCache(self, request, context):
+        self.device_state_cache = {}
+        return Empty()
     
     def StopTask(self, request, context):
         raise NotImplementedError('')

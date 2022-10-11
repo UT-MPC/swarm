@@ -61,7 +61,7 @@ def load_device_model(device: base_device.Device, tag, id):
     tmp_model_path = '.tmp/loaded_model.h5'
     s3.Bucket(BUCKET_NAME).download_file(get_device_model_object_name(tag, id),
                      tmp_model_path)
-    model = keras.models.load_model(tmp_model_path)
+    model = keras.models.load_model(tmp_model_path, compile=False)
     device._weights = model.get_weights()
 
 def save_device_dataset(device: base_device.Device, tag, id, enc_idx):

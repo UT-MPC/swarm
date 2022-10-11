@@ -1,19 +1,86 @@
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: ds-service
-#   namespace: ds-namespace
-#   labels:
-#     app: dist-swarm
-# spec:
-#   selector:
-#     app: dist-swarm
-#   ports:
-#     - protocol: TCP
-#       port: 80
-#       targetPort: 50051
-#   type: LoadBalancer
-# ---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: sc-gp2
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: overmind-service
+  labels:
+    name: overmind
+spec:
+  ports:
+  - port: 50001
+    targetPort: 50001
+  clusterIP: None
+  selector:
+    app: dist-swarm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-0
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-0
+  ports:
+  - port: 50001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-1
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-1
+  ports:
+  - port: 50001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-2
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-2
+  ports:
+  - port: 50001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-3
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-3
+  ports:
+  - port: 50001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-4
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-4
+  ports:
+  - port: 50001
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -22,6 +89,7 @@ metadata:
   labels:
     app: dist-swarm
 spec:
+  serviceName: "overmind"
   replicas: 5
   revisionHistoryLimit: 3
   selector:
@@ -44,18 +112,23 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.4
+        image: sethlee0111/private_swarm:0.04
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
+        volumeMounts:
+           - name: overmind-volume
+             mountPath: /data/db
       imagePullSecrets:
       - name: regcred
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: overmind-volume
+      annotations:
+       volume.beta.kubernetes.io/storage-class: "sc-gp2"
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "my-storage-class"
+      storageClassName: "sc-gp2"
       resources:
         requests:
           storage: 1Gi

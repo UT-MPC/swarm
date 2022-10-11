@@ -2,7 +2,7 @@ from distutils.log import error
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from dynamo_db import ERROR_MSG, IS_PROCESSED, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
+from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
                       WTIMESTAMP, ACTION_TYPE
 
 class WorkerInDB():
@@ -62,7 +62,7 @@ class WorkerInDB():
                 )
         self.status = status
 
-    def update_finished_task(self, task_id):
+    def update_finished_task(self, task_id, is_finished):
         resp = self.finished_tasks_table.put_item(
-            Item={TASK_ID: task_id, IS_PROCESSED: False}
+            Item={TASK_ID: task_id, IS_FINISHED: is_finished, IS_PROCESSED: False}
         )

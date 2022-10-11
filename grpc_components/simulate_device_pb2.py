@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\037io.grpc.examples.simulatedeviceB\023SimulateDeviceProtoP\001\242\002\002SD',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"$\n\x06Status\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\"\x1d\n\x08WorkerId\x12\x11\n\tworker_id\x18\x01 \x01(\x05\x32\x8a\x03\n\x0eSimulateDevice\x12\x44\n\x0eSetWorkerState\x12\x18.simulatedeivce.WorkerId\x1a\x16.simulatedeivce.Status\"\x00\x12;\n\x07RunTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\x08StopTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\tGetStatus\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12\x36\n\x04Ping\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12\x41\n\rSimulateOppCL\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
+  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"$\n\x06Status\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\"3\n\nWorkerInfo\x12\x12\n\nswarm_name\x18\x01 \x01(\t\x12\x11\n\tworker_id\x18\x02 \x01(\x05\x32\x8b\x03\n\x0eSimulateDevice\x12\x45\n\rSetWorkerInfo\x12\x1a.simulatedeivce.WorkerInfo\x1a\x16.simulatedeivce.Status\"\x00\x12;\n\x07RunTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\x08StopTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\tGetStatus\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12\x36\n\x04Ping\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12\x41\n\rSimulateOppCL\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
 )
 
 
@@ -121,17 +121,24 @@ _STATUS = _descriptor.Descriptor(
 )
 
 
-_WORKERID = _descriptor.Descriptor(
-  name='WorkerId',
-  full_name='simulatedeivce.WorkerId',
+_WORKERINFO = _descriptor.Descriptor(
+  name='WorkerInfo',
+  full_name='simulatedeivce.WorkerInfo',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='worker_id', full_name='simulatedeivce.WorkerId.worker_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
+      name='swarm_name', full_name='simulatedeivce.WorkerInfo.swarm_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='worker_id', full_name='simulatedeivce.WorkerInfo.worker_id', index=1,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -149,13 +156,13 @@ _WORKERID = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=114,
-  serialized_end=143,
+  serialized_end=165,
 )
 
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['Config'] = _CONFIG
 DESCRIPTOR.message_types_by_name['Status'] = _STATUS
-DESCRIPTOR.message_types_by_name['WorkerId'] = _WORKERID
+DESCRIPTOR.message_types_by_name['WorkerInfo'] = _WORKERINFO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
@@ -179,12 +186,12 @@ Status = _reflection.GeneratedProtocolMessageType('Status', (_message.Message,),
   })
 _sym_db.RegisterMessage(Status)
 
-WorkerId = _reflection.GeneratedProtocolMessageType('WorkerId', (_message.Message,), {
-  'DESCRIPTOR' : _WORKERID,
+WorkerInfo = _reflection.GeneratedProtocolMessageType('WorkerInfo', (_message.Message,), {
+  'DESCRIPTOR' : _WORKERINFO,
   '__module__' : 'simulate_device_pb2'
-  # @@protoc_insertion_point(class_scope:simulatedeivce.WorkerId)
+  # @@protoc_insertion_point(class_scope:simulatedeivce.WorkerInfo)
   })
-_sym_db.RegisterMessage(WorkerId)
+_sym_db.RegisterMessage(WorkerInfo)
 
 
 DESCRIPTOR._options = None
@@ -196,15 +203,15 @@ _SIMULATEDEVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=146,
-  serialized_end=540,
+  serialized_start=168,
+  serialized_end=563,
   methods=[
   _descriptor.MethodDescriptor(
-    name='SetWorkerState',
-    full_name='simulatedeivce.SimulateDevice.SetWorkerState',
+    name='SetWorkerInfo',
+    full_name='simulatedeivce.SimulateDevice.SetWorkerInfo',
     index=0,
     containing_service=None,
-    input_type=_WORKERID,
+    input_type=_WORKERINFO,
     output_type=_STATUS,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,

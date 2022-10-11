@@ -4,12 +4,11 @@ sys.path.insert(0,'../grpc_components')
 import os
 import boto3
 import grpc
-import argparse
 import pickle
 import json
+import logging
 import numpy as np
-import time
-from decimal import Decimal
+import threading
 from pathlib import Path, PurePath
 from pandas import read_pickle, read_csv
 from time import gmtime, strftime
@@ -34,9 +33,8 @@ client = boto3.client('dynamodb', region_name=REGION)
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 
 class OVMSwarmInitializer():
-    def initialize(self, config_file, ip) -> None:
+    def initialize(self, config_file) -> None:
         self._config_db(config_file)
-        self._config_client(ip)
         
     def _delete_all_items_on_table(self, table_name):
         try:
@@ -143,16 +141,22 @@ class OVMSwarmInitializer():
         # # delete all the existing items in the db
         self._delete_all_items_on_table(table_name)
 
+    def send_set_worker_state_request(self, swarm_name, worker_id):
+        with grpc.insecure_channel(self.worker_ips[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+            stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+            worker_info = simulate_device_pb2.WorkerInfo(swarm_name=swarm_name, worker_id=worker_id)
+            status = stub.SetWorkerInfo.future(worker_info)
+            res = status.result()
+            logging.info(f"{self.worker_ips[worker_id]} set as {worker_id}")
+
     def _initialize_worker(self, tag, worker_id):
         table = dynamodb.Table(self._get_worker_state_table_name(tag))
         with table.batch_writer() as batch:
-                batch.put_item(Item={WORKER_ID: worker_id, WORKER_STATUS: STOPPED,
+            batch.put_item(Item={WORKER_ID: worker_id, WORKER_STATUS: STOPPED,
                                WORKER_HISTORY: [{WTIMESTAMP: strftime("%Y-%m-%d %H:%M:%S", gmtime()), ACTION_TYPE: WORKER_CREATED}]})
-            
-
-    def _config_client(self, ip):
-        self.loadbalancer_ip = ip
-
+        set_number_thread = threading.Thread(target=self.send_set_worker_state_request, args=(tag, worker_id,))
+        set_number_thread.start()
+    
     def _config_db(self, config_file):
         # load config file
         with open(config_file, 'rb') as f:
@@ -161,6 +165,7 @@ class OVMSwarmInitializer():
         self.config = config
         tag = config['tag']
         swarm_config = config['swarm_config']
+        self.worker_ips = config['worker_ips']
 
         x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
         num_classes = len(np.unique(y_train_orig))
@@ -258,7 +263,7 @@ class OVMSwarmInitializer():
         
         # configure worker tables
         self._create_worker_state_table(tag)
-        for worker_id in range(swarm_config['number_of_workers']):
+        for worker_id in range(len(self.worker_ips)):
             self._initialize_worker(tag, worker_id)
         
         self._create_finished_tasks_table(tag)
