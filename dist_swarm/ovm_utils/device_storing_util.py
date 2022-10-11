@@ -122,10 +122,9 @@ def save_device(device: base_device.Device, tag: str, enc_idx: int):
     save_device_as_pickle(device, tag, id, enc_idx)
 
 def load_device(tag, device_id, load_model=True, load_dataset=True):
-
+    Path(".tmp").mkdir(parents=True, exist_ok=True)
     # load pickled device class
     device = load_device_as_pickle(tag, device_id)
-    Path(".tmp").mkdir(parents=True, exist_ok=True)
     if load_model:
         load_device_model(device, tag, device_id)
     if load_dataset:
