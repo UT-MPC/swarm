@@ -27,7 +27,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
     worker_in_db.update_status(RUNNING)
     worker_in_db.append_history(strftime("%Y-%m-%d %H:%M:%S", gmtime()), TASK_START, task_config)
     logging.info(f"Running task {task_config['task_id']} in worker {worker_id}")
-    logging.info(f"cached is {device_state_cache.keys()}")
+    logging.info(f"cached is {device_state_cache['device_states'].keys()}")
 
     try:
         # change the state of current worker
@@ -44,8 +44,8 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
             learner_load_config = device_load_config[str(learner_id)]
         # if device is already in cache, use that
         # @TODO do sanity check. Cached device is not up-to-date? reused in different swarm run?
-        if str(learner_id) in device_state_cache:
-            learner = device_state_cache[str(learner_id)]
+        if str(learner_id) in device_state_cache['device_states']:
+            learner = device_state_cache['device_states'][str(learner_id)]
             logging.info(f"device state {learner_id} loaded from cache")
         else:
             learner = load_device(swarm_name, learner_id, **learner_load_config)
@@ -72,8 +72,8 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
 
         # save to cache before saving to DB
         # because save_device deletes model and data from the device
-        device_state_cache = {}
-        device_state_cache[str(learner_id)] = copy.deepcopy(learner)
+        device_state_cache['device_states'] = {}
+        device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
 
         # save device (s)
         save_device(learner, swarm_name, task_id)
@@ -87,11 +87,11 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
                        "action_type": TASK_FAILED, "task": task_config, "error_msg": traceback.format_exc()}
         worker_in_db.append_history(**new_history)
         worker_in_db.update_status(STOPPED)
-        return new_history, {}
+        return new_history
 
     logging.info(f"-- Task {task_id} successfully finished --")
     worker_in_db.update_status(STOPPED) 
     worker_in_db.append_history(**new_history)
     worker_in_db.update_finished_task(task_id, True)
 
-    return new_history, device_state_cache
+    return new_history

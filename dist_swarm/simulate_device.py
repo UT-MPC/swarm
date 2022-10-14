@@ -5,6 +5,8 @@ sys.path.insert(0,'..')
 import os
 import logging
 import json
+import threading
+import traceback
 from io import StringIO
 
 from ovm_utils.task_runner import run_task
@@ -25,7 +27,7 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         super().__init__()
         # temporarily hold device state in case the next task uses this.
         # which means that this dict is erased whenever a task is ran
-        self.device_state_cache = {}  
+        self.cache = {'device_states' : {}}  
 
     ### gRPC methods
     def SetWorkerInfo(self, request, context):
@@ -38,9 +40,14 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
     def RunTask(self, request, context):
         config = json.load(StringIO(request.config))
         # call the function to run a single training task
-        hist, device_state_cache = run_task(self.worker_status, self.worker_id, config, self.device_state_cache)
-        self.device_state_cache = device_state_cache
-        # save the pointer to the thread
+        try:
+            run_task_thread = threading.Thread(target=run_task, args=(self.worker_status, self.worker_id, config, self.cache))
+            run_task_thread.start()
+            return Status(status=self.worker_status)
+        except Exception as e:
+            logging.error(traceback.format_exc())
+            return Status(status=self.worker_status)
+
         return Status(status=self.worker_status)
     
     def ClearCache(self, request, context):

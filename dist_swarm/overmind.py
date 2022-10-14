@@ -1,6 +1,7 @@
 # overmind controller
 # reads encounter data, creates tasks and build dependency graph
 import sys
+import traceback
 import grpc
 sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
@@ -9,6 +10,7 @@ from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from grpc_components.status import STOPPED
 import json
 import os
+import logging
 import threading
 from time import sleep
 import typing
@@ -83,6 +85,7 @@ class Overmind():
         self.device_config = self.config["device_config"]
         self.swarm_name = self.config['tag']
         self.worker_nodes : typing.List[str] = self.config["worker_ips"]
+        self.number_of_devices = self.config["swarm_config"]["number_of_devices"]
 
         initializer = OVMSwarmInitializer()
         initializer.initialize(config_file)
@@ -121,6 +124,8 @@ class Overmind():
         for index, row in enc_df.iterrows():
             device1_id = (int)(row[CLIENT1])
             device2_id = (int)(row[CLIENT2])
+            if max(device1_id, device2_id) >= self.number_of_devices:
+                continue
             start_time = max(row[TIME_START], last_times[device1_id] if device1_id in last_times else 0)
             start_time = max(start_time, last_times[device2_id] if device2_id in last_times else 0)
             end_time = start_time + oppcl_time
@@ -180,16 +185,15 @@ class Overmind():
         self.finished_tasks_table = self.dynamodb.Table(self.swarm_name +'-finished-tasks')
     
     def send_run_task_request(self, worker_id, task):
-        with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
-            stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
-            config = simulate_device_pb2.Config(config=json.dumps(task.get_config()))
-            status = stub.RunTask.future(config)
-            res = status.result()
-            if res == STOPPED:
-                print(f"rpc call for task {task.task_id} in {worker_id} returned")
-                return True
-            else:
-                return False
+        try:
+            with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+                stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+                config = simulate_device_pb2.Config(config=json.dumps(task.get_config()))
+                status = stub.RunTask.future(config)
+                res = status.result()
+        except Exception as e:
+            logging.error("gRPC call returned with error")
+            traceback.print_stack()
     
     def run_swarm(self, polling_interval=10):
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
@@ -235,6 +239,7 @@ class Overmind():
             worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
             task_id_to_worker = {}
             free_workers = [worker.worker_id for worker in worker_dbs if worker.status == STOPPED]
+            print(f"free workers {free_workers}, task queue size {len(task_queue)}")
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
@@ -245,19 +250,19 @@ class Overmind():
                     if worker_dbs[target_worker_id].status == STOPPED and target_worker_id in free_workers:
                         task_id_to_worker[task_id] = target_worker_id
                         free_workers.remove(target_worker_id)
-
-            # assign remaining tasks to "Stopped" worker nodes
-            for task_id in task_queue:
-                if task_id not in task_id_to_worker:
-                    for worker in worker_dbs:
-                        if worker.status == STOPPED and worker.worker_id in free_workers:
-                            task_id_to_worker[task_id] = worker.worker_id
-                            free_workers.remove(worker.worker_id)
-
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
                 task_queue.remove(task_id)
 
+            # assign remaining tasks to "Stopped" worker nodes
+            while len(free_workers) > 0 and len(task_queue) > 0:
+                worker_id = free_workers.pop()
+                if worker_dbs[worker_id].status == STOPPED:
+                    task_id_to_worker[task_queue.pop()] = worker_id
+
+            print(f"{task_id_to_worker}")
+
+            cached_devices_to_worker_nodes = {}
             # call RunTask asynchronously 
             for task_id in task_id_to_worker:
                 task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
