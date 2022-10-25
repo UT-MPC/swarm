@@ -35,8 +35,23 @@ class SimulateDeviceStub(object):
                 request_serializer=simulate__device__pb2.Empty.SerializeToString,
                 response_deserializer=simulate__device__pb2.Status.FromString,
                 )
+        self.ResetState = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/ResetState',
+                request_serializer=simulate__device__pb2.Empty.SerializeToString,
+                response_deserializer=simulate__device__pb2.Status.FromString,
+                )
+        self.CheckRunning = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/CheckRunning',
+                request_serializer=simulate__device__pb2.Empty.SerializeToString,
+                response_deserializer=simulate__device__pb2.Status.FromString,
+                )
         self.Ping = channel.unary_unary(
                 '/simulatedeivce.SimulateDevice/Ping',
+                request_serializer=simulate__device__pb2.Empty.SerializeToString,
+                response_deserializer=simulate__device__pb2.Empty.FromString,
+                )
+        self.ClearCache = channel.unary_unary(
+                '/simulatedeivce.SimulateDevice/ClearCache',
                 request_serializer=simulate__device__pb2.Empty.SerializeToString,
                 response_deserializer=simulate__device__pb2.Empty.FromString,
                 )
@@ -77,7 +92,25 @@ class SimulateDeviceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ResetState(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CheckRunning(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Ping(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ClearCache(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -113,8 +146,23 @@ def add_SimulateDeviceServicer_to_server(servicer, server):
                     request_deserializer=simulate__device__pb2.Empty.FromString,
                     response_serializer=simulate__device__pb2.Status.SerializeToString,
             ),
+            'ResetState': grpc.unary_unary_rpc_method_handler(
+                    servicer.ResetState,
+                    request_deserializer=simulate__device__pb2.Empty.FromString,
+                    response_serializer=simulate__device__pb2.Status.SerializeToString,
+            ),
+            'CheckRunning': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckRunning,
+                    request_deserializer=simulate__device__pb2.Empty.FromString,
+                    response_serializer=simulate__device__pb2.Status.SerializeToString,
+            ),
             'Ping': grpc.unary_unary_rpc_method_handler(
                     servicer.Ping,
+                    request_deserializer=simulate__device__pb2.Empty.FromString,
+                    response_serializer=simulate__device__pb2.Empty.SerializeToString,
+            ),
+            'ClearCache': grpc.unary_unary_rpc_method_handler(
+                    servicer.ClearCache,
                     request_deserializer=simulate__device__pb2.Empty.FromString,
                     response_serializer=simulate__device__pb2.Empty.SerializeToString,
             ),
@@ -203,6 +251,40 @@ class SimulateDevice(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def ResetState(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/ResetState',
+            simulate__device__pb2.Empty.SerializeToString,
+            simulate__device__pb2.Status.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CheckRunning(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/CheckRunning',
+            simulate__device__pb2.Empty.SerializeToString,
+            simulate__device__pb2.Status.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def Ping(request,
             target,
             options=(),
@@ -214,6 +296,23 @@ class SimulateDevice(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/Ping',
+            simulate__device__pb2.Empty.SerializeToString,
+            simulate__device__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ClearCache(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/simulatedeivce.SimulateDevice/ClearCache',
             simulate__device__pb2.Empty.SerializeToString,
             simulate__device__pb2.Empty.FromString,
             options, channel_credentials,

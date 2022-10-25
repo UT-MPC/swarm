@@ -29,6 +29,8 @@ service SimulateDevice {
   rpc RunTask(Config) returns (Status) {}
   rpc StopTask(Config) returns (Status) {}
   rpc GetStatus(Empty) returns (Status) {}
+  rpc ResetState(Empty) returns (Status) {}
+  rpc CheckRunning(Empty) returns (Status) {}
   rpc Ping(Empty) returns (Empty) {}
   rpc ClearCache(Empty) returns (Empty) {}
 

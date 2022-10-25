@@ -28,6 +28,7 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         # temporarily hold device state in case the next task uses this.
         # which means that this dict is erased whenever a task is ran
         self.cache = {'device_states' : {}}  
+        self.current_task = []
 
     ### gRPC methods
     def SetWorkerInfo(self, request, context):
@@ -43,12 +44,24 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         try:
             run_task_thread = threading.Thread(target=run_task, args=(self.worker_status, self.worker_id, config, self.cache))
             run_task_thread.start()
+            self.current_task = [run_task_thread]
             return Status(status=self.worker_status)
         except Exception as e:
             logging.error(traceback.format_exc())
             return Status(status=self.worker_status)
 
-        return Status(status=self.worker_status)
+    def CheckRunning(self, request, context):
+        # checks if thread is still running
+        # does not update DB
+        if len(self.current_task) == 0 or \
+            not self.current_task[0].is_alive():
+            return Status(status=IDLE)
+        return Status(status=RUNNING)
+
+    # def ResetState(self, request, context):
+    #     # kills the thread if running and reset state on DB
+    #     if len(self.current_task) != 0:
+
     
     def ClearCache(self, request, context):
         self.device_state_cache = {}

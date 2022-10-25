@@ -250,6 +250,7 @@ class Overmind():
                     if worker_dbs[target_worker_id].status == STOPPED and target_worker_id in free_workers:
                         task_id_to_worker[task_id] = target_worker_id
                         free_workers.remove(target_worker_id)
+                        print(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
                 task_queue.remove(task_id)
@@ -261,6 +262,7 @@ class Overmind():
                     task_id_to_worker[task_queue.pop()] = worker_id
 
             print(f"{task_id_to_worker}")
+            print(f"tasks left: {self.task_num}")
 
             cached_devices_to_worker_nodes = {}
             # call RunTask asynchronously 
