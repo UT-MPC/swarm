@@ -76,9 +76,9 @@ class OVMSwarmInitializer():
         return tag + '-worker-state'
 
     def _create_worker_state_table(self, tag):
-        self._create_table(WORKER_ID, self._get_worker_state_table_name(tag))
+        self._create_table(WORKER_ID, self._get_worker_state_table_name(tag), 100, 100)
 
-    def _create_table(self, key, table_name, read_cap_units=10, write_cap_units=10, secondary_index=None):  
+    def _create_table(self, key, table_name, read_cap_units=100, write_cap_units=100, secondary_index=None):  
         """
         stores the state of the worker nodes
         """
@@ -102,21 +102,21 @@ class OVMSwarmInitializer():
             # ProvisionedThroughput controls the amount of data you can read or write to DynamoDB per second.
             # You can control read and write capacity independently.
             'ProvisionedThroughput': {
-                "ReadCapacityUnits": 10,
-                "WriteCapacityUnits": 10
+                "ReadCapacityUnits": read_cap_units,
+                "WriteCapacityUnits": write_cap_units
             }
         }
 
-        if secondary_index is not None:
-            params['GlobalSecondaryIndexes'] = {
-                'IndexName': secondary_index,
-                'KeySchema': [
-                    {
-                        'AttributeName': secondary_index,
-                        'keyType': "HASH"
-                    }
-                ]
-            }
+        # if secondary_index is not None:
+        #     params['GlobalSecondaryIndexes'] = [{
+        #         'IndexName': secondary_index,
+        #         'KeySchema': [
+        #             {
+        #                 'AttributeName': secondary_index,
+        #                 'keyType': "HASH"
+        #             }
+        #         ]
+        #     }]
 
         try:
             resp = client.create_table(
@@ -135,8 +135,8 @@ class OVMSwarmInitializer():
 
         except Exception as e:
             pass
-            # print("Error creating table:")
-            # print(e)
+            print("Error creating table:")
+            print(e)
 
         # # delete all the existing items in the db
         self._delete_all_items_on_table(table_name)

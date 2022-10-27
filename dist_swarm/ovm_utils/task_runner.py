@@ -1,5 +1,6 @@
 # task runner function for simulate_device class
 from decimal import Decimal
+from inspect import trace
 from time import gmtime, strftime
 import traceback
 import sys
@@ -90,8 +91,11 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         return new_history
 
     logging.info(f"-- Task {task_id} successfully finished --")
-    worker_in_db.update_status(STOPPED) 
-    worker_in_db.append_history(**new_history)
-    worker_in_db.update_finished_task(task_id, True)
+    try:
+        worker_in_db.update_status(STOPPED) 
+        worker_in_db.append_history(**new_history)
+        worker_in_db.update_finished_task(task_id, True)
+    except:
+        logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 
     return new_history

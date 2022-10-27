@@ -81,6 +81,71 @@ spec:
   ports:
   - port: 50051
 ---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-5
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-5
+  ports:
+  - port: 50051
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-6
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-6
+  ports:
+  - port: 50051
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-7
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-7
+  ports:
+  - port: 50051
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-8
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-8
+  ports:
+  - port: 50051
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-deployment-9
+spec:
+  type: LoadBalancer 
+  externalTrafficPolicy: Local 
+  selector:
+    statefulset.kubernetes.io/pod-name: ds-deployment-9
+  ports:
+  - port: 50051
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -90,7 +155,7 @@ metadata:
     app: dist-swarm
 spec:
   serviceName: "overmind"
-  replicas: 5
+  replicas: 10
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -112,7 +177,7 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.09
+        image: sethlee0111/private_swarm:0.01
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
