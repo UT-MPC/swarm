@@ -1,5 +1,6 @@
 # overmind controller
 # reads encounter data, creates tasks and build dependency graph
+from sqlite3 import Date
 import sys
 import traceback
 import grpc
@@ -7,12 +8,13 @@ sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
 from dist_swarm.db_bridge.worker_in_db import WorkerInDB
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
-from grpc_components.status import STOPPED
+from grpc_components.status import RUNNING, STOPPED
 import json
 import os
 import logging
 import threading
 from time import sleep
+import datetime
 import typing
 from pathlib import PurePath
 from time import time
@@ -100,6 +102,7 @@ class Overmind():
         else:
             with open(enc_dataset_path,'rb') as pfile:
                 enc_df = read_csv(pfile)
+        self.enc_df = enc_df
         last_end_time = 0
         last_run_time = 0
         
@@ -124,7 +127,7 @@ class Overmind():
         for index, row in enc_df.iterrows():
             device1_id = (int)(row[CLIENT1])
             device2_id = (int)(row[CLIENT2])
-            if max(device1_id, device2_id) >= self.number_of_devices:
+            if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
                 continue
             start_time = max(row[TIME_START], last_times[device1_id] if device1_id in last_times else 0)
             start_time = max(start_time, last_times[device2_id] if device2_id in last_times else 0)
@@ -195,12 +198,32 @@ class Overmind():
             logging.error("gRPC call returned with error")
             traceback.print_stack()
     
-    def run_swarm(self, polling_interval=10):
+    def send_check_running_request(self, worker_id):
+        try:
+            with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+                stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+                status = stub.CheckRunning(simulate_device_pb2.Empty())
+                return status.status == RUNNING
+        except Exception as e:
+            logging.error("gRPC call returned with error")
+            traceback.print_stack()
+            return False
+
+    def revive_worker(self, worker_in_db, worker_id):
+        if self.send_check_running_request(worker_id):
+            worker_in_db.update_status(STOPPED)
+    
+    def run_swarm(self, polling_interval=5):
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
-        task_queue = []
+        self.task_queue = []
+        self.processed_tasks = []
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
-                task_queue.append(task_id)
+                self.task_queue.append(task_id)
+
+        last_avail = {}  # last time that a worker was "idle"
+        for wi in range(len(self.worker_nodes)):
+            last_avail[wi] = 0
 
         while self.task_num > 0:
             resp = self.finished_tasks_table.scan()
@@ -208,7 +231,7 @@ class Overmind():
             # re-allocate failed tasks
             for task_item in resp['Items']:
                 if not task_item[IS_FINISHED]:
-                    task_queue.append(task_item[TASK_ID])
+                    self.task_queue.append(task_item[TASK_ID])
                     # TODO delete task item from DB
 
             for task_item in resp['Items']:
@@ -216,11 +239,12 @@ class Overmind():
                 # decrementing indegrees of tasks that are dependent on that task
                 if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
                     task_id = task_item[TASK_ID]
+                    self.processed_tasks.append(task_id)
                     for next_task in self.dep_graph[task_id]:
-                        print(f"next task {next_task}")
+                        # print(f"next task {next_task}")
                         self.indegrees[next_task] -= 1
                         if self.indegrees[next_task] == 0:
-                            task_queue.append(next_task)
+                            self.task_queue.append(next_task)
 
                     self.finished_tasks_table.update_item(
                         Key={TASK_ID: task_id},
@@ -237,13 +261,27 @@ class Overmind():
             # get "Stopped" workers and check if one of them holds recent device state
             # TODO prevent worker_dbs to be initialized multiple times
             worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
+            
+            for worker in worker_dbs:
+                last_avail[worker.worker_id] = datetime.datetime.now()
+
             task_id_to_worker = {}
             free_workers = [worker.worker_id for worker in worker_dbs if worker.status == STOPPED]
-            print(f"free workers {free_workers}, task queue size {len(task_queue)}")
+            # "revive" the worker if running for more than 300 seconds
+            for w in last_avail:
+                last_avail[w] += 10
+            for w in free_workers:
+                last_avail[w] = 0
+            for w in last_avail:
+                if last_avail[w] > 300:
+                    print(f"reviving worker {w}")
+                    self.revive_worker(worker_dbs[w], w)
+
+            print(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
-            for task_id in task_queue:
+            for task_id in self.task_queue:
                 # @TODO support mutable neighbors
                 if self.tasks[task_id].learner_id in cached_devices_to_worker_nodes and task_id not in task_id_to_worker:
                     target_worker_id = cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
@@ -253,15 +291,15 @@ class Overmind():
                         print(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
-                task_queue.remove(task_id)
+                self.task_queue.remove(task_id)
 
             # assign remaining tasks to "Stopped" worker nodes
-            while len(free_workers) > 0 and len(task_queue) > 0:
+            while len(free_workers) > 0 and len(self.task_queue) > 0:
                 worker_id = free_workers.pop()
                 if worker_dbs[worker_id].status == STOPPED:
-                    task_id_to_worker[task_queue.pop()] = worker_id
+                    task_id_to_worker[self.task_queue.pop()] = worker_id
 
-            print(f"{task_id_to_worker}")
+            # print(f"{task_id_to_worker}")
             print(f"tasks left: {self.task_num}")
 
             cached_devices_to_worker_nodes = {}
@@ -275,5 +313,28 @@ class Overmind():
         
         print(f"Overmind run finished successfully...")
 
+    # def run_swarm_rt_mode(self, polling_interval=10):
+    #     # run swarm real-time (using actual running time on worker nodes)
+    #     # without dependency graph
+
+    #     # for OppCL, if device is running, then we should wait
+    #     # for FL, we should wait for both device where the model is dependent on, and data is dependent on
+    #     is_device_running = {}
+    #     for dn in range(len(self.number_of_devices)):
+    #         is_device_running[dn] = False
+    #     enc_queue = []  # tasks that are waiting for dependent 
+
+    #     for index, row in self.enc_df.iterrows():
+    #         device1_id = (int)(row[CLIENT1])
+    #         device2_id = (int)(row[CLIENT2])
+    #         if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
+    #             continue
+    #         # both the devices have to be free
+
+
+    #         start_time = max(row[TIME_START], last_times[device1_id] if device1_id in last_times else 0)
+    #         start_time = max(start_time, last_times[device2_id] if device2_id in last_times else 0)
+    #         end_time = start_time + oppcl_time
+    #         if (row[TIME_END] - start_time >= oppcl_time):
         
 

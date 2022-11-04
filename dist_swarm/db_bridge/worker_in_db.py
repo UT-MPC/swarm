@@ -50,7 +50,8 @@ class WorkerInDB():
         )
 
     def update_status(self, status):
-        resp = self.table.update_item(
+        try:
+            resp = self.table.update_item(
                     Key={WORKER_ID: self.worker_id},
                     ExpressionAttributeNames={
                         "#status": WORKER_STATUS
@@ -60,7 +61,9 @@ class WorkerInDB():
                     },
                     UpdateExpression="SET #status = :status",
                 )
-        self.status = status
+            self.status = status
+        except:
+            pass
 
     def update_finished_task(self, task_id, is_finished):
         resp = self.finished_tasks_table.put_item(
