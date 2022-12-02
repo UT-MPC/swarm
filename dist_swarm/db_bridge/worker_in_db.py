@@ -3,7 +3,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
-                      WTIMESTAMP, ACTION_TYPE
+                      WTIMESTAMP, ACTION_TYPE, TIME
 
 class WorkerInDB():
     def __init__(self, table_name, worker_id):    
@@ -65,7 +65,7 @@ class WorkerInDB():
         except:
             pass
 
-    def update_finished_task(self, task_id, is_finished):
+    def update_finished_task(self, task_id, is_finished, measured_time):
         resp = self.finished_tasks_table.put_item(
-            Item={TASK_ID: task_id, IS_FINISHED: is_finished, IS_PROCESSED: False}
+            Item={TASK_ID: task_id, IS_FINISHED: is_finished, IS_PROCESSED: False, TIME: measured_time}
         )

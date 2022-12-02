@@ -92,7 +92,7 @@ class Overmind():
         initializer = OVMSwarmInitializer()
         initializer.initialize(config_file)
 
-    def build_dep_graph(self):
+    def build_dep_graph(self, dependency=None, oppcl_time=None):
         # read encounter dataset
         enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
@@ -107,15 +107,17 @@ class Overmind():
         last_run_time = 0
         
         # get dependency info
-        device_class = get_device_class(self.device_config["device_strategy"])
-        dependency = device_class.get_dependency()
+        if dependency is None:
+            device_class = get_device_class(self.device_config["device_strategy"])
+            dependency = device_class.get_dependency()
 
         # read connection data and populate task list
         task_id = 0
         encounter_config = self.device_config['encounter_config']
         model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
         computation_time = encounter_config['computation_time']
-        oppcl_time = 2 * model_send_time + computation_time
+        if oppcl_time is None:
+            oppcl_time = 2 * model_send_time + computation_time
         print(f"oppcl time: {oppcl_time}")
 
         dep_graph = {}  # (preceding task id, task id)
@@ -263,7 +265,7 @@ class Overmind():
             worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
             
             for worker in worker_dbs:
-                last_avail[worker.worker_id] = datetime.datetime.now()
+                last_avail[worker.worker_id] = 0
 
             task_id_to_worker = {}
             free_workers = [worker.worker_id for worker in worker_dbs if worker.status == STOPPED]
@@ -313,28 +315,20 @@ class Overmind():
         
         print(f"Overmind run finished successfully...")
 
-    # def run_swarm_rt_mode(self, polling_interval=10):
-    #     # run swarm real-time (using actual running time on worker nodes)
-    #     # without dependency graph
+    def run_swarm_rt_mode(self, polling_interval=10):
+        # run swarm real-time (using actual running time on worker nodes)
+        # without dependency graph
 
-    #     # for OppCL, if device is running, then we should wait
-    #     # for FL, we should wait for both device where the model is dependent on, and data is dependent on
-    #     is_device_running = {}
-    #     for dn in range(len(self.number_of_devices)):
-    #         is_device_running[dn] = False
-    #     enc_queue = []  # tasks that are waiting for dependent 
+        # for OppCL, if device is running, then we should wait
+        # for FL, we should wait for both device where the model is dependent on, and data is dependent on
+        self.build_dep_graph(dependency={"on_mutable": True}, oppcl_time=0)
 
-    #     for index, row in self.enc_df.iterrows():
-    #         device1_id = (int)(row[CLIENT1])
-    #         device2_id = (int)(row[CLIENT2])
-    #         if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
-    #             continue
-    #         # both the devices have to be free
+        self.task_queue = []
+        for task_id in self.tasks:
+            if self.indegrees[task_id] == 0:
+                self.task_queue.append(task_id)
+        
+        
 
-
-    #         start_time = max(row[TIME_START], last_times[device1_id] if device1_id in last_times else 0)
-    #         start_time = max(start_time, last_times[device2_id] if device2_id in last_times else 0)
-    #         end_time = start_time + oppcl_time
-    #         if (row[TIME_END] - start_time >= oppcl_time):
         
 

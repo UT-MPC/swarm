@@ -6,6 +6,7 @@ import traceback
 import sys
 import copy
 import logging
+import time
 from grpc_components.status import RUNNING, STOPPED
 
 sys.path.insert(0,'..')
@@ -38,6 +39,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         func_list = task_config['func_list']
         device_load_config = task_config['load_config']
         end = Decimal(task_config['end'])
+        measured_time = 0
 
         # load device
         learner_load_config = {}
@@ -65,7 +67,9 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
                 func = getattr(learner, func_list[i]["func_name"])
                 
                 # @TODO handle multiple neighbors
+                start = time.time()
                 func(neighbors[0], **func_list[i]["params"])
+                measured_time += time.time() - start
             elif func_list[i]["func_name"] == '!evaluate':
                 hist = learner.eval()
                 device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
@@ -94,7 +98,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
     try:
         worker_in_db.update_status(STOPPED) 
         worker_in_db.append_history(**new_history)
-        worker_in_db.update_finished_task(task_id, True)
+        worker_in_db.update_finished_task(task_id, True, measured_time)
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 
