@@ -321,12 +321,16 @@ class Overmind():
 
         # for OppCL, if device is running, then we should wait
         # for FL, we should wait for both device where the model is dependent on, and data is dependent on
+
+        # build dependency graph where oppcl_time is set to 0 (all possible device-to-device interaction happens)
         self.build_dep_graph(dependency={"on_mutable": True}, oppcl_time=0)
+        self.last_end_times = dict.fromkeys(range(self.number_of_devices), 0)
 
         self.task_queue = []
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
                 self.task_queue.append(task_id)
+                
         
         
 
