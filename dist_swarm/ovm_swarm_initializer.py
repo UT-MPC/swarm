@@ -78,6 +78,8 @@ class OVMSwarmInitializer():
     def _create_worker_state_table(self, tag):
         self._create_table(WORKER_ID, self._get_worker_state_table_name(tag), 100, 100)
 
+    # def _create_rds_table(self, )
+
     def _create_table(self, key, table_name, read_cap_units=100, write_cap_units=100, secondary_index=None):  
         """
         stores the state of the worker nodes

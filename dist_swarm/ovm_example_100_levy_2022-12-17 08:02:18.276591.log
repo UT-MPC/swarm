@@ -1,0 +1,16 @@
+08:19:23,396 root INFO a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051 set as 0
+08:19:23,429 root INFO ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051 set as 1
+08:19:23,460 root INFO a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051 set as 2
+08:19:23,520 root INFO a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051 set as 3
+08:19:23,562 root INFO acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051 set as 4
+08:41:28,969 root INFO a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051 set as 0
+08:41:29,13 root INFO ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051 set as 1
+08:41:29,50 root INFO a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051 set as 2
+08:41:29,102 root INFO a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051 set as 3
+08:41:29,147 root INFO acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051 set as 4
+08:41:56,20 root INFO free workers [0, 1, 2, 3, 4], task queue size 87
+08:41:56,20 root INFO tasks left: 492
+08:42:02,190 root INFO free workers [], task queue size 82
+08:42:02,190 root INFO tasks left: 492
+08:42:08,209 root INFO free workers [], task queue size 82
+08:42:08,209 root INFO tasks left: 492

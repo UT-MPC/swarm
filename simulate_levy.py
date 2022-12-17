@@ -35,6 +35,8 @@ def main():
     parser.add_argument('--duration', dest='duration',
                         type=int, default=100, help='duration of one episode')
     parser.add_argument('--filename', dest='filename', type=str, default=None, help='output filename')
+    parser.add_argument('--local', dest='local', type=bool, default=False, 
+                        help='starting points are restricted to designated quadrants')
     parser.add_argument('--disp_graph', dest='graph',
                         type=bool, default=False, help='display the graph for simulated nodes')
     parsed = parser.parse_args()
@@ -186,25 +188,32 @@ def levy_walk_episodes(n, max_xy, x_orig, y_orig, thres_loc, thres_time, time_st
         times = np.concatenate((times, t), axis=0)
     return points,times
     
-def create_dataset(num_clients=100,
+def create_dataset(num_clients=45,
                     time_steps=20,
                     episodes=5,
-                    file_name=None):
+                    file_name=None,
+                    local=False):
     pt_tuples = []
     start_point_x = []
     start_point_y = []
-    for x in range(-MAX_XY, MAX_XY, QUAD_SIZE):
-        for y in range(-MAX_XY, MAX_XY, QUAD_SIZE):
-            for _ in range((int)(num_clients/9)):
-                start_point_x.append((np.random.rand(1)*QUAD_SIZE+x)[0])
-                start_point_y.append((np.random.rand(1)*QUAD_SIZE+y)[0])
+
+    if local:
+        for x in range(-MAX_XY, MAX_XY, QUAD_SIZE):
+            for y in range(-MAX_XY, MAX_XY, QUAD_SIZE):
+                for _ in range((int)(num_clients/9)):  # allocate start points in a quadrant
+                    start_point_x.append((np.random.rand(1)*QUAD_SIZE+x)[0])
+                    start_point_y.append((np.random.rand(1)*QUAD_SIZE+y)[0])
+    else:
+        for _ in range(num_clients):
+            start_point_x.append((np.random.rand(1)*(2 * MAX_XY) + -MAX_XY)[0])
+            start_point_y.append((np.random.rand(1)*(2 * MAX_XY) + -MAX_XY)[0])
 
     for i in range(len(start_point_x)):
         print("client {}: {}, {}".format(i, start_point_x[i], start_point_y[i]))
         thres_loc = THRES_LOC
         alpha = ALPHA
         frac = 4./5. # fraction of relativly static nodes
-        if i % (num_clients / 9) <= (num_clients / 9) * frac:
+        if local and i % (num_clients / 9) <= (num_clients / 9) * frac:
             thres_loc = thres_loc / 5
             alpha = alpha * 2
         pt_tuples.append(levy_walk_episodes(time_steps, 

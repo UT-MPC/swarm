@@ -38,6 +38,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         neighbor_ids = task_config['neighbors']
         func_list = task_config['func_list']
         device_load_config = task_config['load_config']
+        timeout = task_config['timeout']
         end = Decimal(task_config['end'])
         measured_time = 0
 
@@ -70,7 +71,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
                 start = time.time()
                 func(neighbors[0], **func_list[i]["params"])
                 measured_time += time.time() - start
-            elif func_list[i]["func_name"] == '!evaluate':
+            elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
                 hist = learner.eval()
                 device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
                 device_in_db.update_timestamp(end)

@@ -20,7 +20,7 @@ from pathlib import PurePath
 from time import time
 from pandas import read_pickle, read_csv
 import boto3
-from dynamo_db import IS_FINISHED, IS_PROCESSED, TASK_ID
+from dynamo_db import IS_FINISHED, IS_PROCESSED, TASK_ID, TIME
 from boto3.dynamodb.conditions import Key
 
 from ovm_swarm_initializer import OVMSwarmInitializer
@@ -33,16 +33,20 @@ CLIENT1="client1"
 CLIENT2="client2"
 ENC_IDX="encounter index"
 
+MAX_ITERATIONS = 10_000_000
 
 class Task():
-    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list):
+    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list, timeout=2**8):
         self.swarm_name = swarm_name
         self.task_id = task_id
         self.start = start
         self.end = end
         self.learner_id = learner_id
         self.neighbor_id_list = neighbor_id_list
+        self.timeout = timeout
         self.load_config = {str(learner_id): self.get_new_load_config()}
+
+        self.skip = False  # skip the processing of this task
         
         for nbgr in neighbor_id_list:
             self.load_config[str(nbgr)] = self.get_new_load_config()
@@ -67,6 +71,7 @@ class Task():
             "neighbors": self.neighbor_id_list,
             "load_config": self.load_config,
             "func_list": self.func_list,
+            "timeout": self.timeout,
         }
         
     def set_load_config(self, id, load_model: bool, load_dataset: bool):
@@ -88,6 +93,10 @@ class Overmind():
         self.swarm_name = self.config['tag']
         self.worker_nodes : typing.List[str] = self.config["worker_ips"]
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"]
+
+        logging.basicConfig(filename=f'{self.swarm_name}_{datetime.datetime.now()}.log', 
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',level=logging.INFO)
 
         initializer = OVMSwarmInitializer()
         initializer.initialize(config_file)
@@ -114,10 +123,10 @@ class Overmind():
         # read connection data and populate task list
         task_id = 0
         encounter_config = self.device_config['encounter_config']
-        model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
+        self.model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
         computation_time = encounter_config['computation_time']
         if oppcl_time is None:
-            oppcl_time = 2 * model_send_time + computation_time
+            oppcl_time = 2 * self.model_send_time + computation_time
         print(f"oppcl time: {oppcl_time}")
 
         dep_graph = {}  # (preceding task id, task id)
@@ -190,6 +199,7 @@ class Overmind():
         self.finished_tasks_table = self.dynamodb.Table(self.swarm_name +'-finished-tasks')
     
     def send_run_task_request(self, worker_id, task):
+        # @TODO skip if the task.skip is True
         try:
             with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
                 stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
@@ -215,7 +225,7 @@ class Overmind():
         if self.send_check_running_request(worker_id):
             worker_in_db.update_status(STOPPED)
     
-    def run_swarm(self, polling_interval=5):
+    def run_swarm(self, polling_interval=5, rt_mode=False):
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
         self.task_queue = []
         self.processed_tasks = []
@@ -227,7 +237,9 @@ class Overmind():
         for wi in range(len(self.worker_nodes)):
             last_avail[wi] = 0
 
-        while self.task_num > 0:
+        iterations = 0
+        while self.task_num > 0 and iterations < MAX_ITERATIONS:
+            iterations += 1
             resp = self.finished_tasks_table.scan()
 
             # re-allocate failed tasks
@@ -242,10 +254,13 @@ class Overmind():
                 if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
                     task_id = task_item[TASK_ID]
                     self.processed_tasks.append(task_id)
+                    freed_time = self.tasks[task_id].start + task_item[TIME] + 2 * self.model_send_time
                     for next_task in self.dep_graph[task_id]:
                         # print(f"next task {next_task}")
                         self.indegrees[next_task] -= 1
-                        if self.indegrees[next_task] == 0:
+                        if rt_mode and self.tasks[next_task].end < freed_time:
+                            self.tasks[next_task].skip = True
+                        if self.indegrees[next_task] <= 0:
                             self.task_queue.append(next_task)
 
                     self.finished_tasks_table.update_item(
@@ -259,7 +274,7 @@ class Overmind():
                         UpdateExpression="SET #is_processed = :is_processed",
                     )
                     self.task_num -= 1
-            
+
             # get "Stopped" workers and check if one of them holds recent device state
             # TODO prevent worker_dbs to be initialized multiple times
             worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
@@ -276,10 +291,10 @@ class Overmind():
                 last_avail[w] = 0
             for w in last_avail:
                 if last_avail[w] > 300:
-                    print(f"reviving worker {w}")
+                    logging.info(f"reviving worker {w}")
                     self.revive_worker(worker_dbs[w], w)
 
-            print(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
+            logging.info(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
@@ -290,7 +305,7 @@ class Overmind():
                     if worker_dbs[target_worker_id].status == STOPPED and target_worker_id in free_workers:
                         task_id_to_worker[task_id] = target_worker_id
                         free_workers.remove(target_worker_id)
-                        print(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
+                        logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
                 self.task_queue.remove(task_id)
@@ -302,7 +317,7 @@ class Overmind():
                     task_id_to_worker[self.task_queue.pop()] = worker_id
 
             # print(f"{task_id_to_worker}")
-            print(f"tasks left: {self.task_num}")
+            logging.info(f"tasks left: {self.task_num}")
 
             cached_devices_to_worker_nodes = {}
             # call RunTask asynchronously 
@@ -313,7 +328,7 @@ class Overmind():
 
             sleep(polling_interval)
         
-        print(f"Overmind run finished successfully...")
+        logging.info(f"Overmind run finished successfully with {iterations} iterations")
 
     def run_swarm_rt_mode(self, polling_interval=10):
         # run swarm real-time (using actual running time on worker nodes)
@@ -330,7 +345,9 @@ class Overmind():
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
                 self.task_queue.append(task_id)
-                
+
+        
+
         
         
 

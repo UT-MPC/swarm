@@ -1,7 +1,7 @@
 {
     "dataset": "mnist",
     "model": "2nn",
-    "tag": "ovm_example",
+    "tag": "ovm_example_100_levy",
     "worker_ips": [
         "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",
         "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051",
@@ -10,7 +10,7 @@
         "acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051"
     ],
     "swarm_config": {
-        "number_of_devices": 45,
+        "number_of_devices": 100,
         "local_set_size": 2,
         "local_data_size": 150,
         "goal_set_size": 5,
@@ -30,7 +30,7 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_walk_client_45_epi_100_dur_100.pickle",
+            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50.pickle",
             "computation_time": 0.24,
             "communication_rate": 16000000
         },
