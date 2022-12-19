@@ -99,7 +99,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
     try:
         worker_in_db.update_status(STOPPED) 
         worker_in_db.append_history(**new_history)
-        worker_in_db.update_finished_task(task_id, True, measured_time)
+        worker_in_db.update_finished_task(task_id, True, Decimal(measured_time))
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 

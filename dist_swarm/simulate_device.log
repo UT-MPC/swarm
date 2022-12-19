@@ -1,0 +1,57 @@
+INFO:root:worker id set to 0
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys([])
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys([])
+INFO:root:-- Task 0 successfully finished --
+ERROR:root:Task 0 returned an error while updating status: Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 102, in run_task
+    worker_in_db.update_finished_task(task_id, True, measured_time)
+  File "../dist_swarm/db_bridge/worker_in_db.py", line 70, in update_finished_task
+    Item={TASK_ID: task_id, IS_FINISHED: is_finished, IS_PROCESSED: False, TIME: measured_time}
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/factory.py", line 520, in do_action
+    response = action(self, *args, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/action.py", line 83, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 649, in _make_api_call
+    api_params, operation_model, context=request_context)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 695, in _convert_to_request_dict
+    api_params, operation_model, context)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 727, in _emit_api_params
+    params=api_params, model=operation_model, context=context)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/hooks.py", line 356, in emit
+    return self._emitter.emit(aliased_event_name, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/hooks.py", line 228, in emit
+    return self._emit(event_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/hooks.py", line 211, in _emit
+    response = handler(**kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 197, in inject_attribute_value_input
+    'AttributeValue')
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 254, in transform
+    model, params, transformation, target_shape)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 261, in _transform_parameters
+    model, params, transformation, target_shape)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 276, in _transform_structure
+    target_shape)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 261, in _transform_parameters
+    model, params, transformation, target_shape)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/transform.py", line 285, in _transform_map
+    params[key] = transformation(value)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/types.py", line 102, in serialize
+    dynamodb_type = self._get_dynamodb_type(value)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/types.py", line 115, in _get_dynamodb_type
+    elif self._is_number(value):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/dynamodb/types.py", line 160, in _is_number
+    'Float types are not supported. Use Decimal types instead.')
+TypeError: Float types are not supported. Use Decimal types instead.
+
+INFO:root:worker id set to 0
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys([])
+INFO:root:-- Task 0 successfully finished --
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys(['0'])
+INFO:root:device state 0 loaded from cache
+INFO:root:-- Task 0 successfully finished --

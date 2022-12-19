@@ -5,6 +5,7 @@
     "task_id": 0,
     "learner": 0,
     "neighbors": [1],
+    "timeout": 100000,
     "load_config": {
         "0": {
             "load_model": true,
