@@ -6,6 +6,8 @@
     "learner": 0,
     "neighbors": [1],
     "timeout": 100000,
+    "real_time_mode": true,
+    "real_time_timeout": "0.04",
     "load_config": {
         "0": {
             "load_model": true,

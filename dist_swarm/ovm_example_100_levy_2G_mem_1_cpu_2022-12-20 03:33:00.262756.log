@@ -1,0 +1,419 @@
+03:50:47,642 root INFO a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051 set as 0
+03:50:47,682 root INFO ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051 set as 1
+03:50:47,732 root INFO a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051 set as 2
+03:50:47,787 root INFO a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051 set as 3
+03:50:47,851 root INFO acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051 set as 4
+03:50:47,901 root INFO a86d15c50c0ef4fd889c208b91306322-1434235675.us-east-2.elb.amazonaws.com:50051 set as 5
+03:50:47,957 root INFO a73d0841439be4c72a7f99c2a8ee014c-461204456.us-east-2.elb.amazonaws.com:50051 set as 6
+03:50:48,12 root INFO a2db8d3e5406b4932acea5b23c9031f7-510381442.us-east-2.elb.amazonaws.com:50051 set as 7
+03:50:48,62 root INFO a53fdee8cddc64425960db2cfccd9cfe-1399437765.us-east-2.elb.amazonaws.com:50051 set as 8
+03:50:48,115 root INFO ac707e718b19942a9a6cae3863f20aef-1947071726.us-east-2.elb.amazonaws.com:50051 set as 9
+03:57:24,294 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 87
+03:57:24,295 root INFO tasks left: 492
+03:57:31,930 root INFO free workers [], task queue size 77
+03:57:31,930 root INFO tasks left: 492
+03:57:39,437 root INFO free workers [], task queue size 77
+03:57:39,437 root INFO tasks left: 492
+03:57:46,741 root INFO free workers [], task queue size 77
+03:57:46,741 root INFO tasks left: 492
+03:57:54,216 root INFO free workers [2, 4, 5, 7, 8], task queue size 78
+03:57:54,216 root INFO tasks left: 489
+03:58:02,390 root INFO free workers [0, 1, 3, 6, 9], task queue size 76
+03:58:02,391 root INFO tasks left: 482
+03:58:09,720 root INFO free workers [], task queue size 71
+03:58:09,720 root INFO tasks left: 482
+03:58:17,224 root INFO free workers [], task queue size 71
+03:58:17,224 root INFO tasks left: 482
+03:58:25,76 root INFO free workers [1, 2, 4, 5, 7, 8], task queue size 73
+03:58:25,76 root INFO tasks left: 477
+03:58:32,467 root INFO free workers [], task queue size 68
+03:58:32,467 root INFO tasks left: 476
+03:58:39,986 root INFO free workers [0, 3, 6, 9], task queue size 69
+03:58:39,986 root INFO tasks left: 472
+03:58:47,393 root INFO free workers [], task queue size 65
+03:58:47,393 root INFO tasks left: 472
+03:58:55,267 root INFO free workers [1, 2, 4, 5, 7, 8], task queue size 70
+03:58:55,267 root INFO tasks left: 466
+03:59:02,611 root INFO free workers [], task queue size 64
+03:59:02,611 root INFO tasks left: 466
+03:59:10,227 root INFO free workers [6], task queue size 64
+03:59:10,227 root INFO tasks left: 466
+03:59:17,955 root INFO free workers [0, 3, 5, 8, 9], task queue size 66
+03:59:17,955 root INFO tasks left: 460
+03:59:25,642 root INFO free workers [1, 2, 4, 7], task queue size 64
+03:59:25,643 root INFO tasks left: 456
+03:59:33,222 root INFO free workers [], task queue size 60
+03:59:33,222 root INFO tasks left: 456
+03:59:40,667 root INFO free workers [6], task queue size 61
+03:59:40,668 root INFO tasks left: 455
+03:59:48,312 root INFO free workers [0, 2, 3, 5, 8, 9], task queue size 64
+03:59:48,312 root INFO tasks left: 449
+03:59:55,978 root INFO free workers [4, 7], task queue size 59
+03:59:55,979 root INFO tasks left: 447
+04:00:03,523 root INFO free workers [1, 6], task queue size 59
+04:00:03,523 root INFO tasks left: 445
+04:00:10,952 root INFO free workers [], task queue size 57
+04:00:10,952 root INFO tasks left: 445
+04:00:19,37 root INFO free workers [0, 2, 3, 5, 8, 9], task queue size 61
+04:00:19,37 root INFO tasks left: 440
+04:00:26,844 root INFO free workers [4, 6, 7], task queue size 58
+04:00:26,844 root INFO tasks left: 436
+04:00:34,558 root INFO free workers [1], task queue size 55
+04:00:34,559 root INFO tasks left: 435
+04:00:42,696 root INFO free workers [], task queue size 54
+04:00:42,696 root INFO tasks left: 435
+04:00:50,991 root INFO free workers [2, 3, 4, 5, 6, 7, 8, 9], task queue size 60
+04:00:50,991 root INFO tasks left: 428
+04:00:59,213 root INFO free workers [0, 1], task queue size 55
+04:00:59,214 root INFO tasks left: 425
+04:01:07,31 root INFO free workers [], task queue size 53
+04:01:07,31 root INFO tasks left: 425
+04:01:14,986 root INFO free workers [7, 9], task queue size 53
+04:01:14,986 root INFO tasks left: 424
+04:01:23,423 root INFO free workers [1, 2, 3, 4, 5, 6, 8], task queue size 55
+04:01:23,423 root INFO tasks left: 417
+04:01:31,502 root INFO free workers [0], task queue size 50
+04:01:31,502 root INFO tasks left: 415
+04:01:39,619 root INFO free workers [7], task queue size 50
+04:01:39,619 root INFO tasks left: 414
+04:01:47,497 root INFO free workers [6, 9], task queue size 49
+04:01:47,497 root INFO tasks left: 413
+04:01:55,861 root INFO free workers [1, 2, 3, 4, 5, 8], task queue size 53
+04:01:55,862 root INFO tasks left: 406
+04:02:04,131 root INFO free workers [0, 7], task queue size 48
+04:02:04,131 root INFO tasks left: 404
+04:02:11,976 root INFO free workers [], task queue size 46
+04:02:11,976 root INFO tasks left: 404
+04:02:20,361 root INFO free workers [1, 3, 6, 8, 9], task queue size 50
+04:02:20,361 root INFO tasks left: 400
+04:02:28,469 root INFO free workers [2, 4, 5, 7], task queue size 49
+04:02:28,469 root INFO tasks left: 396
+04:02:36,772 root INFO free workers [0], task queue size 47
+04:02:36,773 root INFO tasks left: 394
+04:02:44,911 root INFO free workers [1, 8, 9], task queue size 47
+04:02:44,911 root INFO tasks left: 392
+04:02:53,349 root INFO free workers [3, 4, 5, 6, 7], task queue size 47
+04:02:53,350 root INFO tasks left: 387
+04:03:01,658 root INFO free workers [0, 2], task queue size 44
+04:03:01,658 root INFO tasks left: 384
+04:03:09,572 root INFO free workers [8], task queue size 42
+04:03:09,573 root INFO tasks left: 383
+04:03:17,957 root INFO free workers [1, 4, 5, 6, 9], task queue size 42
+04:03:17,957 root INFO tasks left: 380
+04:03:26,240 root INFO free workers [0, 2, 3, 7], task queue size 42
+04:03:26,240 root INFO tasks left: 375
+04:03:34,557 root INFO free workers [8], task queue size 40
+04:03:34,558 root INFO tasks left: 373
+04:03:42,576 root INFO free workers [1, 5, 6, 9], task queue size 39
+04:03:42,577 root INFO tasks left: 372
+04:03:50,929 root INFO free workers [0, 2, 4, 8], task queue size 40
+04:03:50,929 root INFO tasks left: 367
+04:03:59,414 root INFO free workers [3, 7], task queue size 38
+04:03:59,414 root INFO tasks left: 363
+04:04:07,798 root INFO free workers [1, 5, 6, 9], task queue size 38
+04:04:07,798 root INFO tasks left: 361
+04:04:16,271 root INFO free workers [0, 2, 7, 8], task queue size 37
+04:04:16,271 root INFO tasks left: 358
+04:04:25,251 root INFO free workers [4], task queue size 37
+04:04:25,251 root INFO tasks left: 354
+04:04:33,822 root INFO free workers [1, 3, 5, 9], task queue size 40
+04:04:33,822 root INFO tasks left: 350
+04:04:42,482 root INFO free workers [6, 7, 8], task queue size 38
+04:04:42,483 root INFO tasks left: 348
+04:04:51,19 root INFO free workers [0, 2, 4, 5, 9], task queue size 39
+04:04:51,19 root INFO tasks left: 344
+04:04:59,768 root INFO free workers [1, 3], task queue size 37
+04:04:59,769 root INFO tasks left: 340
+04:05:08,433 root INFO free workers [6, 7, 8], task queue size 37
+04:05:08,433 root INFO tasks left: 337
+04:05:17,328 root INFO free workers [9], task queue size 34
+04:05:17,328 root INFO tasks left: 337
+04:05:26,12 root INFO free workers [0, 2, 4, 5, 7], task queue size 38
+04:05:26,12 root INFO tasks left: 332
+04:05:34,716 root INFO free workers [1, 3, 6, 8], task queue size 37
+04:05:34,716 root INFO tasks left: 328
+04:05:43,204 root INFO free workers [9], task queue size 35
+04:05:43,204 root INFO tasks left: 326
+04:05:51,773 root INFO free workers [0, 2, 5, 7], task queue size 35
+04:05:51,773 root INFO tasks left: 325
+04:06:00,513 root INFO free workers [1, 3, 4, 6, 8], task queue size 37
+04:06:00,513 root INFO tasks left: 319
+04:06:09,165 root INFO free workers [9], task queue size 34
+04:06:09,165 root INFO tasks left: 316
+04:06:17,614 root INFO free workers [0, 2, 5, 7], task queue size 35
+04:06:17,614 root INFO tasks left: 314
+04:06:26,613 root INFO free workers [1, 3, 4, 6, 8, 9], task queue size 36
+04:06:26,613 root INFO tasks left: 309
+04:06:35,408 root INFO free workers [7], task queue size 32
+04:06:35,408 root INFO tasks left: 306
+04:06:43,943 root INFO free workers [2, 5], task queue size 33
+04:06:43,943 root INFO tasks left: 304
+04:06:52,553 root INFO free workers [0, 4, 8], task queue size 35
+04:06:52,553 root INFO tasks left: 300
+04:07:01,205 root INFO free workers [1, 3, 5, 6, 7, 9], task queue size 35
+04:07:01,205 root INFO tasks left: 295
+04:07:09,929 root INFO free workers [2], task queue size 30
+04:07:09,929 root INFO tasks left: 293
+04:07:18,807 root INFO free workers [4, 8], task queue size 31
+04:07:18,807 root INFO tasks left: 291
+04:07:27,694 root INFO free workers [0, 1, 5, 7, 9], task queue size 33
+04:07:27,694 root INFO tasks left: 287
+04:07:36,706 root INFO free workers [2, 3, 4, 6, 8], task queue size 31
+04:07:36,706 root INFO tasks left: 283
+04:07:45,655 root INFO free workers [5], task queue size 28
+04:07:45,655 root INFO tasks left: 281
+04:07:54,749 root INFO free workers [1, 7, 9], task queue size 29
+04:07:54,749 root INFO tasks left: 278
+04:08:04,10 root INFO free workers [0, 2, 3, 4, 6, 8], task queue size 30
+04:08:04,11 root INFO tasks left: 273
+04:08:12,959 root INFO free workers [5], task queue size 26
+04:08:12,959 root INFO tasks left: 270
+04:08:22,35 root INFO free workers [7], task queue size 26
+04:08:22,35 root INFO tasks left: 269
+04:08:31,157 root INFO free workers [1, 2, 4, 8, 9], task queue size 28
+04:08:31,158 root INFO tasks left: 265
+04:08:40,373 root INFO free workers [0, 3, 5, 6, 7], task queue size 27
+04:08:40,373 root INFO tasks left: 260
+04:08:49,384 root INFO free workers [], task queue size 23
+04:08:49,384 root INFO tasks left: 259
+04:08:58,192 root INFO free workers [2, 5, 8, 9], task queue size 23
+04:08:58,192 root INFO tasks left: 259
+04:09:07,718 root INFO free workers [0, 1, 4, 6, 7], task queue size 25
+04:09:07,718 root INFO tasks left: 251
+04:09:16,798 root INFO free workers [3], task queue size 22
+04:09:16,798 root INFO tasks left: 249
+04:09:25,866 root INFO free workers [5, 8], task queue size 21
+04:09:25,866 root INFO tasks left: 249
+04:09:35,184 root INFO free workers [2, 4, 9], task queue size 23
+04:09:35,184 root INFO tasks left: 245
+04:09:44,343 root INFO free workers [0, 1, 3, 6, 7], task queue size 26
+04:09:44,343 root INFO tasks left: 239
+04:09:53,422 root INFO free workers [5, 8, 9], task queue size 22
+04:09:53,423 root INFO tasks left: 237
+04:10:02,533 root INFO free workers [], task queue size 20
+04:10:02,534 root INFO tasks left: 236
+04:10:11,624 root INFO free workers [2, 4], task queue size 22
+04:10:11,624 root INFO tasks left: 234
+04:10:20,977 root INFO free workers [0, 1, 3, 5, 6, 7, 8], task queue size 25
+04:10:20,978 root INFO tasks left: 229
+04:10:30,222 root INFO free workers [9], task queue size 21
+04:10:30,222 root INFO tasks left: 226
+04:10:39,435 root INFO free workers [2], task queue size 21
+04:10:39,435 root INFO tasks left: 225
+04:10:48,825 root INFO free workers [4, 5, 6, 7, 8], task queue size 23
+04:10:48,826 root INFO tasks left: 222
+04:10:58,442 root INFO free workers [0, 1, 2, 3, 9], task queue size 22
+04:10:58,442 root INFO tasks left: 216
+04:11:07,561 root INFO free workers [], task queue size 17
+04:11:07,561 root INFO tasks left: 215
+04:11:17,46 root INFO free workers [4, 5, 6, 8, 9], task queue size 20
+04:11:17,46 root INFO tasks left: 211
+04:11:26,486 root INFO free workers [0, 2, 3, 7], task queue size 19
+04:11:26,486 root INFO tasks left: 207
+04:11:35,744 root INFO free workers [1, 8], task queue size 17
+04:11:35,744 root INFO tasks left: 205
+04:11:45,277 root INFO free workers [4, 5, 9], task queue size 17
+04:11:45,278 root INFO tasks left: 202
+04:11:55,117 root INFO free workers [0, 1, 2, 6, 7], task queue size 19
+04:11:55,118 root INFO tasks left: 197
+04:12:04,723 root INFO free workers [3, 8], task queue size 17
+04:12:04,723 root INFO tasks left: 194
+04:12:13,980 root INFO free workers [4, 5, 7, 9], task queue size 18
+04:12:13,980 root INFO tasks left: 191
+04:12:23,744 root INFO free workers [0, 1, 2, 3, 8], task queue size 15
+04:12:23,744 root INFO tasks left: 187
+04:12:33,471 root INFO free workers [5, 6], task queue size 13
+04:12:33,472 root INFO tasks left: 184
+04:12:43,32 root INFO free workers [4, 7, 9], task queue size 13
+04:12:43,32 root INFO tasks left: 181
+04:12:52,776 root INFO free workers [2, 8], task queue size 12
+04:12:52,776 root INFO tasks left: 178
+04:13:02,712 root INFO free workers [0, 1, 3, 5], task queue size 12
+04:13:02,713 root INFO tasks left: 174
+04:13:12,225 root INFO free workers [4, 6, 7, 9], task queue size 11
+04:13:12,225 root INFO tasks left: 171
+04:13:21,673 root INFO free workers [2, 8], task queue size 10
+04:13:21,673 root INFO tasks left: 168
+04:13:31,663 root INFO free workers [0, 1, 5, 9], task queue size 11
+04:13:31,663 root INFO tasks left: 165
+04:13:41,453 root INFO free workers [3, 4, 6, 7], task queue size 9
+04:13:41,453 root INFO tasks left: 163
+04:13:51,249 root INFO free workers [1, 2, 8], task queue size 11
+04:13:51,249 root INFO tasks left: 157
+04:14:00,983 root INFO free workers [0, 5, 9], task queue size 11
+04:14:00,984 root INFO tasks left: 154
+04:14:11,99 root INFO free workers [3, 4, 6, 7, 8], task queue size 10
+04:14:11,99 root INFO tasks left: 150
+04:14:20,904 root INFO free workers [2, 5], task queue size 6
+04:14:20,905 root INFO tasks left: 148
+04:14:31,213 root INFO free workers [1, 9], task queue size 7
+04:14:31,214 root INFO tasks left: 145
+04:14:41,19 root INFO free workers [4, 6], task queue size 6
+04:14:41,19 root INFO tasks left: 144
+04:14:50,978 root INFO free workers [0, 1, 2, 5, 8], task queue size 8
+04:14:50,978 root INFO tasks left: 139
+04:15:00,917 root INFO free workers [6, 9], task queue size 5
+04:15:00,917 root INFO tasks left: 137
+04:15:11,36 root INFO free workers [4], task queue size 4
+04:15:11,36 root INFO tasks left: 135
+04:15:20,934 root INFO free workers [0, 1, 2, 8, 9], task queue size 6
+04:15:20,934 root INFO tasks left: 132
+04:15:31,339 root INFO free workers [4, 5, 6], task queue size 6
+04:15:31,339 root INFO tasks left: 127
+04:15:41,222 root INFO free workers [3, 7], task queue size 5
+04:15:41,222 root INFO tasks left: 125
+04:15:51,465 root INFO free workers [0, 1, 2, 5, 6, 8, 9], task queue size 8
+04:15:51,465 root INFO tasks left: 120
+04:16:01,699 root INFO free workers [], task queue size 3
+04:16:01,699 root INFO tasks left: 118
+04:16:11,709 root INFO free workers [3, 4, 7, 8], task queue size 6
+04:16:11,710 root INFO tasks left: 115
+04:16:22,24 root INFO free workers [0, 1, 2, 5, 6, 9], task queue size 8
+04:16:22,24 root INFO tasks left: 109
+04:16:32,133 root INFO free workers [], task queue size 3
+04:16:32,134 root INFO tasks left: 108
+04:16:42,484 root INFO free workers [3, 4, 7, 8], task queue size 7
+04:16:42,485 root INFO tasks left: 104
+04:16:52,797 root INFO free workers [0, 2, 6, 9], task queue size 6
+04:16:52,797 root INFO tasks left: 101
+04:17:02,749 root INFO free workers [3, 7], task queue size 4
+04:17:02,749 root INFO tasks left: 99
+04:17:12,475 root INFO free workers [2, 4, 8], task queue size 5
+04:17:12,475 root INFO tasks left: 96
+04:17:22,647 root INFO free workers [], task queue size 3
+04:17:22,647 root INFO tasks left: 95
+04:17:33,149 root INFO free workers [0, 3, 4, 6, 7, 9], task queue size 7
+04:17:33,149 root INFO tasks left: 90
+04:17:43,376 root INFO free workers [1, 2, 8], task queue size 4
+04:17:43,377 root INFO tasks left: 87
+04:17:53,584 root INFO free workers [5], task queue size 3
+04:17:53,584 root INFO tasks left: 85
+04:18:03,324 root INFO free workers [4, 7, 8, 9], task queue size 3
+04:18:03,325 root INFO tasks left: 83
+04:18:13,640 root INFO free workers [0, 1, 2, 3, 4, 5, 6], task queue size 6
+04:18:13,640 root INFO tasks left: 76
+04:18:23,832 root INFO free workers [0, 9], task queue size 1
+04:18:23,832 root INFO tasks left: 75
+04:18:34,285 root INFO free workers [0, 7, 8], task queue size 3
+04:18:34,285 root INFO tasks left: 72
+04:18:44,621 root INFO free workers [1, 2, 3, 4, 5, 6, 9], task queue size 5
+04:18:44,621 root INFO tasks left: 66
+04:18:54,325 root INFO free workers [1, 2], task queue size 1
+04:18:54,325 root INFO tasks left: 65
+04:19:04,733 root INFO free workers [0, 1, 4, 7, 8], task queue size 2
+04:19:04,734 root INFO tasks left: 62
+04:19:14,782 root INFO free workers [0, 1, 4, 5, 6], task queue size 1
+04:19:14,782 root INFO tasks left: 60
+04:19:25,102 root INFO free workers [0, 1, 2, 3, 4, 5, 9], task queue size 4
+04:19:25,103 root INFO tasks left: 56
+04:19:35,562 root INFO free workers [0, 1, 2, 7, 8], task queue size 2
+04:19:35,562 root INFO tasks left: 54
+04:19:45,528 root INFO free workers [0, 1, 2, 6], task queue size 1
+04:19:45,528 root INFO tasks left: 53
+04:19:56,6 root INFO free workers [0, 1, 2, 3, 4, 5, 9], task queue size 4
+04:19:56,6 root INFO tasks left: 49
+04:20:06,293 root INFO free workers [0, 1, 2, 6, 7, 8], task queue size 3
+04:20:06,293 root INFO tasks left: 46
+04:20:16,509 root INFO free workers [0, 1, 2], task queue size 0
+04:20:16,509 root INFO tasks left: 46
+04:20:27,451 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 4
+04:20:27,451 root INFO tasks left: 40
+04:20:37,822 root INFO free workers [0, 1, 2, 3, 4, 5], task queue size 1
+04:20:37,822 root INFO tasks left: 39
+04:20:48,495 root INFO free workers [0, 1, 2, 3, 4, 7, 8, 9], task queue size 1
+04:20:48,495 root INFO tasks left: 37
+04:20:58,974 root INFO free workers [0, 1, 2, 3, 4, 6, 7, 8], task queue size 1
+04:20:58,974 root INFO tasks left: 35
+04:21:09,472 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 1
+04:21:09,472 root INFO tasks left: 34
+04:21:19,987 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 1
+04:21:19,987 root INFO tasks left: 33
+04:21:30,450 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 8, 9], task queue size 1
+04:21:30,450 root INFO tasks left: 32
+04:21:40,987 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 0
+04:21:40,987 root INFO tasks left: 31
+04:21:51,432 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 1
+04:21:51,432 root INFO tasks left: 30
+04:22:01,895 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 1
+04:22:01,895 root INFO tasks left: 29
+04:22:12,345 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:22:12,345 root INFO tasks left: 29
+04:22:22,995 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:22:22,995 root INFO tasks left: 27
+04:22:33,455 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:22:33,455 root INFO tasks left: 27
+04:22:44,133 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 0
+04:22:44,133 root INFO tasks left: 27
+04:22:54,792 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:22:54,793 root INFO tasks left: 25
+04:23:05,123 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:23:05,124 root INFO tasks left: 25
+04:23:15,557 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:23:15,557 root INFO tasks left: 25
+04:23:26,183 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:23:26,183 root INFO tasks left: 23
+04:23:36,870 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:23:36,870 root INFO tasks left: 23
+04:23:47,79 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:23:47,79 root INFO tasks left: 23
+04:23:57,535 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:23:57,535 root INFO tasks left: 21
+04:24:07,763 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:24:07,763 root INFO tasks left: 21
+04:24:17,748 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:24:17,748 root INFO tasks left: 21
+04:24:28,391 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:24:28,392 root INFO tasks left: 19
+04:24:38,888 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:24:38,888 root INFO tasks left: 19
+04:24:49,397 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 1
+04:24:49,397 root INFO tasks left: 18
+04:25:00,88 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 1
+04:25:00,88 root INFO tasks left: 17
+04:25:10,400 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 0
+04:25:10,400 root INFO tasks left: 17
+04:25:20,841 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 1
+04:25:20,842 root INFO tasks left: 16
+04:25:31,544 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 1
+04:25:31,544 root INFO tasks left: 15
+04:25:41,686 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 1
+04:25:41,686 root INFO tasks left: 14
+04:25:52,76 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 0
+04:25:52,76 root INFO tasks left: 14
+04:26:02,573 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:26:02,573 root INFO tasks left: 12
+04:26:13,6 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:26:13,6 root INFO tasks left: 12
+04:26:23,511 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 0
+04:26:23,511 root INFO tasks left: 12
+04:26:33,444 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:26:33,444 root INFO tasks left: 10
+04:26:43,930 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:26:43,930 root INFO tasks left: 10
+04:26:54,225 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:26:54,225 root INFO tasks left: 8
+04:27:04,493 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:27:04,493 root INFO tasks left: 8
+04:27:15,261 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 0
+04:27:15,261 root INFO tasks left: 8
+04:27:25,638 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:27:25,638 root INFO tasks left: 6
+04:27:36,44 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:27:36,44 root INFO tasks left: 6
+04:27:46,545 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+04:27:46,546 root INFO tasks left: 4
+04:27:56,914 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 0
+04:27:56,915 root INFO tasks left: 4
+04:28:12,207 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 1
+04:28:12,208 root INFO tasks left: 2
+04:28:22,887 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 0
+04:28:22,888 root INFO tasks left: 2
+04:28:33,612 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 0
+04:28:33,612 root INFO tasks left: 2
+04:28:44,427 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 1
+04:28:44,428 root INFO tasks left: 1
+04:28:54,966 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 0
+04:28:54,966 root INFO tasks left: 1
+04:29:05,596 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 0
+04:29:05,596 root INFO tasks left: 0
+04:29:10,602 root INFO Overmind run finished successfully with 204 iterations, elasped time 1908.8367037773132 sec.

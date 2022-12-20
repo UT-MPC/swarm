@@ -55,3 +55,19 @@ INFO:root:Running task 0 in worker 0
 INFO:root:cached is dict_keys(['0'])
 INFO:root:device state 0 loaded from cache
 INFO:root:-- Task 0 successfully finished --
+INFO:root:worker id set to 0
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys([])
+INFO:root:-- Task 0 successfully finished --
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys(['0'])
+INFO:root:device state 0 loaded from cache
+INFO:root:-- Task 0 successfully finished --
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys(['0'])
+INFO:root:device state 0 loaded from cache
+INFO:root:-- Task 0 successfully finished --
+INFO:root:Running task 0 in worker 0
+INFO:root:cached is dict_keys(['0'])
+INFO:root:device state 0 loaded from cache
+INFO:root:-- Task 0 successfully finished --

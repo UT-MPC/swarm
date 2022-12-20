@@ -177,13 +177,20 @@ spec:
                 - arm64
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.04
+        image: sethlee0111/private_swarm:0.05
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
         volumeMounts:
            - name: overmind-volume
              mountPath: /data/db
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
       imagePullSecrets:
       - name: regcred
   volumeClaimTemplates:

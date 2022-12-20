@@ -14,7 +14,7 @@ sys.path.insert(0,'..')
 from ovm_utils.device_storing_util import load_device, save_device
 from dist_swarm.db_bridge.device_in_db import DeviceInDB
 from dist_swarm.db_bridge.worker_in_db import WorkerInDB
-from dynamo_db import TASK_END, TASK_FAILED, TASK_START
+from dynamo_db import TASK_END, TASK_FAILED, TASK_START, TASK_REALTIME_TIMEOUT
 
 # @TODO implement timeout here
 def run_task(worker_status, worker_id, task_config, device_state_cache):
@@ -39,6 +39,8 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         func_list = task_config['func_list']
         device_load_config = task_config['load_config']
         timeout = task_config['timeout']
+        real_time_mode = float(task_config['real_time_mode'])
+        real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
         measured_time = 0
 
@@ -67,14 +69,15 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
             if func_list[i]["func_name"][0] != '!':
                 func = getattr(learner, func_list[i]["func_name"])
                 
-                # @TODO handle multiple neighbors
+                # @TODO handle multiple neighbors and multiple function calls before eval()
                 start = time.time()
                 func(neighbors[0], **func_list[i]["params"])
                 measured_time += time.time() - start
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
                 hist = learner.eval()
-                device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
-                device_in_db.update_timestamp(end)
+                if not real_time_mode or real_time_timeout >= measured_time:
+                    device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
+                    device_in_db.update_timestamp(end)
 
         # save to cache before saving to DB
         # because save_device deletes model and data from the device
@@ -86,7 +89,8 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         # @TODO save neighbor device states if instructed
         
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
-                       "action_type": TASK_END, "task": task_config}
+                       "action_type": TASK_REALTIME_TIMEOUT 
+                       if real_time_mode and real_time_timeout < measured_time else TASK_END, "task": task_config}
     except:
         traceback.print_exc()
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 

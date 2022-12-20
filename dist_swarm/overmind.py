@@ -13,11 +13,11 @@ import json
 import os
 import logging
 import threading
+import time
 from time import sleep
 import datetime
 import typing
 from pathlib import PurePath
-from time import time
 from pandas import read_pickle, read_csv
 import boto3
 from dynamo_db import IS_FINISHED, IS_PROCESSED, TASK_ID, TIME
@@ -36,7 +36,8 @@ ENC_IDX="encounter index"
 MAX_ITERATIONS = 10_000_000
 
 class Task():
-    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list, timeout=2**8):
+    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list, 
+                 timeout=2**8, real_time_mode=False, real_time_timeout=10):
         self.swarm_name = swarm_name
         self.task_id = task_id
         self.start = start
@@ -45,6 +46,8 @@ class Task():
         self.neighbor_id_list = neighbor_id_list
         self.timeout = timeout
         self.load_config = {str(learner_id): self.get_new_load_config()}
+        self.real_time_mode = real_time_mode
+        self.real_time_timeout = real_time_timeout
 
         self.skip = False  # skip the processing of this task
         
@@ -71,7 +74,9 @@ class Task():
             "neighbors": self.neighbor_id_list,
             "load_config": self.load_config,
             "func_list": self.func_list,
-            "timeout": self.timeout,
+            "timeout": self.timeout,  # overmind controller assumes that server is dead when timeout is elasped
+            "real_time_mode": str(self.real_time_mode),
+            "real_time_timeout": str(self.real_time_timeout),
         }
         
     def set_load_config(self, id, load_model: bool, load_dataset: bool):
@@ -85,7 +90,7 @@ class Overmind():
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
-    def create_swarm(self, config_file):
+    def create_swarm(self, config_file, skip_init_tables=False):
         with open(config_file, 'rb') as f:
             config_json = f.read()
         self.config = json.loads(config_json)
@@ -98,8 +103,9 @@ class Overmind():
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',level=logging.INFO)
 
-        initializer = OVMSwarmInitializer()
-        initializer.initialize(config_file)
+        if not skip_init_tables:
+            initializer = OVMSwarmInitializer()
+            initializer.initialize(config_file)
 
     def build_dep_graph(self, dependency=None, oppcl_time=None):
         # read encounter dataset
@@ -226,6 +232,7 @@ class Overmind():
             worker_in_db.update_status(STOPPED)
     
     def run_swarm(self, polling_interval=5, rt_mode=False):
+        run_swarm_start_time = time.time()
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
         self.task_queue = []
         self.processed_tasks = []
@@ -254,7 +261,8 @@ class Overmind():
                 if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
                     task_id = task_item[TASK_ID]
                     self.processed_tasks.append(task_id)
-                    freed_time = self.tasks[task_id].start + task_item[TIME] + 2 * self.model_send_time
+                    elasped_time = float(task_item[TIME]) + 2 * self.model_send_time
+                    freed_time = self.tasks[task_id].start + elasped_time
                     for next_task in self.dep_graph[task_id]:
                         # print(f"next task {next_task}")
                         self.indegrees[next_task] -= 1
@@ -328,7 +336,7 @@ class Overmind():
 
             sleep(polling_interval)
         
-        logging.info(f"Overmind run finished successfully with {iterations} iterations")
+        logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")
 
     def run_swarm_rt_mode(self, polling_interval=10):
         # run swarm real-time (using actual running time on worker nodes)

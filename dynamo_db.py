@@ -34,6 +34,7 @@ TASK_START = "TaskStart"
 TASK_FAILED = "TaskFailed"
 TASK_TIMEOUT = "TaskTimeout"
 TASK_END = "TaskEnd"
+TASK_REALTIME_TIMEOUT = "TaskRealTimeTimeout"  # timeout in real-time mode
 
 # Done-tasks table
 TASK_ID = "TaskId"
