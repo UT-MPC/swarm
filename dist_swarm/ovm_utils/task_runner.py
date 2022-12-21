@@ -39,7 +39,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         func_list = task_config['func_list']
         device_load_config = task_config['load_config']
         timeout = task_config['timeout']
-        real_time_mode = float(task_config['real_time_mode'])
+        real_time_mode = task_config['real_time_mode']
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
         measured_time = 0
