@@ -1,5 +1,6 @@
 {
-    "swarm_name": "ovm_example",
+    "swarm_name": "ovm_example_100_levy",
+    "worker_namespace": "ds-deployment",
     "start": 10,
     "end": 30,
     "task_id": 0,
@@ -7,7 +8,7 @@
     "neighbors": [1],
     "timeout": 100000,
     "real_time_mode": true,
-    "real_time_timeout": "0.04",
+    "real_time_timeout": "0.20",
     "load_config": {
         "0": {
             "load_model": true,

@@ -13,6 +13,8 @@ ENC_IDX = "EncIdx"
 HOSTNAME = "Hostname"
 TOTAL_ENC_IDX = "TotalEncIdx"
 
+ENCOUNTER_HISTORY = "EncounterHistory"
+
 DEV_STATUS = "DeviceStatus"
 
 ERROR_TRACE = "ErrorTrace"

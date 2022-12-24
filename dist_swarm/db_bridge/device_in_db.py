@@ -5,7 +5,7 @@ from boto3.dynamodb.conditions import Key
 import time
 from decimal import Decimal
 
-from dynamo_db import DEVICE_ID, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
+from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
             GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX, MODEL_INFO
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
@@ -65,6 +65,20 @@ class DeviceInDB():
                     #metric = list_append(#metric, :metric), #enc_idx = :enc_idx",
                 )
     
+    def update_encounter_history(self, encounter_result):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.device_id},
+                    ExpressionAttributeNames={
+                        "#encounter_history": ENCOUNTER_HISTORY,
+                    },
+                    ExpressionAttributeValues={
+                        ":encounter_result": encounter_result,
+                    },
+                    UpdateExpression="SET #encounter_history = list_append(#encounter_history, :encounter_result)"
+        )
+
+    # def update_computation_time_history(self, computation_time_history) 
+
     def update_timestamp(self, timestamp):
         resp = self.table.update_item(
             Key={DEVICE_ID: self.device_id},

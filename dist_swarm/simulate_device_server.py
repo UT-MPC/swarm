@@ -16,5 +16,7 @@ def serve():
     server.wait_for_termination()
 
 if __name__ == '__main__':
-    logging.basicConfig(filename="simulate_device.log", level=logging.INFO)
+    logging.basicConfig(filename="simulate_device.log", 
+                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                        level=logging.INFO)
     serve()

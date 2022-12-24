@@ -33,8 +33,8 @@ client = boto3.client('dynamodb', region_name=REGION)
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 
 class OVMSwarmInitializer():
-    def initialize(self, config_file) -> None:
-        self._config_db(config_file)
+    def initialize(self, config_file, create_tables=False) -> None:
+        self._config_db(config_file, create_tables)
         
     def _delete_all_items_on_table(self, table_name):
         try:
@@ -72,11 +72,11 @@ class OVMSwarmInitializer():
     def _create_db_state_table(self, tag):
         self._create_table(DEVICE_ID, tag, 100, 100)
 
-    def _get_worker_state_table_name(self, tag):
-        return tag + '-worker-state'
+    def _get_worker_state_table_name(self):
+        return self.worker_namespace + '-worker-state'
 
     def _create_worker_state_table(self, tag):
-        self._create_table(WORKER_ID, self._get_worker_state_table_name(tag), 100, 100)
+        self._create_table(WORKER_ID, self._get_worker_state_table_name(), 100, 100)
 
     # def _create_rds_table(self, )
 
@@ -152,14 +152,14 @@ class OVMSwarmInitializer():
             logging.info(f"{self.worker_ips[worker_id]} set as {worker_id}")
 
     def _initialize_worker(self, tag, worker_id):
-        table = dynamodb.Table(self._get_worker_state_table_name(tag))
+        table = dynamodb.Table(self._get_worker_state_table_name())
         with table.batch_writer() as batch:
             batch.put_item(Item={WORKER_ID: worker_id, WORKER_STATUS: STOPPED,
                                WORKER_HISTORY: [{WTIMESTAMP: strftime("%Y-%m-%d %H:%M:%S", gmtime()), ACTION_TYPE: WORKER_CREATED}]})
         set_number_thread = threading.Thread(target=self.send_set_worker_state_request, args=(tag, worker_id,))
         set_number_thread.start()
     
-    def _config_db(self, config_file):
+    def _config_db(self, config_file, create_tables=False):
         # load config file
         with open(config_file, 'rb') as f:
             config_json = f.read()
@@ -168,11 +168,13 @@ class OVMSwarmInitializer():
         tag = config['tag']
         swarm_config = config['swarm_config']
         self.worker_ips = config['worker_ips']
+        self.worker_namespace = config['worker_namespace']
 
         x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
         num_classes = len(np.unique(y_train_orig))
 
-        self._create_db_state_table(tag)
+        if create_tables:
+            self._create_db_state_table(tag)
 
         enc_dataset_filename = self.config['device_config']['encounter_config']['encounter_data_file']
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
@@ -187,7 +189,8 @@ class OVMSwarmInitializer():
         # store local data dist, goal dist, and training data indices in the table
         s3 = boto3.resource('s3')
         for idnum in range(swarm_config['number_of_devices']):
-            # print('init db for device {}.'.format(idnum))
+            if not create_tables:
+                continue
 
             # pick data
             label_set = []
@@ -264,11 +267,13 @@ class OVMSwarmInitializer():
             # @TODO handle hetero device
         
         # configure worker tables
-        self._create_worker_state_table(tag)
+        if create_tables:
+            self._create_worker_state_table(tag)
         for worker_id in range(len(self.worker_ips)):
             self._initialize_worker(tag, worker_id)
         
-        self._create_finished_tasks_table(tag)
+        if create_tables:
+            self._create_finished_tasks_table(tag)
 
 
 def convert_to_map(dist):

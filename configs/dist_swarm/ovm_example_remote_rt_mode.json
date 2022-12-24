@@ -36,8 +36,8 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50_step_02.pickle",
-            "computation_time": 0.14,
+            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50.pickle",
+            "computation_time": 0.1,
             "communication_rate": 16000000
         },
         "train_config": {

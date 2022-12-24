@@ -57,5 +57,6 @@ message Status {
 
 message WorkerInfo {
   string swarm_name = 1;
-  int32 worker_id = 2;
+  string worker_namespace = 2;
+  int32 worker_id = 3;
 }

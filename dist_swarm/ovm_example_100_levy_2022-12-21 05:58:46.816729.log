@@ -1,0 +1,1952 @@
+05:58:47,430 root INFO a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051 set as 0
+05:58:47,458 root INFO ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051 set as 1
+05:58:47,520 root INFO a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051 set as 2
+05:58:47,580 root INFO a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051 set as 3
+05:58:47,627 root INFO acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051 set as 4
+05:58:47,679 root INFO a86d15c50c0ef4fd889c208b91306322-1434235675.us-east-2.elb.amazonaws.com:50051 set as 5
+05:58:47,726 root INFO a73d0841439be4c72a7f99c2a8ee014c-461204456.us-east-2.elb.amazonaws.com:50051 set as 6
+05:58:47,793 root INFO a2db8d3e5406b4932acea5b23c9031f7-510381442.us-east-2.elb.amazonaws.com:50051 set as 7
+05:58:47,840 root INFO a53fdee8cddc64425960db2cfccd9cfe-1399437765.us-east-2.elb.amazonaws.com:50051 set as 8
+05:58:47,896 root INFO ac707e718b19942a9a6cae3863f20aef-1947071726.us-east-2.elb.amazonaws.com:50051 set as 9
+05:58:52,982 root INFO ----- swarm run start -----
+05:58:55,305 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 96
+05:58:55,305 root INFO tasks left: 794
+05:59:02,594 root INFO free workers [], task queue size 86
+05:59:02,594 root INFO tasks left: 794
+05:59:09,765 root INFO free workers [], task queue size 86
+05:59:09,766 root INFO tasks left: 794
+05:59:16,892 root INFO free workers [], task queue size 86
+05:59:16,892 root INFO tasks left: 794
+05:59:24,358 root INFO free workers [4, 5, 7, 8], task queue size 88
+05:59:24,358 root INFO tasks left: 790
+05:59:31,858 root INFO free workers [0, 1, 2, 3, 6, 9], task queue size 88
+05:59:31,858 root INFO tasks left: 784
+05:59:39,63 root INFO free workers [], task queue size 82
+05:59:39,63 root INFO tasks left: 784
+05:59:46,181 root INFO free workers [8], task queue size 83
+05:59:46,181 root INFO tasks left: 783
+05:59:53,825 root INFO free workers [4, 5, 7, 9], task queue size 84
+05:59:53,825 root INFO tasks left: 781
+06:00:01,106 root INFO free workers [1, 2, 6], task queue size 82
+06:00:01,106 root INFO tasks left: 777
+06:00:08,446 root INFO free workers [0, 3, 8], task queue size 81
+06:00:08,447 root INFO tasks left: 773
+06:00:15,503 root INFO free workers [9], task queue size 78
+06:00:15,503 root INFO tasks left: 773
+06:00:23,175 root INFO free workers [2, 5, 7], task queue size 81
+06:00:23,175 root INFO tasks left: 769
+06:00:30,413 root INFO free workers [1, 4, 6, 8], task queue size 81
+06:00:30,413 root INFO tasks left: 766
+06:00:37,635 root INFO free workers [0, 3], task queue size 79
+06:00:37,635 root INFO tasks left: 764
+06:00:45,49 root INFO free workers [2, 7, 9], task queue size 79
+06:00:45,50 root INFO tasks left: 761
+06:00:52,250 root INFO free workers [5], task queue size 77
+06:00:52,250 root INFO tasks left: 759
+06:00:59,654 root INFO free workers [0, 4, 6, 8], task queue size 79
+06:00:59,655 root INFO tasks left: 755
+06:01:06,846 root INFO free workers [1, 3, 7, 9], task queue size 77
+06:01:06,846 root INFO tasks left: 753
+06:01:14,180 root INFO free workers [2], task queue size 75
+06:01:14,180 root INFO tasks left: 750
+06:01:21,347 root INFO free workers [5], task queue size 75
+06:01:21,348 root INFO tasks left: 749
+06:01:28,656 root INFO free workers [4, 8], task queue size 76
+06:01:28,656 root INFO tasks left: 747
+06:01:36,510 root INFO free workers [0, 1, 3, 6, 7, 9], task queue size 78
+06:01:36,511 root INFO tasks left: 741
+06:01:48,304 root INFO free workers [2, 4, 5, 8], task queue size 73
+06:01:48,304 root INFO tasks left: 737
+06:01:55,732 root INFO free workers [], task queue size 69
+06:01:55,732 root INFO tasks left: 737
+06:02:03,364 root INFO free workers [1, 3, 7, 9], task queue size 71
+06:02:03,364 root INFO tasks left: 733
+06:02:10,919 root INFO free workers [0, 4, 6], task queue size 69
+06:02:10,919 root INFO tasks left: 731
+06:02:18,437 root INFO free workers [2, 5, 8], task queue size 70
+06:02:18,438 root INFO tasks left: 727
+06:02:25,760 root INFO free workers [], task queue size 67
+06:02:25,760 root INFO tasks left: 727
+06:02:33,680 root INFO free workers [1, 7, 9], task queue size 70
+06:02:33,681 root INFO tasks left: 724
+06:02:41,441 root INFO free workers [0, 3, 4, 6], task queue size 69
+06:02:41,441 root INFO tasks left: 720
+06:02:49,20 root INFO free workers [2, 5, 8], task queue size 67
+06:02:49,21 root INFO tasks left: 717
+06:02:56,752 root INFO free workers [5, 7, 9], task queue size 64
+06:02:56,752 root INFO tasks left: 717
+06:03:04,453 root INFO free workers [1, 4], task queue size 63
+06:03:04,453 root INFO tasks left: 714
+06:03:12,68 root INFO free workers [0, 3, 6, 8], task queue size 65
+06:03:12,68 root INFO tasks left: 710
+06:03:19,937 root INFO free workers [2, 7], task queue size 63
+06:03:19,938 root INFO tasks left: 708
+06:03:27,672 root INFO free workers [4, 5, 9], task queue size 64
+06:03:27,673 root INFO tasks left: 705
+06:03:35,163 root INFO free workers [1, 3, 8], task queue size 61
+06:03:35,164 root INFO tasks left: 703
+06:03:42,805 root INFO free workers [2, 6, 7], task queue size 62
+06:03:42,805 root INFO tasks left: 698
+06:03:50,264 root INFO free workers [0, 4, 5, 9], task queue size 59
+06:03:50,265 root INFO tasks left: 697
+06:03:58,85 root INFO free workers [3, 8], task queue size 58
+06:03:58,85 root INFO tasks left: 694
+06:04:05,894 root INFO free workers [1, 2], task queue size 58
+06:04:05,894 root INFO tasks left: 692
+06:04:13,471 root INFO free workers [5, 6], task queue size 59
+06:04:13,472 root INFO tasks left: 689
+06:04:21,291 root INFO free workers [8, 9], task queue size 59
+06:04:21,292 root INFO tasks left: 687
+06:04:29,14 root INFO free workers [3], task queue size 59
+06:04:29,15 root INFO tasks left: 685
+06:04:36,677 root INFO free workers [0, 1, 2, 4, 5, 6, 9], task queue size 62
+06:04:36,677 root INFO tasks left: 681
+06:04:44,517 root INFO free workers [8], task queue size 59
+06:04:44,517 root INFO tasks left: 677
+06:04:52,459 root INFO free workers [], task queue size 58
+06:04:52,460 root INFO tasks left: 677
+06:05:00,52 root INFO free workers [3, 4], task queue size 58
+06:05:00,53 root INFO tasks left: 676
+06:05:08,165 root INFO free workers [0, 2, 5, 6, 7, 8, 9], task queue size 61
+06:05:08,166 root INFO tasks left: 671
+06:05:16,222 root INFO free workers [1], task queue size 58
+06:05:16,222 root INFO tasks left: 667
+06:05:23,975 root INFO free workers [4], task queue size 58
+06:05:23,975 root INFO tasks left: 666
+06:05:31,940 root INFO free workers [3, 7, 9], task queue size 59
+06:05:31,940 root INFO tasks left: 664
+06:05:39,957 root INFO free workers [0, 2, 5, 6, 8], task queue size 61
+06:05:39,958 root INFO tasks left: 658
+06:05:48,154 root INFO free workers [1, 4], task queue size 58
+06:05:48,154 root INFO tasks left: 656
+06:05:55,984 root INFO free workers [7], task queue size 57
+06:05:55,984 root INFO tasks left: 655
+06:06:03,767 root INFO free workers [0, 3, 8, 9], task queue size 60
+06:06:03,767 root INFO tasks left: 651
+06:06:12,142 root INFO free workers [1, 2, 4, 5, 6], task queue size 61
+06:06:12,142 root INFO tasks left: 646
+06:06:19,935 root INFO free workers [6, 7, 8], task queue size 57
+06:06:19,935 root INFO tasks left: 645
+06:06:28,82 root INFO free workers [0], task queue size 56
+06:06:28,83 root INFO tasks left: 643
+06:06:36,235 root INFO free workers [3, 9], task queue size 57
+06:06:36,235 root INFO tasks left: 641
+06:06:44,109 root INFO free workers [1, 2, 4, 5, 6, 7, 8], task queue size 58
+06:06:44,109 root INFO tasks left: 637
+06:06:52,316 root INFO free workers [0], task queue size 55
+06:06:52,316 root INFO tasks left: 633
+06:07:00,132 root INFO free workers [3, 9], task queue size 56
+06:07:00,132 root INFO tasks left: 631
+06:07:08,139 root INFO free workers [6, 7], task queue size 55
+06:07:08,140 root INFO tasks left: 630
+06:07:16,254 root INFO free workers [0, 1, 2, 4, 5, 8], task queue size 58
+06:07:16,255 root INFO tasks left: 624
+06:07:23,984 root INFO free workers [], task queue size 53
+06:07:23,985 root INFO tasks left: 623
+06:07:32,264 root INFO free workers [3, 6, 7, 9], task queue size 55
+06:07:32,265 root INFO tasks left: 621
+06:07:40,225 root INFO free workers [0, 1, 4], task queue size 54
+06:07:40,225 root INFO tasks left: 617
+06:07:48,511 root INFO free workers [2, 5, 8], task queue size 53
+06:07:48,512 root INFO tasks left: 613
+06:07:56,545 root INFO free workers [], task queue size 50
+06:07:56,545 root INFO tasks left: 613
+06:08:04,768 root INFO free workers [1, 3, 6, 7, 9], task queue size 53
+06:08:04,769 root INFO tasks left: 608
+06:08:12,799 root INFO free workers [4], task queue size 49
+06:08:12,799 root INFO tasks left: 607
+06:08:20,829 root INFO free workers [0, 2, 5, 8], task queue size 51
+06:08:20,829 root INFO tasks left: 603
+06:08:29,177 root INFO free workers [7, 9], task queue size 47
+06:08:29,177 root INFO tasks left: 602
+06:08:37,537 root INFO free workers [1, 3, 4, 6], task queue size 50
+06:08:37,538 root INFO tasks left: 597
+06:08:45,690 root INFO free workers [0], task queue size 46
+06:08:45,691 root INFO tasks left: 597
+06:08:53,977 root INFO free workers [2, 5, 7, 8, 9], task queue size 50
+06:08:53,977 root INFO tasks left: 591
+06:09:01,984 root INFO free workers [1, 4, 5, 6, 9], task queue size 46
+06:09:01,984 root INFO tasks left: 590
+06:09:10,369 root INFO free workers [3, 9], task queue size 44
+06:09:10,369 root INFO tasks left: 587
+06:09:18,432 root INFO free workers [0, 8], task queue size 43
+06:09:18,432 root INFO tasks left: 586
+06:09:26,956 root INFO free workers [2, 5, 6, 7], task queue size 45
+06:09:26,956 root INFO tasks left: 582
+06:09:35,187 root INFO free workers [1, 4, 6], task queue size 44
+06:09:35,187 root INFO tasks left: 579
+06:09:43,541 root INFO free workers [0, 3, 8, 9], task queue size 43
+06:09:43,541 root INFO tasks left: 576
+06:09:51,563 root INFO free workers [5, 7], task queue size 40
+06:09:51,563 root INFO tasks left: 575
+06:10:00,105 root INFO free workers [1, 2, 6], task queue size 42
+06:10:00,105 root INFO tasks left: 570
+06:10:08,310 root INFO free workers [4, 8, 9], task queue size 41
+06:10:08,310 root INFO tasks left: 568
+06:10:16,462 root INFO free workers [3, 5, 7], task queue size 41
+06:10:16,462 root INFO tasks left: 565
+06:10:25,213 root INFO free workers [0, 2, 3, 7], task queue size 40
+06:10:25,213 root INFO tasks left: 563
+06:10:33,702 root INFO free workers [4, 6, 8, 9], task queue size 41
+06:10:33,702 root INFO tasks left: 558
+06:10:42,115 root INFO free workers [1, 5], task queue size 39
+06:10:42,115 root INFO tasks left: 556
+06:10:50,19 root INFO free workers [2, 7], task queue size 38
+06:10:50,19 root INFO tasks left: 555
+06:10:58,549 root INFO free workers [0, 3, 4, 8, 9], task queue size 41
+06:10:58,549 root INFO tasks left: 550
+06:11:06,707 root INFO free workers [1, 5, 6, 7], task queue size 39
+06:11:06,707 root INFO tasks left: 546
+06:11:15,36 root INFO free workers [2], task queue size 36
+06:11:15,36 root INFO tasks left: 545
+06:11:23,489 root INFO free workers [8], task queue size 37
+06:11:23,489 root INFO tasks left: 543
+06:11:31,807 root INFO free workers [0, 4, 5, 9], task queue size 40
+06:11:31,807 root INFO tasks left: 539
+06:11:40,406 root INFO free workers [1, 2, 3, 6, 7], task queue size 40
+06:11:40,407 root INFO tasks left: 535
+06:11:49,8 root INFO free workers [8], task queue size 36
+06:11:49,9 root INFO tasks left: 533
+06:11:57,219 root INFO free workers [4, 5, 9], task queue size 36
+06:11:57,219 root INFO tasks left: 531
+06:12:05,731 root INFO free workers [0, 2, 6, 7], task queue size 35
+06:12:05,731 root INFO tasks left: 529
+06:12:14,693 root INFO free workers [1, 3, 8], task queue size 36
+06:12:14,693 root INFO tasks left: 524
+06:12:23,614 root INFO free workers [4, 5, 9], task queue size 36
+06:12:23,615 root INFO tasks left: 521
+06:12:32,303 root INFO free workers [2, 7], task queue size 36
+06:12:32,303 root INFO tasks left: 518
+06:12:41,398 root INFO free workers [0, 1, 6, 8], task queue size 38
+06:12:41,398 root INFO tasks left: 514
+06:12:49,896 root INFO free workers [3, 4, 5, 7, 9], task queue size 37
+06:12:49,896 root INFO tasks left: 510
+06:12:58,419 root INFO free workers [2, 9], task queue size 34
+06:12:58,419 root INFO tasks left: 508
+06:13:07,77 root INFO free workers [6, 8], task queue size 34
+06:13:07,77 root INFO tasks left: 506
+06:13:15,835 root INFO free workers [0, 1, 3, 4, 5, 7], task queue size 36
+06:13:15,835 root INFO tasks left: 501
+06:13:24,511 root INFO free workers [2, 8, 9], task queue size 32
+06:13:24,511 root INFO tasks left: 498
+06:13:33,463 root INFO free workers [6], task queue size 30
+06:13:33,463 root INFO tasks left: 496
+06:13:42,167 root INFO free workers [0, 5], task queue size 30
+06:13:42,168 root INFO tasks left: 495
+06:13:51,544 root INFO free workers [1, 2, 3, 4, 7, 8, 9], task queue size 35
+06:13:51,544 root INFO tasks left: 488
+06:14:00,252 root INFO free workers [5], task queue size 29
+06:14:00,252 root INFO tasks left: 487
+06:14:08,931 root INFO free workers [], task queue size 28
+06:14:08,932 root INFO tasks left: 486
+06:14:18,123 root INFO free workers [0, 3, 6, 8, 9], task queue size 32
+06:14:18,123 root INFO tasks left: 482
+06:14:26,873 root INFO free workers [1, 2, 4, 5, 7], task queue size 33
+06:14:26,873 root INFO tasks left: 476
+06:14:35,374 root INFO free workers [], task queue size 28
+06:14:35,374 root INFO tasks left: 476
+06:14:43,860 root INFO free workers [8], task queue size 29
+06:14:43,860 root INFO tasks left: 475
+06:14:52,821 root INFO free workers [2, 5, 9], task queue size 30
+06:14:52,821 root INFO tasks left: 473
+06:15:01,781 root INFO free workers [0, 1, 3, 4, 6, 7, 8], task queue size 34
+06:15:01,782 root INFO tasks left: 466
+06:15:10,591 root INFO free workers [], task queue size 28
+06:15:10,591 root INFO tasks left: 465
+06:15:19,364 root INFO free workers [2, 5, 9], task queue size 29
+06:15:19,364 root INFO tasks left: 464
+06:15:28,376 root INFO free workers [6, 7, 8], task queue size 30
+06:15:28,376 root INFO tasks left: 459
+06:15:37,340 root INFO free workers [0, 1, 3, 4], task queue size 31
+06:15:37,340 root INFO tasks left: 455
+06:15:46,589 root INFO free workers [2, 5, 8, 9], task queue size 27
+06:15:46,589 root INFO tasks left: 454
+06:15:55,237 root INFO free workers [4, 6, 7], task queue size 27
+06:15:55,238 root INFO tasks left: 449
+06:16:04,325 root INFO free workers [0, 1, 3], task queue size 28
+06:16:04,325 root INFO tasks left: 445
+06:16:12,849 root INFO free workers [5, 8, 9], task queue size 25
+06:16:12,849 root INFO tasks left: 445
+06:16:21,793 root INFO free workers [2, 4, 6, 7], task queue size 27
+06:16:21,793 root INFO tasks left: 440
+06:16:31,164 root INFO free workers [1], task queue size 26
+06:16:31,165 root INFO tasks left: 437
+06:16:40,236 root INFO free workers [0, 3, 5, 8, 9], task queue size 29
+06:16:40,237 root INFO tasks left: 433
+06:16:49,637 root INFO free workers [2, 4, 6, 7, 8], task queue size 27
+06:16:49,637 root INFO tasks left: 429
+06:16:58,350 root INFO free workers [], task queue size 23
+06:16:58,350 root INFO tasks left: 428
+06:17:07,838 root INFO free workers [1, 5, 8], task queue size 25
+06:17:07,838 root INFO tasks left: 426
+06:17:17,354 root INFO free workers [0, 2, 3, 4, 6, 7, 9], task queue size 29
+06:17:17,354 root INFO tasks left: 419
+06:17:26,885 root INFO free workers [], task queue size 23
+06:17:26,885 root INFO tasks left: 418
+06:17:35,928 root INFO free workers [1, 5, 8], task queue size 25
+06:17:35,929 root INFO tasks left: 415
+06:17:45,41 root INFO free workers [2, 4, 6, 7, 9], task queue size 25
+06:17:45,42 root INFO tasks left: 412
+06:17:54,150 root INFO free workers [0, 3], task queue size 23
+06:17:54,150 root INFO tasks left: 408
+06:18:03,14 root INFO free workers [1, 5, 8, 9], task queue size 23
+06:18:03,15 root INFO tasks left: 406
+06:18:12,479 root INFO free workers [2, 4, 6, 7], task queue size 23
+06:18:12,479 root INFO tasks left: 400
+06:18:21,671 root INFO free workers [0, 3, 4, 6], task queue size 21
+06:18:21,672 root INFO tasks left: 398
+06:18:30,801 root INFO free workers [1, 5, 8, 9], task queue size 20
+06:18:30,801 root INFO tasks left: 395
+06:18:39,810 root INFO free workers [2, 7, 8], task queue size 17
+06:18:39,811 root INFO tasks left: 392
+06:18:48,903 root INFO free workers [], task queue size 14
+06:18:48,903 root INFO tasks left: 392
+06:18:58,519 root INFO free workers [0, 1, 3, 4, 5, 6, 9], task queue size 20
+06:18:58,519 root INFO tasks left: 386
+06:19:07,610 root INFO free workers [2, 7, 8], task queue size 17
+06:19:07,610 root INFO tasks left: 382
+06:19:16,903 root INFO free workers [], task queue size 14
+06:19:16,904 root INFO tasks left: 382
+06:19:26,163 root INFO free workers [4, 5, 7, 8], task queue size 15
+06:19:26,163 root INFO tasks left: 381
+06:19:35,963 root INFO free workers [0, 1, 2, 3, 6, 9], task queue size 18
+06:19:35,963 root INFO tasks left: 372
+06:19:44,735 root INFO free workers [9], task queue size 12
+06:19:44,735 root INFO tasks left: 372
+06:19:53,645 root INFO free workers [5, 7, 8], task queue size 12
+06:19:53,646 root INFO tasks left: 370
+06:20:03,56 root INFO free workers [1, 2, 4], task queue size 12
+06:20:03,57 root INFO tasks left: 366
+06:20:12,401 root INFO free workers [0, 3, 6, 9], task queue size 13
+06:20:12,401 root INFO tasks left: 362
+06:20:22,12 root INFO free workers [5, 7, 8], task queue size 11
+06:20:22,12 root INFO tasks left: 360
+06:20:31,540 root INFO free workers [1, 2, 4], task queue size 10
+06:20:31,540 root INFO tasks left: 356
+06:20:40,591 root INFO free workers [9], task queue size 7
+06:20:40,591 root INFO tasks left: 355
+06:20:49,420 root INFO free workers [0, 3, 5, 6, 7, 8], task queue size 10
+06:20:49,421 root INFO tasks left: 350
+06:20:58,596 root INFO free workers [1, 2, 4], task queue size 7
+06:20:58,596 root INFO tasks left: 347
+06:21:08,344 root INFO free workers [5, 7, 9], task queue size 6
+06:21:08,344 root INFO tasks left: 345
+06:21:17,692 root INFO free workers [2, 8], task queue size 6
+06:21:17,692 root INFO tasks left: 342
+06:21:27,547 root INFO free workers [0, 1, 3, 4, 6, 9], task queue size 10
+06:21:27,548 root INFO tasks left: 336
+06:21:37,85 root INFO free workers [1, 4, 5, 7], task queue size 6
+06:21:37,85 root INFO tasks left: 334
+06:21:45,981 root INFO free workers [2, 7, 8], task queue size 5
+06:21:45,981 root INFO tasks left: 331
+06:21:55,14 root INFO free workers [5, 6, 9], task queue size 2
+06:21:55,14 root INFO tasks left: 331
+06:22:04,830 root INFO free workers [0, 1, 3, 5], task queue size 6
+06:22:04,830 root INFO tasks left: 325
+06:22:14,514 root INFO free workers [2, 4, 7, 8], task queue size 5
+06:22:14,514 root INFO tasks left: 321
+06:22:23,436 root INFO free workers [6, 9], task queue size 3
+06:22:23,436 root INFO tasks left: 319
+06:22:32,765 root INFO free workers [0, 1, 3, 5, 8], task queue size 4
+06:22:32,765 root INFO tasks left: 316
+06:22:41,981 root INFO free workers [0, 2, 4, 7], task queue size 3
+06:22:41,981 root INFO tasks left: 313
+06:22:51,306 root INFO free workers [0, 6, 9], task queue size 3
+06:22:51,306 root INFO tasks left: 310
+06:23:01,137 root INFO free workers [1, 3, 5, 8], task queue size 4
+06:23:01,138 root INFO tasks left: 306
+06:23:10,93 root INFO free workers [2, 4, 7], task queue size 4
+06:23:10,93 root INFO tasks left: 302
+06:23:19,264 root INFO free workers [6, 9], task queue size 1
+06:23:19,264 root INFO tasks left: 302
+06:23:29,493 root INFO free workers [0, 1, 3, 5, 6, 8], task queue size 5
+06:23:29,493 root INFO tasks left: 296
+06:23:38,510 root INFO free workers [0, 2, 4], task queue size 3
+06:23:38,511 root INFO tasks left: 293
+06:23:47,604 root INFO free workers [7, 9], task queue size 2
+06:23:47,605 root INFO tasks left: 291
+06:23:57,178 root INFO free workers [3, 4, 5, 6, 7, 8], task queue size 1
+06:23:57,178 root INFO tasks left: 290
+06:24:07,236 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 7
+06:24:07,237 root INFO tasks left: 283
+06:24:17,93 root INFO free workers [0, 1, 8], task queue size 1
+06:24:17,94 root INFO tasks left: 282
+06:24:27,337 root INFO free workers [0, 1], task queue size 1
+06:24:27,337 root INFO tasks left: 281
+06:24:36,706 root INFO free workers [0, 2, 3, 4, 5, 6, 9], task queue size 2
+06:24:36,706 root INFO tasks left: 279
+06:24:46,392 root INFO free workers [0, 2, 3, 4, 5, 7, 8], task queue size 6
+06:24:46,393 root INFO tasks left: 273
+06:24:55,945 root INFO free workers [0, 1], task queue size 1
+06:24:55,945 root INFO tasks left: 272
+06:25:05,598 root INFO free workers [0, 6, 9], task queue size 1
+06:25:05,599 root INFO tasks left: 271
+06:25:14,836 root INFO free workers [0, 3, 6, 7, 8], task queue size 3
+06:25:14,836 root INFO tasks left: 268
+06:25:24,966 root INFO free workers [0, 1, 2, 3, 4, 5, 9], task queue size 3
+06:25:24,967 root INFO tasks left: 263
+06:25:34,483 root INFO free workers [0, 1, 2, 3, 6], task queue size 2
+06:25:34,483 root INFO tasks left: 261
+06:25:43,844 root INFO free workers [0, 1, 2, 4, 7, 8], task queue size 2
+06:25:43,845 root INFO tasks left: 259
+06:25:53,491 root INFO free workers [0, 1, 2, 4, 5, 6, 9], task queue size 2
+06:25:53,492 root INFO tasks left: 257
+06:26:02,819 root INFO free workers [0, 1, 2, 3, 4, 5, 7, 8], task queue size 3
+06:26:02,819 root INFO tasks left: 254
+06:26:12,220 root INFO free workers [0, 1, 2, 3, 4], task queue size 2
+06:26:12,221 root INFO tasks left: 252
+06:26:21,457 root INFO free workers [0, 1, 2, 6, 9], task queue size 2
+06:26:21,457 root INFO tasks left: 250
+06:26:30,795 root INFO free workers [0, 1, 2, 5, 7, 8], task queue size 2
+06:26:30,795 root INFO tasks left: 248
+06:26:40,673 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 9], task queue size 1
+06:26:40,673 root INFO tasks left: 245
+06:26:50,818 root INFO free workers [0, 1, 2, 3, 4, 5, 6], task queue size 2
+06:26:50,818 root INFO tasks left: 243
+06:27:00,145 root INFO free workers [0, 1, 2, 3, 4, 7, 8], task queue size 2
+06:27:00,145 root INFO tasks left: 241
+06:27:10,144 root INFO free workers [0, 1, 2, 3, 4, 6, 9], task queue size 1
+06:27:10,144 root INFO tasks left: 240
+06:27:20,13 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 3
+06:27:20,13 root INFO tasks left: 237
+06:27:29,852 root INFO free workers [0, 1, 2, 3, 4, 5, 9], task queue size 1
+06:27:29,852 root INFO tasks left: 236
+06:27:39,88 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 1
+06:27:39,88 root INFO tasks left: 235
+06:27:49,324 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 8], task queue size 3
+06:27:49,325 root INFO tasks left: 232
+06:27:58,914 root INFO free workers [0, 1, 2, 3, 4, 9], task queue size 1
+06:27:58,914 root INFO tasks left: 231
+06:28:08,308 root INFO free workers [0, 1, 2, 3, 4, 7], task queue size 1
+06:28:08,308 root INFO tasks left: 230
+06:28:18,410 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 8, 9], task queue size 3
+06:28:18,411 root INFO tasks left: 227
+06:28:28,50 root INFO free workers [0, 1, 2, 3, 4, 5, 7], task queue size 2
+06:28:28,50 root INFO tasks left: 225
+06:28:37,682 root INFO free workers [0, 1, 2, 3, 4], task queue size 23
+06:28:37,682 root INFO tasks left: 225
+06:28:47,915 root INFO free workers [6, 7, 8, 9], task queue size 21
+06:28:47,915 root INFO tasks left: 222
+06:28:57,786 root INFO free workers [5, 6], task queue size 19
+06:28:57,786 root INFO tasks left: 220
+06:29:07,625 root INFO free workers [0, 1, 2, 3, 4, 8, 9], task queue size 22
+06:29:07,626 root INFO tasks left: 215
+06:29:17,85 root INFO free workers [0, 1, 7], task queue size 17
+06:29:17,85 root INFO tasks left: 212
+06:29:27,124 root INFO free workers [0, 5, 6, 8, 9], task queue size 16
+06:29:27,124 root INFO tasks left: 210
+06:29:37,75 root INFO free workers [0, 2, 3, 4, 5, 6], task queue size 15
+06:29:37,75 root INFO tasks left: 205
+06:29:46,700 root INFO free workers [0, 1, 2, 7], task queue size 11
+06:29:46,700 root INFO tasks left: 203
+06:29:56,497 root INFO free workers [0, 1, 5, 6, 8, 9], task queue size 9
+06:29:56,497 root INFO tasks left: 201
+06:30:06,194 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 7
+06:30:06,194 root INFO tasks left: 197
+06:30:16,387 root INFO free workers [0, 1, 2, 3, 8, 9], task queue size 2
+06:30:16,388 root INFO tasks left: 195
+06:30:26,576 root INFO free workers [0, 1, 2, 3, 5, 6], task queue size 2
+06:30:26,576 root INFO tasks left: 193
+06:30:36,190 root INFO free workers [0, 1, 2, 3, 4, 7], task queue size 2
+06:30:36,191 root INFO tasks left: 191
+06:30:46,143 root INFO free workers [0, 1, 2, 3, 8], task queue size 1
+06:30:46,143 root INFO tasks left: 190
+06:30:56,542 root INFO free workers [0, 1, 2, 3, 5, 6, 7, 9], task queue size 3
+06:30:56,542 root INFO tasks left: 187
+06:31:06,845 root INFO free workers [0, 1, 2, 3, 4, 5, 8], task queue size 3
+06:31:06,846 root INFO tasks left: 184
+06:31:16,194 root INFO free workers [0, 1, 2, 3, 6, 7], task queue size 1
+06:31:16,194 root INFO tasks left: 183
+06:31:25,755 root INFO free workers [0, 1, 2, 3, 4, 6, 8, 9], task queue size 2
+06:31:25,755 root INFO tasks left: 181
+06:31:35,800 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7], task queue size 3
+06:31:35,801 root INFO tasks left: 178
+06:31:53,691 root INFO free workers [0, 1, 2, 3, 4, 9], task queue size 1
+06:31:53,691 root INFO tasks left: 177
+06:32:04,68 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 5
+06:32:04,68 root INFO tasks left: 172
+06:32:13,764 root INFO free workers [0, 1, 2, 3, 9], task queue size 22
+06:32:13,765 root INFO tasks left: 172
+06:32:23,652 root INFO free workers [0, 4, 8], task queue size 18
+06:32:23,653 root INFO tasks left: 171
+06:32:33,306 root INFO free workers [0, 4, 5, 6, 7], task queue size 18
+06:32:33,307 root INFO tasks left: 167
+06:32:43,856 root INFO free workers [0, 1, 2, 3, 4, 9], task queue size 16
+06:32:43,856 root INFO tasks left: 163
+06:32:53,981 root INFO free workers [0, 1, 2, 4, 7, 8], task queue size 12
+06:32:53,982 root INFO using 4 to reuse state 43 in 627
+06:32:53,982 root INFO tasks left: 161
+06:33:04,414 root INFO free workers [0, 1, 2, 5, 6, 7], task queue size 8
+06:33:04,415 root INFO tasks left: 159
+06:33:14,684 root INFO free workers [0, 1, 2, 3, 5, 9], task queue size 4
+06:33:14,684 root INFO tasks left: 157
+06:33:24,924 root INFO free workers [0, 1, 2, 3, 4, 6, 7, 8], task queue size 3
+06:33:24,924 root INFO tasks left: 153
+06:33:34,568 root INFO free workers [0, 1, 2, 3, 4, 5, 8], task queue size 20
+06:33:34,568 root INFO using 8 to reuse state 43 in 638
+06:33:34,568 root INFO tasks left: 153
+06:33:44,373 root INFO free workers [0, 1, 2, 3, 4, 7, 8, 9], task queue size 14
+06:33:44,374 root INFO tasks left: 151
+06:33:54,940 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 8
+06:33:54,941 root INFO tasks left: 149
+06:34:04,838 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 9], task queue size 1
+06:34:04,838 root INFO tasks left: 148
+06:34:14,96 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8], task queue size 1
+06:34:14,96 root INFO tasks left: 147
+06:34:23,878 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 9], task queue size 2
+06:34:23,878 root INFO tasks left: 145
+06:34:34,89 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 8, 9], task queue size 20
+06:34:34,90 root INFO tasks left: 145
+06:34:44,292 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 12
+06:34:44,292 root INFO using 9 to reuse state 85 in 717
+06:34:44,292 root INFO tasks left: 144
+06:34:54,398 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 2
+06:34:54,398 root INFO tasks left: 144
+06:35:04,903 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:35:04,903 root INFO using 8 to reuse state 72 in 262
+06:35:04,903 root INFO using 9 to reuse state 50 in 429
+06:35:04,903 root INFO tasks left: 144
+06:35:14,799 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:35:14,799 root INFO tasks left: 144
+06:35:25,411 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:35:25,411 root INFO using 0 to reuse state 23 in 84
+06:35:25,411 root INFO using 1 to reuse state 51 in 94
+06:35:25,411 root INFO using 2 to reuse state 28 in 536
+06:35:25,411 root INFO using 3 to reuse state 64 in 77
+06:35:25,411 root INFO using 4 to reuse state 77 in 100
+06:35:25,411 root INFO using 5 to reuse state 5 in 600
+06:35:25,411 root INFO using 6 to reuse state 59 in 131
+06:35:25,411 root INFO using 7 to reuse state 53 in 35
+06:35:25,411 root INFO using 8 to reuse state 39 in 34
+06:35:25,411 root INFO using 9 to reuse state 86 in 23
+06:35:25,411 root INFO tasks left: 144
+06:35:35,654 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:35:35,655 root INFO tasks left: 144
+06:35:45,147 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:35:45,148 root INFO using 0 to reuse state 72 in 262
+06:35:45,148 root INFO using 1 to reuse state 50 in 429
+06:35:45,148 root INFO using 2 to reuse state 32 in 22
+06:35:45,148 root INFO using 3 to reuse state 19 in 76
+06:35:45,148 root INFO using 4 to reuse state 30 in 284
+06:35:45,148 root INFO using 5 to reuse state 58 in 27
+06:35:45,148 root INFO using 6 to reuse state 37 in 26
+06:35:45,148 root INFO using 7 to reuse state 73 in 486
+06:35:45,148 root INFO using 8 to reuse state 43 in 638
+06:35:45,148 root INFO using 9 to reuse state 85 in 717
+06:35:45,148 root INFO tasks left: 144
+06:35:54,591 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:35:54,592 root INFO tasks left: 144
+06:36:04,643 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:36:04,643 root INFO using 0 to reuse state 23 in 84
+06:36:04,643 root INFO using 1 to reuse state 51 in 94
+06:36:04,643 root INFO using 2 to reuse state 28 in 536
+06:36:04,643 root INFO using 3 to reuse state 64 in 77
+06:36:04,643 root INFO using 4 to reuse state 77 in 100
+06:36:04,643 root INFO using 5 to reuse state 5 in 600
+06:36:04,643 root INFO using 6 to reuse state 59 in 131
+06:36:04,643 root INFO using 7 to reuse state 53 in 35
+06:36:04,643 root INFO using 8 to reuse state 39 in 34
+06:36:04,643 root INFO using 9 to reuse state 86 in 23
+06:36:04,643 root INFO tasks left: 144
+06:36:14,599 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:36:14,599 root INFO tasks left: 144
+06:36:25,93 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:36:25,93 root INFO using 0 to reuse state 72 in 262
+06:36:25,93 root INFO using 1 to reuse state 50 in 429
+06:36:25,94 root INFO using 2 to reuse state 32 in 22
+06:36:25,94 root INFO using 3 to reuse state 19 in 76
+06:36:25,94 root INFO using 4 to reuse state 30 in 284
+06:36:25,94 root INFO using 5 to reuse state 58 in 27
+06:36:25,94 root INFO using 6 to reuse state 37 in 26
+06:36:25,94 root INFO using 7 to reuse state 73 in 486
+06:36:25,94 root INFO using 8 to reuse state 43 in 638
+06:36:25,94 root INFO using 9 to reuse state 85 in 717
+06:36:25,94 root INFO tasks left: 144
+06:36:35,567 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:36:35,567 root INFO tasks left: 144
+06:36:45,593 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:36:45,593 root INFO using 0 to reuse state 23 in 84
+06:36:45,593 root INFO using 1 to reuse state 51 in 94
+06:36:45,593 root INFO using 2 to reuse state 28 in 536
+06:36:45,593 root INFO using 3 to reuse state 64 in 77
+06:36:45,593 root INFO using 4 to reuse state 77 in 100
+06:36:45,593 root INFO using 5 to reuse state 5 in 600
+06:36:45,593 root INFO using 6 to reuse state 59 in 131
+06:36:45,593 root INFO using 7 to reuse state 53 in 35
+06:36:45,593 root INFO using 8 to reuse state 39 in 34
+06:36:45,593 root INFO using 9 to reuse state 86 in 23
+06:36:45,593 root INFO tasks left: 144
+06:36:55,424 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:36:55,424 root INFO tasks left: 144
+06:37:05,412 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:37:05,413 root INFO using 0 to reuse state 72 in 262
+06:37:05,413 root INFO using 1 to reuse state 50 in 429
+06:37:05,413 root INFO using 2 to reuse state 32 in 22
+06:37:05,413 root INFO using 3 to reuse state 19 in 76
+06:37:05,413 root INFO using 4 to reuse state 30 in 284
+06:37:05,413 root INFO using 5 to reuse state 58 in 27
+06:37:05,413 root INFO using 6 to reuse state 37 in 26
+06:37:05,413 root INFO using 7 to reuse state 73 in 486
+06:37:05,413 root INFO using 8 to reuse state 43 in 638
+06:37:05,413 root INFO using 9 to reuse state 85 in 717
+06:37:05,413 root INFO tasks left: 144
+06:37:15,626 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:37:15,626 root INFO tasks left: 144
+06:37:25,582 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:37:25,583 root INFO using 0 to reuse state 23 in 84
+06:37:25,583 root INFO using 1 to reuse state 51 in 94
+06:37:25,583 root INFO using 2 to reuse state 28 in 536
+06:37:25,583 root INFO using 3 to reuse state 64 in 77
+06:37:25,583 root INFO using 4 to reuse state 77 in 100
+06:37:25,583 root INFO using 5 to reuse state 5 in 600
+06:37:25,583 root INFO using 6 to reuse state 59 in 131
+06:37:25,583 root INFO using 7 to reuse state 53 in 35
+06:37:25,583 root INFO using 8 to reuse state 39 in 34
+06:37:25,583 root INFO using 9 to reuse state 86 in 23
+06:37:25,583 root INFO tasks left: 144
+06:37:35,954 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:37:35,955 root INFO tasks left: 144
+06:37:45,873 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:37:45,873 root INFO using 0 to reuse state 72 in 262
+06:37:45,873 root INFO using 1 to reuse state 50 in 429
+06:37:45,873 root INFO using 2 to reuse state 32 in 22
+06:37:45,873 root INFO using 3 to reuse state 19 in 76
+06:37:45,873 root INFO using 4 to reuse state 30 in 284
+06:37:45,873 root INFO using 5 to reuse state 58 in 27
+06:37:45,873 root INFO using 6 to reuse state 37 in 26
+06:37:45,873 root INFO using 7 to reuse state 73 in 486
+06:37:45,873 root INFO using 8 to reuse state 43 in 638
+06:37:45,873 root INFO using 9 to reuse state 85 in 717
+06:37:45,873 root INFO tasks left: 144
+06:37:56,218 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:37:56,218 root INFO tasks left: 144
+06:38:06,775 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:38:06,775 root INFO using 0 to reuse state 23 in 84
+06:38:06,775 root INFO using 1 to reuse state 51 in 94
+06:38:06,775 root INFO using 2 to reuse state 28 in 536
+06:38:06,775 root INFO using 3 to reuse state 64 in 77
+06:38:06,775 root INFO using 4 to reuse state 77 in 100
+06:38:06,775 root INFO using 5 to reuse state 5 in 600
+06:38:06,775 root INFO using 6 to reuse state 59 in 131
+06:38:06,775 root INFO using 7 to reuse state 53 in 35
+06:38:06,775 root INFO using 8 to reuse state 39 in 34
+06:38:06,775 root INFO using 9 to reuse state 86 in 23
+06:38:06,775 root INFO tasks left: 144
+06:38:16,393 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:38:16,393 root INFO tasks left: 144
+06:38:26,765 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:38:26,765 root INFO using 0 to reuse state 72 in 262
+06:38:26,765 root INFO using 1 to reuse state 50 in 429
+06:38:26,765 root INFO using 2 to reuse state 32 in 22
+06:38:26,765 root INFO using 3 to reuse state 19 in 76
+06:38:26,765 root INFO using 4 to reuse state 30 in 284
+06:38:26,765 root INFO using 5 to reuse state 58 in 27
+06:38:26,765 root INFO using 6 to reuse state 37 in 26
+06:38:26,765 root INFO using 7 to reuse state 73 in 486
+06:38:26,765 root INFO using 8 to reuse state 43 in 638
+06:38:26,765 root INFO using 9 to reuse state 85 in 717
+06:38:26,765 root INFO tasks left: 144
+06:38:36,779 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:38:36,779 root INFO tasks left: 144
+06:38:46,48 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:38:46,48 root INFO using 0 to reuse state 23 in 84
+06:38:46,48 root INFO using 1 to reuse state 51 in 94
+06:38:46,48 root INFO using 2 to reuse state 28 in 536
+06:38:46,48 root INFO using 3 to reuse state 64 in 77
+06:38:46,48 root INFO using 4 to reuse state 77 in 100
+06:38:46,48 root INFO using 5 to reuse state 5 in 600
+06:38:46,48 root INFO using 6 to reuse state 59 in 131
+06:38:46,48 root INFO using 7 to reuse state 53 in 35
+06:38:46,48 root INFO using 8 to reuse state 39 in 34
+06:38:46,48 root INFO using 9 to reuse state 86 in 23
+06:38:46,48 root INFO tasks left: 144
+06:38:56,339 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:38:56,340 root INFO tasks left: 144
+06:39:05,830 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:39:05,831 root INFO using 0 to reuse state 72 in 262
+06:39:05,831 root INFO using 1 to reuse state 50 in 429
+06:39:05,831 root INFO using 2 to reuse state 32 in 22
+06:39:05,831 root INFO using 3 to reuse state 19 in 76
+06:39:05,831 root INFO using 4 to reuse state 30 in 284
+06:39:05,831 root INFO using 5 to reuse state 58 in 27
+06:39:05,831 root INFO using 6 to reuse state 37 in 26
+06:39:05,831 root INFO using 7 to reuse state 73 in 486
+06:39:05,831 root INFO using 8 to reuse state 43 in 638
+06:39:05,831 root INFO using 9 to reuse state 85 in 717
+06:39:05,831 root INFO tasks left: 144
+06:39:16,274 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:39:16,275 root INFO tasks left: 144
+06:39:26,134 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:39:26,135 root INFO using 0 to reuse state 23 in 84
+06:39:26,135 root INFO using 1 to reuse state 51 in 94
+06:39:26,135 root INFO using 2 to reuse state 28 in 536
+06:39:26,135 root INFO using 3 to reuse state 64 in 77
+06:39:26,135 root INFO using 4 to reuse state 77 in 100
+06:39:26,135 root INFO using 5 to reuse state 5 in 600
+06:39:26,135 root INFO using 6 to reuse state 59 in 131
+06:39:26,135 root INFO using 7 to reuse state 53 in 35
+06:39:26,135 root INFO using 8 to reuse state 39 in 34
+06:39:26,135 root INFO using 9 to reuse state 86 in 23
+06:39:26,135 root INFO tasks left: 144
+06:39:36,208 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:39:36,209 root INFO tasks left: 144
+06:39:46,877 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:39:46,877 root INFO using 0 to reuse state 72 in 262
+06:39:46,877 root INFO using 1 to reuse state 50 in 429
+06:39:46,877 root INFO using 2 to reuse state 32 in 22
+06:39:46,877 root INFO using 3 to reuse state 19 in 76
+06:39:46,877 root INFO using 4 to reuse state 30 in 284
+06:39:46,877 root INFO using 5 to reuse state 58 in 27
+06:39:46,877 root INFO using 6 to reuse state 37 in 26
+06:39:46,877 root INFO using 7 to reuse state 73 in 486
+06:39:46,877 root INFO using 8 to reuse state 43 in 638
+06:39:46,877 root INFO using 9 to reuse state 85 in 717
+06:39:46,877 root INFO tasks left: 144
+06:39:56,650 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:39:56,651 root INFO tasks left: 144
+06:40:06,427 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:40:06,427 root INFO using 0 to reuse state 23 in 84
+06:40:06,427 root INFO using 1 to reuse state 51 in 94
+06:40:06,427 root INFO using 2 to reuse state 28 in 536
+06:40:06,427 root INFO using 3 to reuse state 64 in 77
+06:40:06,427 root INFO using 4 to reuse state 77 in 100
+06:40:06,427 root INFO using 5 to reuse state 5 in 600
+06:40:06,427 root INFO using 6 to reuse state 59 in 131
+06:40:06,427 root INFO using 7 to reuse state 53 in 35
+06:40:06,427 root INFO using 8 to reuse state 39 in 34
+06:40:06,427 root INFO using 9 to reuse state 86 in 23
+06:40:06,427 root INFO tasks left: 144
+06:40:16,631 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:40:16,631 root INFO tasks left: 144
+06:40:26,93 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:40:26,93 root INFO using 0 to reuse state 72 in 262
+06:40:26,93 root INFO using 1 to reuse state 50 in 429
+06:40:26,93 root INFO using 2 to reuse state 32 in 22
+06:40:26,93 root INFO using 3 to reuse state 19 in 76
+06:40:26,93 root INFO using 4 to reuse state 30 in 284
+06:40:26,93 root INFO using 5 to reuse state 58 in 27
+06:40:26,93 root INFO using 6 to reuse state 37 in 26
+06:40:26,93 root INFO using 7 to reuse state 73 in 486
+06:40:26,93 root INFO using 8 to reuse state 43 in 638
+06:40:26,93 root INFO using 9 to reuse state 85 in 717
+06:40:26,93 root INFO tasks left: 144
+06:40:36,913 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:40:36,913 root INFO tasks left: 144
+06:40:47,15 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:40:47,16 root INFO using 0 to reuse state 23 in 84
+06:40:47,16 root INFO using 1 to reuse state 51 in 94
+06:40:47,16 root INFO using 2 to reuse state 28 in 536
+06:40:47,16 root INFO using 3 to reuse state 64 in 77
+06:40:47,16 root INFO using 4 to reuse state 77 in 100
+06:40:47,16 root INFO using 5 to reuse state 5 in 600
+06:40:47,16 root INFO using 6 to reuse state 59 in 131
+06:40:47,16 root INFO using 7 to reuse state 53 in 35
+06:40:47,16 root INFO using 8 to reuse state 39 in 34
+06:40:47,16 root INFO using 9 to reuse state 86 in 23
+06:40:47,16 root INFO tasks left: 144
+06:40:57,274 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:40:57,274 root INFO tasks left: 144
+06:41:07,69 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:41:07,69 root INFO using 0 to reuse state 72 in 262
+06:41:07,69 root INFO using 1 to reuse state 50 in 429
+06:41:07,69 root INFO using 2 to reuse state 32 in 22
+06:41:07,69 root INFO using 3 to reuse state 19 in 76
+06:41:07,69 root INFO using 4 to reuse state 30 in 284
+06:41:07,69 root INFO using 5 to reuse state 58 in 27
+06:41:07,69 root INFO using 6 to reuse state 37 in 26
+06:41:07,69 root INFO using 7 to reuse state 73 in 486
+06:41:07,69 root INFO using 8 to reuse state 43 in 638
+06:41:07,69 root INFO using 9 to reuse state 85 in 717
+06:41:07,69 root INFO tasks left: 144
+06:41:16,856 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:41:16,857 root INFO tasks left: 144
+06:41:26,484 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:41:26,484 root INFO using 0 to reuse state 23 in 84
+06:41:26,484 root INFO using 1 to reuse state 51 in 94
+06:41:26,484 root INFO using 2 to reuse state 28 in 536
+06:41:26,484 root INFO using 3 to reuse state 64 in 77
+06:41:26,484 root INFO using 4 to reuse state 77 in 100
+06:41:26,485 root INFO using 5 to reuse state 5 in 600
+06:41:26,485 root INFO using 6 to reuse state 59 in 131
+06:41:26,485 root INFO using 7 to reuse state 53 in 35
+06:41:26,485 root INFO using 8 to reuse state 39 in 34
+06:41:26,485 root INFO using 9 to reuse state 86 in 23
+06:41:26,485 root INFO tasks left: 144
+06:41:36,325 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:41:36,326 root INFO tasks left: 144
+06:41:46,127 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:41:46,127 root INFO using 0 to reuse state 72 in 262
+06:41:46,127 root INFO using 1 to reuse state 50 in 429
+06:41:46,127 root INFO using 2 to reuse state 32 in 22
+06:41:46,127 root INFO using 3 to reuse state 19 in 76
+06:41:46,127 root INFO using 4 to reuse state 30 in 284
+06:41:46,127 root INFO using 5 to reuse state 58 in 27
+06:41:46,127 root INFO using 6 to reuse state 37 in 26
+06:41:46,127 root INFO using 7 to reuse state 73 in 486
+06:41:46,127 root INFO using 8 to reuse state 43 in 638
+06:41:46,127 root INFO using 9 to reuse state 85 in 717
+06:41:46,127 root INFO tasks left: 144
+06:41:56,616 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:41:56,617 root INFO tasks left: 144
+06:42:06,975 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:42:06,975 root INFO using 0 to reuse state 23 in 84
+06:42:06,975 root INFO using 1 to reuse state 51 in 94
+06:42:06,976 root INFO using 2 to reuse state 28 in 536
+06:42:06,976 root INFO using 3 to reuse state 64 in 77
+06:42:06,976 root INFO using 4 to reuse state 77 in 100
+06:42:06,976 root INFO using 5 to reuse state 5 in 600
+06:42:06,976 root INFO using 6 to reuse state 59 in 131
+06:42:06,976 root INFO using 7 to reuse state 53 in 35
+06:42:06,976 root INFO using 8 to reuse state 39 in 34
+06:42:06,976 root INFO using 9 to reuse state 86 in 23
+06:42:06,976 root INFO tasks left: 144
+06:42:16,852 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:42:16,853 root INFO tasks left: 144
+06:42:26,677 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:42:26,677 root INFO using 0 to reuse state 72 in 262
+06:42:26,677 root INFO using 1 to reuse state 50 in 429
+06:42:26,677 root INFO using 2 to reuse state 32 in 22
+06:42:26,677 root INFO using 3 to reuse state 19 in 76
+06:42:26,677 root INFO using 4 to reuse state 30 in 284
+06:42:26,677 root INFO using 5 to reuse state 58 in 27
+06:42:26,677 root INFO using 6 to reuse state 37 in 26
+06:42:26,677 root INFO using 7 to reuse state 73 in 486
+06:42:26,677 root INFO using 8 to reuse state 43 in 638
+06:42:26,677 root INFO using 9 to reuse state 85 in 717
+06:42:26,677 root INFO tasks left: 144
+06:42:37,512 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:42:37,512 root INFO tasks left: 144
+06:42:47,709 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:42:47,710 root INFO using 0 to reuse state 23 in 84
+06:42:47,710 root INFO using 1 to reuse state 51 in 94
+06:42:47,710 root INFO using 2 to reuse state 28 in 536
+06:42:47,710 root INFO using 3 to reuse state 64 in 77
+06:42:47,710 root INFO using 4 to reuse state 77 in 100
+06:42:47,710 root INFO using 5 to reuse state 5 in 600
+06:42:47,710 root INFO using 6 to reuse state 59 in 131
+06:42:47,710 root INFO using 7 to reuse state 53 in 35
+06:42:47,710 root INFO using 8 to reuse state 39 in 34
+06:42:47,710 root INFO using 9 to reuse state 86 in 23
+06:42:47,710 root INFO tasks left: 144
+06:42:58,158 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:42:58,158 root INFO tasks left: 144
+06:43:08,997 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:43:08,998 root INFO using 0 to reuse state 72 in 262
+06:43:08,998 root INFO using 1 to reuse state 50 in 429
+06:43:08,998 root INFO using 2 to reuse state 32 in 22
+06:43:08,998 root INFO using 3 to reuse state 19 in 76
+06:43:08,998 root INFO using 4 to reuse state 30 in 284
+06:43:08,998 root INFO using 5 to reuse state 58 in 27
+06:43:08,998 root INFO using 6 to reuse state 37 in 26
+06:43:08,998 root INFO using 7 to reuse state 73 in 486
+06:43:08,998 root INFO using 8 to reuse state 43 in 638
+06:43:08,998 root INFO using 9 to reuse state 85 in 717
+06:43:08,998 root INFO tasks left: 144
+06:43:18,615 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:43:18,615 root INFO tasks left: 144
+06:43:29,143 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:43:29,144 root INFO using 0 to reuse state 23 in 84
+06:43:29,144 root INFO using 1 to reuse state 51 in 94
+06:43:29,144 root INFO using 2 to reuse state 28 in 536
+06:43:29,144 root INFO using 3 to reuse state 64 in 77
+06:43:29,144 root INFO using 4 to reuse state 77 in 100
+06:43:29,144 root INFO using 5 to reuse state 5 in 600
+06:43:29,144 root INFO using 6 to reuse state 59 in 131
+06:43:29,144 root INFO using 7 to reuse state 53 in 35
+06:43:29,144 root INFO using 8 to reuse state 39 in 34
+06:43:29,144 root INFO using 9 to reuse state 86 in 23
+06:43:29,144 root INFO tasks left: 144
+06:43:39,10 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:43:39,11 root INFO tasks left: 144
+06:43:48,898 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:43:48,898 root INFO using 0 to reuse state 72 in 262
+06:43:48,898 root INFO using 1 to reuse state 50 in 429
+06:43:48,899 root INFO using 2 to reuse state 32 in 22
+06:43:48,899 root INFO using 3 to reuse state 19 in 76
+06:43:48,899 root INFO using 4 to reuse state 30 in 284
+06:43:48,899 root INFO using 5 to reuse state 58 in 27
+06:43:48,899 root INFO using 6 to reuse state 37 in 26
+06:43:48,899 root INFO using 7 to reuse state 73 in 486
+06:43:48,899 root INFO using 8 to reuse state 43 in 638
+06:43:48,899 root INFO using 9 to reuse state 85 in 717
+06:43:48,899 root INFO tasks left: 144
+06:43:58,432 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:43:58,433 root INFO tasks left: 144
+06:44:08,250 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:44:08,250 root INFO using 0 to reuse state 23 in 84
+06:44:08,250 root INFO using 1 to reuse state 51 in 94
+06:44:08,250 root INFO using 2 to reuse state 28 in 536
+06:44:08,250 root INFO using 3 to reuse state 64 in 77
+06:44:08,250 root INFO using 4 to reuse state 77 in 100
+06:44:08,250 root INFO using 5 to reuse state 5 in 600
+06:44:08,250 root INFO using 6 to reuse state 59 in 131
+06:44:08,250 root INFO using 7 to reuse state 53 in 35
+06:44:08,250 root INFO using 8 to reuse state 39 in 34
+06:44:08,250 root INFO using 9 to reuse state 86 in 23
+06:44:08,250 root INFO tasks left: 144
+06:44:18,326 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:44:18,327 root INFO tasks left: 144
+06:44:28,643 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:44:28,643 root INFO using 0 to reuse state 72 in 262
+06:44:28,643 root INFO using 1 to reuse state 50 in 429
+06:44:28,643 root INFO using 2 to reuse state 32 in 22
+06:44:28,643 root INFO using 3 to reuse state 19 in 76
+06:44:28,643 root INFO using 4 to reuse state 30 in 284
+06:44:28,643 root INFO using 5 to reuse state 58 in 27
+06:44:28,643 root INFO using 6 to reuse state 37 in 26
+06:44:28,643 root INFO using 7 to reuse state 73 in 486
+06:44:28,643 root INFO using 8 to reuse state 43 in 638
+06:44:28,643 root INFO using 9 to reuse state 85 in 717
+06:44:28,643 root INFO tasks left: 144
+06:44:38,53 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:44:38,54 root INFO tasks left: 144
+06:44:48,55 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:44:48,55 root INFO using 0 to reuse state 23 in 84
+06:44:48,55 root INFO using 1 to reuse state 51 in 94
+06:44:48,55 root INFO using 2 to reuse state 28 in 536
+06:44:48,55 root INFO using 3 to reuse state 64 in 77
+06:44:48,55 root INFO using 4 to reuse state 77 in 100
+06:44:48,55 root INFO using 5 to reuse state 5 in 600
+06:44:48,55 root INFO using 6 to reuse state 59 in 131
+06:44:48,55 root INFO using 7 to reuse state 53 in 35
+06:44:48,55 root INFO using 8 to reuse state 39 in 34
+06:44:48,55 root INFO using 9 to reuse state 86 in 23
+06:44:48,55 root INFO tasks left: 144
+06:44:58,6 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:44:58,6 root INFO tasks left: 144
+06:45:08,293 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:45:08,293 root INFO using 0 to reuse state 72 in 262
+06:45:08,294 root INFO using 1 to reuse state 50 in 429
+06:45:08,294 root INFO using 2 to reuse state 32 in 22
+06:45:08,294 root INFO using 3 to reuse state 19 in 76
+06:45:08,294 root INFO using 4 to reuse state 30 in 284
+06:45:08,294 root INFO using 5 to reuse state 58 in 27
+06:45:08,294 root INFO using 6 to reuse state 37 in 26
+06:45:08,294 root INFO using 7 to reuse state 73 in 486
+06:45:08,294 root INFO using 8 to reuse state 43 in 638
+06:45:08,294 root INFO using 9 to reuse state 85 in 717
+06:45:08,294 root INFO tasks left: 144
+06:45:18,108 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:45:18,108 root INFO tasks left: 144
+06:45:27,777 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:45:27,777 root INFO using 0 to reuse state 23 in 84
+06:45:27,777 root INFO using 1 to reuse state 51 in 94
+06:45:27,777 root INFO using 2 to reuse state 28 in 536
+06:45:27,777 root INFO using 3 to reuse state 64 in 77
+06:45:27,777 root INFO using 4 to reuse state 77 in 100
+06:45:27,777 root INFO using 5 to reuse state 5 in 600
+06:45:27,777 root INFO using 6 to reuse state 59 in 131
+06:45:27,777 root INFO using 7 to reuse state 53 in 35
+06:45:27,777 root INFO using 8 to reuse state 39 in 34
+06:45:27,777 root INFO using 9 to reuse state 86 in 23
+06:45:27,777 root INFO tasks left: 144
+06:45:38,47 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:45:38,47 root INFO tasks left: 144
+06:45:48,265 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:45:48,265 root INFO using 0 to reuse state 72 in 262
+06:45:48,265 root INFO using 1 to reuse state 50 in 429
+06:45:48,265 root INFO using 2 to reuse state 32 in 22
+06:45:48,265 root INFO using 3 to reuse state 19 in 76
+06:45:48,265 root INFO using 4 to reuse state 30 in 284
+06:45:48,265 root INFO using 5 to reuse state 58 in 27
+06:45:48,265 root INFO using 6 to reuse state 37 in 26
+06:45:48,265 root INFO using 7 to reuse state 73 in 486
+06:45:48,265 root INFO using 8 to reuse state 43 in 638
+06:45:48,265 root INFO using 9 to reuse state 85 in 717
+06:45:48,265 root INFO tasks left: 144
+06:45:58,41 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:45:58,42 root INFO tasks left: 144
+06:46:07,575 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:46:07,575 root INFO using 0 to reuse state 23 in 84
+06:46:07,575 root INFO using 1 to reuse state 51 in 94
+06:46:07,575 root INFO using 2 to reuse state 28 in 536
+06:46:07,575 root INFO using 3 to reuse state 64 in 77
+06:46:07,575 root INFO using 4 to reuse state 77 in 100
+06:46:07,575 root INFO using 5 to reuse state 5 in 600
+06:46:07,575 root INFO using 6 to reuse state 59 in 131
+06:46:07,575 root INFO using 7 to reuse state 53 in 35
+06:46:07,575 root INFO using 8 to reuse state 39 in 34
+06:46:07,575 root INFO using 9 to reuse state 86 in 23
+06:46:07,575 root INFO tasks left: 144
+06:46:17,122 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:46:17,122 root INFO tasks left: 144
+06:46:27,53 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:46:27,53 root INFO using 0 to reuse state 72 in 262
+06:46:27,53 root INFO using 1 to reuse state 50 in 429
+06:46:27,53 root INFO using 2 to reuse state 32 in 22
+06:46:27,53 root INFO using 3 to reuse state 19 in 76
+06:46:27,53 root INFO using 4 to reuse state 30 in 284
+06:46:27,53 root INFO using 5 to reuse state 58 in 27
+06:46:27,53 root INFO using 6 to reuse state 37 in 26
+06:46:27,53 root INFO using 7 to reuse state 73 in 486
+06:46:27,53 root INFO using 8 to reuse state 43 in 638
+06:46:27,53 root INFO using 9 to reuse state 85 in 717
+06:46:27,53 root INFO tasks left: 144
+06:46:36,574 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:46:36,574 root INFO tasks left: 144
+06:46:46,884 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:46:46,884 root INFO using 0 to reuse state 23 in 84
+06:46:46,884 root INFO using 1 to reuse state 51 in 94
+06:46:46,884 root INFO using 2 to reuse state 28 in 536
+06:46:46,884 root INFO using 3 to reuse state 64 in 77
+06:46:46,884 root INFO using 4 to reuse state 77 in 100
+06:46:46,884 root INFO using 5 to reuse state 5 in 600
+06:46:46,884 root INFO using 6 to reuse state 59 in 131
+06:46:46,884 root INFO using 7 to reuse state 53 in 35
+06:46:46,884 root INFO using 8 to reuse state 39 in 34
+06:46:46,884 root INFO using 9 to reuse state 86 in 23
+06:46:46,884 root INFO tasks left: 144
+06:46:57,249 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:46:57,250 root INFO tasks left: 144
+06:47:07,386 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:47:07,386 root INFO using 0 to reuse state 72 in 262
+06:47:07,386 root INFO using 1 to reuse state 50 in 429
+06:47:07,386 root INFO using 2 to reuse state 32 in 22
+06:47:07,386 root INFO using 3 to reuse state 19 in 76
+06:47:07,386 root INFO using 4 to reuse state 30 in 284
+06:47:07,386 root INFO using 5 to reuse state 58 in 27
+06:47:07,386 root INFO using 6 to reuse state 37 in 26
+06:47:07,386 root INFO using 7 to reuse state 73 in 486
+06:47:07,386 root INFO using 8 to reuse state 43 in 638
+06:47:07,387 root INFO using 9 to reuse state 85 in 717
+06:47:07,387 root INFO tasks left: 144
+06:47:17,611 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:47:17,611 root INFO tasks left: 144
+06:47:27,186 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:47:27,187 root INFO using 0 to reuse state 23 in 84
+06:47:27,193 root INFO using 1 to reuse state 51 in 94
+06:47:27,194 root INFO using 2 to reuse state 28 in 536
+06:47:27,194 root INFO using 3 to reuse state 64 in 77
+06:47:27,194 root INFO using 4 to reuse state 77 in 100
+06:47:27,194 root INFO using 5 to reuse state 5 in 600
+06:47:27,194 root INFO using 6 to reuse state 59 in 131
+06:47:27,194 root INFO using 7 to reuse state 53 in 35
+06:47:27,194 root INFO using 8 to reuse state 39 in 34
+06:47:27,194 root INFO using 9 to reuse state 86 in 23
+06:47:27,194 root INFO tasks left: 144
+06:47:37,413 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:47:37,413 root INFO tasks left: 144
+06:47:47,846 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:47:47,846 root INFO using 0 to reuse state 72 in 262
+06:47:47,846 root INFO using 1 to reuse state 50 in 429
+06:47:47,846 root INFO using 2 to reuse state 32 in 22
+06:47:47,846 root INFO using 3 to reuse state 19 in 76
+06:47:47,846 root INFO using 4 to reuse state 30 in 284
+06:47:47,846 root INFO using 5 to reuse state 58 in 27
+06:47:47,846 root INFO using 6 to reuse state 37 in 26
+06:47:47,846 root INFO using 7 to reuse state 73 in 486
+06:47:47,846 root INFO using 8 to reuse state 43 in 638
+06:47:47,846 root INFO using 9 to reuse state 85 in 717
+06:47:47,847 root INFO tasks left: 144
+06:47:57,189 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:47:57,190 root INFO tasks left: 144
+06:48:07,324 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:48:07,324 root INFO using 0 to reuse state 23 in 84
+06:48:07,324 root INFO using 1 to reuse state 51 in 94
+06:48:07,324 root INFO using 2 to reuse state 28 in 536
+06:48:07,324 root INFO using 3 to reuse state 64 in 77
+06:48:07,324 root INFO using 4 to reuse state 77 in 100
+06:48:07,324 root INFO using 5 to reuse state 5 in 600
+06:48:07,324 root INFO using 6 to reuse state 59 in 131
+06:48:07,324 root INFO using 7 to reuse state 53 in 35
+06:48:07,324 root INFO using 8 to reuse state 39 in 34
+06:48:07,324 root INFO using 9 to reuse state 86 in 23
+06:48:07,324 root INFO tasks left: 144
+06:48:18,266 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 10
+06:48:18,267 root INFO tasks left: 144
+06:48:27,897 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:48:27,897 root INFO using 0 to reuse state 72 in 262
+06:48:27,897 root INFO using 1 to reuse state 50 in 429
+06:48:27,897 root INFO using 2 to reuse state 32 in 22
+06:48:27,897 root INFO using 3 to reuse state 19 in 76
+06:48:27,897 root INFO using 4 to reuse state 30 in 284
+06:48:27,897 root INFO using 5 to reuse state 58 in 27
+06:48:27,897 root INFO using 6 to reuse state 37 in 26
+06:48:27,897 root INFO using 7 to reuse state 73 in 486
+06:48:27,897 root INFO using 8 to reuse state 43 in 638
+06:48:27,897 root INFO using 9 to reuse state 85 in 717
+06:48:27,897 root INFO tasks left: 144
+06:52:19,813 root INFO ----- swarm run start -----
+06:52:19,813 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 96
+06:52:19,814 root INFO tasks left: 794
+06:52:19,816 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 92
+06:52:19,816 root INFO using 9 to reuse state 38 in 793
+06:52:19,816 root INFO using 8 to reuse state 25 in 749
+06:52:19,816 root INFO using 4 to reuse state 62 in 549
+06:52:19,816 root INFO using 3 to reuse state 21 in 496
+06:52:19,816 root INFO using 2 to reuse state 7 in 652
+06:52:19,816 root INFO using 1 to reuse state 60 in 461
+06:52:19,816 root INFO tasks left: 784
+06:52:19,819 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 89
+06:52:19,819 root INFO using 8 to reuse state 25 in 781
+06:52:19,819 root INFO using 4 to reuse state 62 in 577
+06:52:19,819 root INFO using 3 to reuse state 21 in 624
+06:52:19,819 root INFO using 2 to reuse state 7 in 692
+06:52:19,819 root INFO using 7 to reuse state 56 in 681
+06:52:19,819 root INFO using 6 to reuse state 63 in 471
+06:52:19,819 root INFO using 0 to reuse state 88 in 463
+06:52:19,819 root INFO tasks left: 774
+06:52:19,822 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 88
+06:52:19,822 root INFO using 4 to reuse state 62 in 596
+06:52:19,822 root INFO using 3 to reuse state 21 in 654
+06:52:19,822 root INFO using 2 to reuse state 7 in 694
+06:52:19,822 root INFO using 7 to reuse state 56 in 777
+06:52:19,822 root INFO using 6 to reuse state 63 in 653
+06:52:19,822 root INFO using 0 to reuse state 88 in 635
+06:52:19,822 root INFO using 9 to reuse state 76 in 485
+06:52:19,822 root INFO using 5 to reuse state 42 in 326
+06:52:19,822 root INFO using 1 to reuse state 75 in 709
+06:52:19,822 root INFO tasks left: 764
+06:52:19,825 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 86
+06:52:19,825 root INFO using 3 to reuse state 21 in 702
+06:52:19,825 root INFO using 2 to reuse state 7 in 760
+06:52:19,825 root INFO using 6 to reuse state 63 in 693
+06:52:19,825 root INFO using 0 to reuse state 88 in 637
+06:52:19,825 root INFO using 9 to reuse state 76 in 565
+06:52:19,825 root INFO using 5 to reuse state 42 in 328
+06:52:19,825 root INFO using 1 to reuse state 75 in 711
+06:52:19,825 root INFO using 8 to reuse state 29 in 707
+06:52:19,825 root INFO tasks left: 754
+06:52:19,827 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 83
+06:52:19,827 root INFO using 6 to reuse state 63 in 695
+06:52:19,827 root INFO using 0 to reuse state 88 in 697
+06:52:19,827 root INFO using 9 to reuse state 76 in 595
+06:52:19,827 root INFO using 5 to reuse state 42 in 754
+06:52:19,828 root INFO using 1 to reuse state 75 in 775
+06:52:19,828 root INFO using 8 to reuse state 29 in 708
+06:52:19,828 root INFO using 4 to reuse state 46 in 460
+06:52:19,828 root INFO tasks left: 744
+06:52:19,830 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 78
+06:52:19,830 root INFO using 0 to reuse state 88 in 761
+06:52:19,830 root INFO using 8 to reuse state 29 in 710
+06:52:19,830 root INFO using 4 to reuse state 46 in 726
+06:52:19,831 root INFO using 7 to reuse state 8 in 444
+06:52:19,831 root INFO using 3 to reuse state 78 in 495
+06:52:19,831 root INFO tasks left: 734
+06:52:19,833 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 76
+06:52:19,833 root INFO using 4 to reuse state 46 in 728
+06:52:19,833 root INFO using 7 to reuse state 8 in 748
+06:52:19,833 root INFO using 3 to reuse state 78 in 559
+06:52:19,833 root INFO using 9 to reuse state 34 in 720
+06:52:19,833 root INFO using 6 to reuse state 72 in 251
+06:52:19,833 root INFO using 5 to reuse state 28 in 231
+06:52:19,833 root INFO using 2 to reuse state 3 in 226
+06:52:19,833 root INFO using 1 to reuse state 41 in 557
+06:52:19,833 root INFO tasks left: 724
+06:52:19,836 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 73
+06:52:19,836 root INFO using 3 to reuse state 78 in 663
+06:52:19,836 root INFO using 6 to reuse state 72 in 262
+06:52:19,836 root INFO using 5 to reuse state 28 in 363
+06:52:19,836 root INFO using 2 to reuse state 3 in 272
+06:52:19,836 root INFO using 1 to reuse state 41 in 737
+06:52:19,836 root INFO using 8 to reuse state 26 in 476
+06:52:19,836 root INFO using 0 to reuse state 5 in 228
+06:52:19,836 root INFO tasks left: 714
+06:52:19,839 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 72
+06:52:19,839 root INFO using 3 to reuse state 78 in 718
+06:52:19,839 root INFO using 6 to reuse state 72 in 264
+06:52:19,839 root INFO using 5 to reuse state 28 in 428
+06:52:19,839 root INFO using 2 to reuse state 3 in 736
+06:52:19,839 root INFO using 8 to reuse state 26 in 562
+06:52:19,839 root INFO using 0 to reuse state 5 in 230
+06:52:19,839 root INFO using 9 to reuse state 71 in 215
+06:52:19,839 root INFO using 7 to reuse state 69 in 175
+06:52:19,839 root INFO using 4 to reuse state 52 in 170
+06:52:19,839 root INFO tasks left: 704
+06:52:19,841 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 69
+06:52:19,841 root INFO using 6 to reuse state 72 in 321
+06:52:19,841 root INFO using 5 to reuse state 28 in 430
+06:52:19,841 root INFO using 0 to reuse state 5 in 362
+06:52:19,842 root INFO using 9 to reuse state 71 in 333
+06:52:19,842 root INFO using 7 to reuse state 69 in 217
+06:52:19,842 root INFO using 4 to reuse state 52 in 352
+06:52:19,842 root INFO using 1 to reuse state 82 in 247
+06:52:19,842 root INFO tasks left: 694
+06:52:19,844 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 69
+06:52:19,844 root INFO using 6 to reuse state 72 in 764
+06:52:19,844 root INFO using 5 to reuse state 28 in 491
+06:52:19,844 root INFO using 0 to reuse state 5 in 406
+06:52:19,845 root INFO using 9 to reuse state 71 in 439
+06:52:19,845 root INFO using 7 to reuse state 69 in 305
+06:52:19,845 root INFO using 4 to reuse state 52 in 445
+06:52:19,845 root INFO using 1 to reuse state 82 in 465
+06:52:19,845 root INFO using 8 to reuse state 50 in 185
+06:52:19,845 root INFO using 3 to reuse state 68 in 161
+06:52:19,845 root INFO using 2 to reuse state 40 in 434
+06:52:19,845 root INFO tasks left: 684
+06:52:19,847 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 68
+06:52:19,847 root INFO using 5 to reuse state 28 in 511
+06:52:19,847 root INFO using 0 to reuse state 5 in 408
+06:52:19,847 root INFO using 9 to reuse state 71 in 455
+06:52:19,847 root INFO using 7 to reuse state 69 in 497
+06:52:19,847 root INFO using 4 to reuse state 52 in 481
+06:52:19,847 root INFO using 1 to reuse state 82 in 734
+06:52:19,847 root INFO using 8 to reuse state 50 in 396
+06:52:19,847 root INFO using 3 to reuse state 68 in 163
+06:52:19,847 root INFO using 2 to reuse state 40 in 589
+06:52:19,847 root INFO tasks left: 674
+06:52:19,850 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 66
+06:52:19,850 root INFO using 5 to reuse state 28 in 513
+06:52:19,850 root INFO using 0 to reuse state 5 in 490
+06:52:19,850 root INFO using 9 to reuse state 71 in 457
+06:52:19,850 root INFO using 4 to reuse state 52 in 564
+06:52:19,850 root INFO using 8 to reuse state 50 in 407
+06:52:19,850 root INFO using 3 to reuse state 68 in 178
+06:52:19,850 root INFO using 2 to reuse state 40 in 763
+06:52:19,850 root INFO using 6 to reuse state 55 in 189
+06:52:19,850 root INFO tasks left: 664
+06:52:19,853 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 65
+06:52:19,853 root INFO using 5 to reuse state 28 in 515
+06:52:19,853 root INFO using 0 to reuse state 5 in 492
+06:52:19,853 root INFO using 9 to reuse state 71 in 645
+06:52:19,853 root INFO using 4 to reuse state 52 in 609
+06:52:19,853 root INFO using 8 to reuse state 50 in 409
+06:52:19,853 root INFO using 3 to reuse state 68 in 187
+06:52:19,853 root INFO using 6 to reuse state 55 in 191
+06:52:19,853 root INFO using 7 to reuse state 6 in 186
+06:52:19,853 root INFO using 1 to reuse state 97 in 311
+06:52:19,853 root INFO tasks left: 654
+06:52:19,856 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 65
+06:52:19,856 root INFO using 5 to reuse state 28 in 517
+06:52:19,856 root INFO using 0 to reuse state 5 in 510
+06:52:19,856 root INFO using 9 to reuse state 71 in 647
+06:52:19,856 root INFO using 4 to reuse state 52 in 611
+06:52:19,856 root INFO using 8 to reuse state 50 in 429
+06:52:19,856 root INFO using 3 to reuse state 68 in 213
+06:52:19,856 root INFO using 6 to reuse state 55 in 212
+06:52:19,856 root INFO using 7 to reuse state 6 in 188
+06:52:19,856 root INFO using 1 to reuse state 97 in 493
+06:52:19,856 root INFO using 2 to reuse state 93 in 139
+06:52:19,856 root INFO tasks left: 644
+06:52:19,859 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 65
+06:52:19,859 root INFO using 5 to reuse state 28 in 519
+06:52:19,859 root INFO using 0 to reuse state 5 in 512
+06:52:19,859 root INFO using 9 to reuse state 71 in 732
+06:52:19,859 root INFO using 4 to reuse state 52 in 613
+06:52:19,859 root INFO using 8 to reuse state 50 in 431
+06:52:19,859 root INFO using 3 to reuse state 68 in 261
+06:52:19,859 root INFO using 6 to reuse state 55 in 275
+06:52:19,859 root INFO using 7 to reuse state 6 in 190
+06:52:19,859 root INFO using 1 to reuse state 97 in 629
+06:52:19,859 root INFO using 2 to reuse state 93 in 310
+06:52:19,859 root INFO tasks left: 634
+06:52:19,861 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 62
+06:52:19,861 root INFO using 5 to reuse state 28 in 521
+06:52:19,861 root INFO using 0 to reuse state 5 in 514
+06:52:19,861 root INFO using 9 to reuse state 71 in 759
+06:52:19,861 root INFO using 8 to reuse state 50 in 537
+06:52:19,861 root INFO using 6 to reuse state 55 in 303
+06:52:19,862 root INFO using 7 to reuse state 6 in 274
+06:52:19,862 root INFO using 1 to reuse state 97 in 665
+06:52:19,862 root INFO tasks left: 624
+06:52:19,864 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 61
+06:52:19,864 root INFO using 5 to reuse state 28 in 536
+06:52:19,865 root INFO using 0 to reuse state 5 in 516
+06:52:19,865 root INFO using 8 to reuse state 50 in 585
+06:52:19,865 root INFO using 6 to reuse state 55 in 315
+06:52:19,865 root INFO using 7 to reuse state 6 in 314
+06:52:19,865 root INFO using 1 to reuse state 97 in 689
+06:52:19,865 root INFO using 4 to reuse state 67 in 171
+06:52:19,865 root INFO using 3 to reuse state 49 in 127
+06:52:19,865 root INFO using 2 to reuse state 57 in 144
+06:52:19,865 root INFO tasks left: 614
+06:52:19,867 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 61
+06:52:19,867 root INFO using 5 to reuse state 28 in 584
+06:52:19,867 root INFO using 0 to reuse state 5 in 518
+06:52:19,867 root INFO using 8 to reuse state 50 in 631
+06:52:19,867 root INFO using 6 to reuse state 55 in 771
+06:52:19,867 root INFO using 7 to reuse state 6 in 442
+06:52:19,867 root INFO using 1 to reuse state 97 in 691
+06:52:19,867 root INFO using 4 to reuse state 67 in 176
+06:52:19,867 root INFO using 3 to reuse state 49 in 142
+06:52:19,867 root INFO using 2 to reuse state 57 in 257
+06:52:19,867 root INFO using 9 to reuse state 95 in 145
+06:52:19,867 root INFO tasks left: 604
+06:52:19,870 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 60
+06:52:19,870 root INFO using 5 to reuse state 28 in 599
+06:52:19,870 root INFO using 0 to reuse state 5 in 520
+06:52:19,870 root INFO using 8 to reuse state 50 in 657
+06:52:19,870 root INFO using 7 to reuse state 6 in 554
+06:52:19,870 root INFO using 1 to reuse state 97 in 735
+06:52:19,870 root INFO using 4 to reuse state 67 in 304
+06:52:19,870 root INFO using 3 to reuse state 49 in 206
+06:52:19,870 root INFO using 2 to reuse state 57 in 285
+06:52:19,870 root INFO using 9 to reuse state 95 in 193
+06:52:19,870 root INFO tasks left: 594
+06:52:19,873 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 58
+06:52:19,873 root INFO using 5 to reuse state 28 in 601
+06:52:19,873 root INFO using 0 to reuse state 5 in 598
+06:52:19,873 root INFO using 8 to reuse state 50 in 659
+06:52:19,873 root INFO using 7 to reuse state 6 in 616
+06:52:19,873 root INFO using 4 to reuse state 67 in 484
+06:52:19,873 root INFO using 2 to reuse state 57 in 287
+06:52:19,873 root INFO using 9 to reuse state 95 in 267
+06:52:19,873 root INFO using 6 to reuse state 27 in 118
+06:52:19,873 root INFO tasks left: 584
+06:52:19,876 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 56
+06:52:19,876 root INFO using 5 to reuse state 28 in 603
+06:52:19,876 root INFO using 0 to reuse state 5 in 600
+06:52:19,876 root INFO using 8 to reuse state 50 in 664
+06:52:19,876 root INFO using 2 to reuse state 57 in 289
+06:52:19,876 root INFO using 9 to reuse state 95 in 487
+06:52:19,876 root INFO using 6 to reuse state 27 in 248
+06:52:19,876 root INFO using 3 to reuse state 94 in 309
+06:52:19,876 root INFO using 1 to reuse state 2 in 270
+06:52:19,876 root INFO tasks left: 574
+06:52:19,878 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 56
+06:52:19,879 root INFO using 5 to reuse state 28 in 628
+06:52:19,879 root INFO using 0 to reuse state 5 in 602
+06:52:19,879 root INFO using 8 to reuse state 50 in 743
+06:52:19,879 root INFO using 2 to reuse state 57 in 291
+06:52:19,879 root INFO using 9 to reuse state 95 in 535
+06:52:19,879 root INFO using 6 to reuse state 27 in 250
+06:52:19,879 root INFO using 3 to reuse state 94 in 615
+06:52:19,879 root INFO using 1 to reuse state 2 in 312
+06:52:19,879 root INFO using 7 to reuse state 54 in 130
+06:52:19,879 root INFO using 4 to reuse state 51 in 94
+06:52:19,879 root INFO tasks left: 564
+06:52:19,882 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 54
+06:52:19,882 root INFO using 5 to reuse state 28 in 630
+06:52:19,882 root INFO using 8 to reuse state 50 in 745
+06:52:19,882 root INFO using 2 to reuse state 57 in 295
+06:52:19,882 root INFO using 9 to reuse state 95 in 539
+06:52:19,882 root INFO using 6 to reuse state 27 in 282
+06:52:19,882 root INFO using 1 to reuse state 2 in 614
+06:52:19,882 root INFO using 7 to reuse state 54 in 165
+06:52:19,882 root INFO using 4 to reuse state 51 in 96
+06:52:19,882 root INFO tasks left: 554
+06:52:19,885 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 54
+06:52:19,885 root INFO using 5 to reuse state 28 in 656
+06:52:19,885 root INFO using 8 to reuse state 50 in 753
+06:52:19,885 root INFO using 2 to reuse state 57 in 297
+06:52:19,885 root INFO using 9 to reuse state 95 in 551
+06:52:19,885 root INFO using 6 to reuse state 27 in 320
+06:52:19,885 root INFO using 1 to reuse state 2 in 648
+06:52:19,885 root INFO using 7 to reuse state 54 in 354
+06:52:19,885 root INFO using 4 to reuse state 51 in 111
+06:52:19,885 root INFO using 3 to reuse state 23 in 84
+06:52:19,885 root INFO using 0 to reuse state 64 in 77
+06:52:19,885 root INFO tasks left: 544
+06:52:19,887 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 54
+06:52:19,887 root INFO using 5 to reuse state 28 in 658
+06:52:19,888 root INFO using 8 to reuse state 50 in 770
+06:52:19,888 root INFO using 2 to reuse state 57 in 299
+06:52:19,888 root INFO using 9 to reuse state 95 in 561
+06:52:19,888 root INFO using 6 to reuse state 27 in 534
+06:52:19,888 root INFO using 1 to reuse state 2 in 650
+06:52:19,888 root INFO using 7 to reuse state 54 in 398
+06:52:19,888 root INFO using 4 to reuse state 51 in 208
+06:52:19,888 root INFO using 3 to reuse state 23 in 86
+06:52:19,888 root INFO using 0 to reuse state 64 in 79
+06:52:19,888 root INFO tasks left: 534
+06:52:19,891 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 52
+06:52:19,891 root INFO using 5 to reuse state 28 in 706
+06:52:19,891 root INFO using 2 to reuse state 57 in 373
+06:52:19,891 root INFO using 9 to reuse state 95 in 741
+06:52:19,891 root INFO using 6 to reuse state 27 in 563
+06:52:19,891 root INFO using 7 to reuse state 54 in 640
+06:52:19,891 root INFO using 4 to reuse state 51 in 210
+06:52:19,891 root INFO using 3 to reuse state 23 in 114
+06:52:19,891 root INFO using 0 to reuse state 64 in 93
+06:52:19,891 root INFO tasks left: 524
+06:52:19,893 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 52
+06:52:19,893 root INFO using 5 to reuse state 28 in 742
+06:52:19,893 root INFO using 2 to reuse state 57 in 375
+06:52:19,893 root INFO using 9 to reuse state 95 in 751
+06:52:19,893 root INFO using 6 to reuse state 27 in 740
+06:52:19,893 root INFO using 7 to reuse state 54 in 666
+06:52:19,893 root INFO using 4 to reuse state 51 in 330
+06:52:19,894 root INFO using 3 to reuse state 23 in 242
+06:52:19,894 root INFO using 0 to reuse state 64 in 95
+06:52:19,894 root INFO using 8 to reuse state 90 in 277
+06:52:19,894 root INFO using 1 to reuse state 17 in 276
+06:52:19,894 root INFO tasks left: 514
+06:52:19,896 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 51
+06:52:19,897 root INFO using 5 to reuse state 28 in 744
+06:52:19,897 root INFO using 2 to reuse state 57 in 449
+06:52:19,897 root INFO using 9 to reuse state 95 in 779
+06:52:19,897 root INFO using 6 to reuse state 27 in 750
+06:52:19,897 root INFO using 7 to reuse state 54 in 721
+06:52:19,897 root INFO using 4 to reuse state 51 in 475
+06:52:19,897 root INFO using 3 to reuse state 23 in 244
+06:52:19,897 root INFO using 0 to reuse state 64 in 97
+06:52:19,897 root INFO using 8 to reuse state 90 in 607
+06:52:19,897 root INFO tasks left: 504
+06:52:19,899 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 51
+06:52:19,899 root INFO using 5 to reuse state 28 in 752
+06:52:19,899 root INFO using 2 to reuse state 57 in 451
+06:52:19,899 root INFO using 9 to reuse state 95 in 791
+06:52:19,899 root INFO using 6 to reuse state 27 in 790
+06:52:19,899 root INFO using 7 to reuse state 54 in 739
+06:52:19,899 root INFO using 4 to reuse state 51 in 480
+06:52:19,899 root INFO using 3 to reuse state 23 in 280
+06:52:19,899 root INFO using 0 to reuse state 64 in 172
+06:52:19,899 root INFO using 8 to reuse state 90 in 633
+06:52:19,899 root INFO using 1 to reuse state 16 in 225
+06:52:19,899 root INFO tasks left: 494
+06:52:19,902 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 49
+06:52:19,902 root INFO using 5 to reuse state 28 in 789
+06:52:19,902 root INFO using 2 to reuse state 57 in 501
+06:52:19,902 root INFO using 7 to reuse state 54 in 746
+06:52:19,902 root INFO using 4 to reuse state 51 in 502
+06:52:19,902 root INFO using 3 to reuse state 23 in 338
+06:52:19,902 root INFO using 0 to reuse state 64 in 174
+06:52:19,902 root INFO using 8 to reuse state 90 in 733
+06:52:19,902 root INFO using 1 to reuse state 16 in 227
+06:52:19,903 root INFO tasks left: 484
+06:52:19,905 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 46
+06:52:19,905 root INFO using 2 to reuse state 57 in 587
+06:52:19,905 root INFO using 4 to reuse state 51 in 504
+06:52:19,905 root INFO using 3 to reuse state 23 in 340
+06:52:19,905 root INFO using 0 to reuse state 64 in 209
+06:52:19,905 root INFO using 1 to reuse state 16 in 273
+06:52:19,905 root INFO using 9 to reuse state 77 in 100
+06:52:19,905 root INFO using 6 to reuse state 99 in 67
+06:52:19,905 root INFO tasks left: 474
+06:52:19,908 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 46
+06:52:19,908 root INFO using 2 to reuse state 57 in 591
+06:52:19,908 root INFO using 4 to reuse state 51 in 506
+06:52:19,908 root INFO using 3 to reuse state 23 in 365
+06:52:19,908 root INFO using 0 to reuse state 64 in 211
+06:52:19,908 root INFO using 1 to reuse state 16 in 414
+06:52:19,908 root INFO using 9 to reuse state 77 in 218
+06:52:19,908 root INFO using 6 to reuse state 99 in 105
+06:52:19,908 root INFO using 8 to reuse state 12 in 66
+06:52:19,908 root INFO using 7 to reuse state 61 in 214
+06:52:19,908 root INFO using 5 to reuse state 74 in 61
+06:52:19,908 root INFO tasks left: 464
+06:52:19,911 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 46
+06:52:19,911 root INFO using 2 to reuse state 57 in 661
+06:52:19,911 root INFO using 4 to reuse state 51 in 594
+06:52:19,911 root INFO using 3 to reuse state 23 in 370
+06:52:19,911 root INFO using 0 to reuse state 64 in 216
+06:52:19,911 root INFO using 1 to reuse state 16 in 556
+06:52:19,911 root INFO using 9 to reuse state 77 in 306
+06:52:19,911 root INFO using 6 to reuse state 99 in 317
+06:52:19,911 root INFO using 8 to reuse state 12 in 104
+06:52:19,912 root INFO using 7 to reuse state 61 in 369
+06:52:19,912 root INFO using 5 to reuse state 74 in 129
+06:52:19,912 root INFO tasks left: 454
+06:52:19,914 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 45
+06:52:19,914 root INFO using 2 to reuse state 57 in 683
+06:52:19,914 root INFO using 4 to reuse state 51 in 608
+06:52:19,914 root INFO using 3 to reuse state 23 in 530
+06:52:19,914 root INFO using 0 to reuse state 64 in 331
+06:52:19,914 root INFO using 9 to reuse state 77 in 337
+06:52:19,914 root INFO using 6 to reuse state 99 in 523
+06:52:19,914 root INFO using 8 to reuse state 12 in 147
+06:52:19,914 root INFO using 7 to reuse state 61 in 400
+06:52:19,914 root INFO using 5 to reuse state 74 in 179
+06:52:19,914 root INFO tasks left: 444
+06:52:19,917 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 45
+06:52:19,917 root INFO using 2 to reuse state 57 in 685
+06:52:19,917 root INFO using 4 to reuse state 51 in 610
+06:52:19,917 root INFO using 3 to reuse state 23 in 532
+06:52:19,917 root INFO using 0 to reuse state 64 in 441
+06:52:19,917 root INFO using 9 to reuse state 77 in 356
+06:52:19,917 root INFO using 6 to reuse state 99 in 579
+06:52:19,917 root INFO using 8 to reuse state 12 in 316
+06:52:19,917 root INFO using 7 to reuse state 61 in 566
+06:52:19,917 root INFO using 5 to reuse state 74 in 555
+06:52:19,917 root INFO using 1 to reuse state 47 in 60
+06:52:19,917 root INFO tasks left: 434
+06:52:19,920 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 45
+06:52:19,920 root INFO using 2 to reuse state 57 in 715
+06:52:19,920 root INFO using 4 to reuse state 51 in 612
+06:52:19,920 root INFO using 3 to reuse state 23 in 558
+06:52:19,920 root INFO using 0 to reuse state 64 in 503
+06:52:19,920 root INFO using 9 to reuse state 77 in 411
+06:52:19,920 root INFO using 6 to reuse state 99 in 581
+06:52:19,920 root INFO using 8 to reuse state 12 in 522
+06:52:19,920 root INFO using 7 to reuse state 61 in 701
+06:52:19,920 root INFO using 5 to reuse state 74 in 617
+06:52:19,920 root INFO using 1 to reuse state 47 in 128
+06:52:19,920 root INFO tasks left: 424
+06:52:19,923 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 43
+06:52:19,923 root INFO using 2 to reuse state 57 in 783
+06:52:19,923 root INFO using 3 to reuse state 23 in 606
+06:52:19,923 root INFO using 0 to reuse state 64 in 505
+06:52:19,923 root INFO using 9 to reuse state 77 in 413
+06:52:19,923 root INFO using 6 to reuse state 99 in 597
+06:52:19,923 root INFO using 8 to reuse state 12 in 578
+06:52:19,923 root INFO using 5 to reuse state 74 in 679
+06:52:19,923 root INFO using 1 to reuse state 47 in 158
+06:52:19,923 root INFO tasks left: 414
+06:52:19,926 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 43
+06:52:19,926 root INFO using 2 to reuse state 57 in 785
+06:52:19,926 root INFO using 3 to reuse state 23 in 626
+06:52:19,926 root INFO using 0 to reuse state 64 in 507
+06:52:19,926 root INFO using 9 to reuse state 77 in 417
+06:52:19,926 root INFO using 6 to reuse state 99 in 619
+06:52:19,926 root INFO using 8 to reuse state 12 in 580
+06:52:19,926 root INFO using 5 to reuse state 74 in 688
+06:52:19,926 root INFO using 1 to reuse state 47 in 160
+06:52:19,926 root INFO using 7 to reuse state 59 in 99
+06:52:19,926 root INFO using 4 to reuse state 44 in 458
+06:52:19,926 root INFO tasks left: 404
+06:52:19,929 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 41
+06:52:19,929 root INFO using 2 to reuse state 57 in 787
+06:52:19,929 root INFO using 3 to reuse state 23 in 704
+06:52:19,929 root INFO using 9 to reuse state 77 in 419
+06:52:19,929 root INFO using 6 to reuse state 99 in 621
+06:52:19,929 root INFO using 8 to reuse state 12 in 618
+06:52:19,929 root INFO using 5 to reuse state 74 in 729
+06:52:19,929 root INFO using 1 to reuse state 47 in 162
+06:52:19,929 root INFO using 7 to reuse state 59 in 131
+06:52:19,929 root INFO tasks left: 394
+06:52:19,932 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 39
+06:52:19,932 root INFO using 9 to reuse state 77 in 488
+06:52:19,932 root INFO using 6 to reuse state 99 in 623
+06:52:19,932 root INFO using 8 to reuse state 12 in 620
+06:52:19,932 root INFO using 5 to reuse state 74 in 731
+06:52:19,932 root INFO using 1 to reuse state 47 in 260
+06:52:19,932 root INFO using 7 to reuse state 59 in 459
+06:52:19,932 root INFO using 4 to reuse state 36 in 122
+06:52:19,932 root INFO using 0 to reuse state 81 in 134
+06:52:19,932 root INFO tasks left: 384
+06:52:19,935 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 38
+06:52:19,935 root INFO using 9 to reuse state 77 in 525
+06:52:19,935 root INFO using 6 to reuse state 99 in 671
+06:52:19,935 root INFO using 8 to reuse state 12 in 622
+06:52:19,935 root INFO using 1 to reuse state 47 in 500
+06:52:19,935 root INFO using 7 to reuse state 59 in 482
+06:52:19,935 root INFO using 4 to reuse state 36 in 194
+06:52:19,935 root INFO using 0 to reuse state 81 in 219
+06:52:19,935 root INFO using 3 to reuse state 84 in 101
+06:52:19,935 root INFO using 2 to reuse state 13 in 68
+06:52:19,935 root INFO tasks left: 374
+06:52:19,938 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 38
+06:52:19,938 root INFO using 9 to reuse state 77 in 605
+06:52:19,938 root INFO using 6 to reuse state 99 in 673
+06:52:19,938 root INFO using 8 to reuse state 12 in 670
+06:52:19,938 root INFO using 1 to reuse state 47 in 727
+06:52:19,938 root INFO using 7 to reuse state 59 in 641
+06:52:19,938 root INFO using 4 to reuse state 36 in 196
+06:52:19,938 root INFO using 0 to reuse state 81 in 220
+06:52:19,938 root INFO using 3 to reuse state 84 in 107
+06:52:19,939 root INFO using 2 to reuse state 13 in 106
+06:52:19,939 root INFO using 5 to reuse state 24 in 246
+06:52:19,939 root INFO tasks left: 364
+06:52:19,941 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 38
+06:52:19,941 root INFO using 9 to reuse state 77 in 642
+06:52:19,941 root INFO using 6 to reuse state 99 in 675
+06:52:19,941 root INFO using 8 to reuse state 12 in 672
+06:52:19,941 root INFO using 1 to reuse state 47 in 730
+06:52:19,941 root INFO using 7 to reuse state 59 in 667
+06:52:19,941 root INFO using 4 to reuse state 36 in 198
+06:52:19,941 root INFO using 0 to reuse state 81 in 235
+06:52:19,941 root INFO using 3 to reuse state 84 in 109
+06:52:19,941 root INFO using 2 to reuse state 13 in 108
+06:52:19,941 root INFO using 5 to reuse state 24 in 560
+06:52:19,941 root INFO tasks left: 354
+06:52:19,944 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 37
+06:52:19,944 root INFO using 9 to reuse state 77 in 755
+06:52:19,944 root INFO using 6 to reuse state 99 in 677
+06:52:19,944 root INFO using 8 to reuse state 12 in 674
+06:52:19,944 root INFO using 7 to reuse state 59 in 696
+06:52:19,945 root INFO using 4 to reuse state 36 in 300
+06:52:19,945 root INFO using 0 to reuse state 81 in 237
+06:52:19,945 root INFO using 3 to reuse state 84 in 307
+06:52:19,945 root INFO using 2 to reuse state 13 in 336
+06:52:19,945 root INFO using 5 to reuse state 24 in 568
+06:52:19,945 root INFO tasks left: 344
+06:52:19,947 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 35
+06:52:19,947 root INFO using 6 to reuse state 99 in 699
+06:52:19,947 root INFO using 8 to reuse state 12 in 676
+06:52:19,947 root INFO using 7 to reuse state 59 in 747
+06:52:19,947 root INFO using 4 to reuse state 36 in 346
+06:52:19,947 root INFO using 0 to reuse state 81 in 241
+06:52:19,947 root INFO using 3 to reuse state 84 in 325
+06:52:19,947 root INFO using 2 to reuse state 13 in 366
+06:52:19,947 root INFO using 1 to reuse state 1 in 146
+06:52:19,947 root INFO tasks left: 334
+06:52:19,950 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 32
+06:52:19,950 root INFO using 8 to reuse state 12 in 698
+06:52:19,950 root INFO using 4 to reuse state 36 in 376
+06:52:19,950 root INFO using 0 to reuse state 81 in 269
+06:52:19,950 root INFO using 3 to reuse state 84 in 327
+06:52:19,950 root INFO using 2 to reuse state 13 in 410
+06:52:19,950 root INFO using 1 to reuse state 1 in 148
+06:52:19,950 root INFO using 5 to reuse state 0 in 332
+06:52:19,951 root INFO tasks left: 324
+06:52:19,953 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 31
+06:52:19,953 root INFO using 4 to reuse state 36 in 378
+06:52:19,953 root INFO using 0 to reuse state 81 in 447
+06:52:19,953 root INFO using 3 to reuse state 84 in 329
+06:52:19,953 root INFO using 2 to reuse state 13 in 412
+06:52:19,953 root INFO using 1 to reuse state 1 in 182
+06:52:19,953 root INFO using 5 to reuse state 0 in 644
+06:52:19,953 root INFO using 9 to reuse state 96 in 713
+06:52:19,953 root INFO using 7 to reuse state 87 in 263
+06:52:19,953 root INFO using 6 to reuse state 53 in 35
+06:52:19,953 root INFO tasks left: 314
+06:52:19,956 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 30
+06:52:19,956 root INFO using 4 to reuse state 36 in 380
+06:52:19,956 root INFO using 0 to reuse state 81 in 466
+06:52:19,956 root INFO using 3 to reuse state 84 in 357
+06:52:19,956 root INFO using 2 to reuse state 13 in 524
+06:52:19,956 root INFO using 1 to reuse state 1 in 222
+06:52:19,956 root INFO using 5 to reuse state 0 in 646
+06:52:19,956 root INFO using 7 to reuse state 87 in 265
+06:52:19,956 root INFO using 6 to reuse state 53 in 41
+06:52:19,956 root INFO using 8 to reuse state 39 in 34
+06:52:19,956 root INFO tasks left: 304
+06:52:19,959 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 28
+06:52:19,959 root INFO using 4 to reuse state 36 in 382
+06:52:19,960 root INFO using 0 to reuse state 81 in 468
+06:52:19,960 root INFO using 3 to reuse state 84 in 473
+06:52:19,960 root INFO using 1 to reuse state 1 in 334
+06:52:19,960 root INFO using 7 to reuse state 87 in 765
+06:52:19,960 root INFO using 6 to reuse state 53 in 149
+06:52:19,960 root INFO using 8 to reuse state 39 in 359
+06:52:19,960 root INFO using 9 to reuse state 86 in 23
+06:52:19,960 root INFO tasks left: 294
+06:52:19,962 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 27
+06:52:19,962 root INFO using 4 to reuse state 36 in 415
+06:52:19,962 root INFO using 0 to reuse state 81 in 552
+06:52:19,962 root INFO using 3 to reuse state 84 in 489
+06:52:19,962 root INFO using 1 to reuse state 1 in 358
+06:52:19,962 root INFO using 6 to reuse state 53 in 183
+06:52:19,963 root INFO using 8 to reuse state 39 in 454
+06:52:19,963 root INFO using 9 to reuse state 86 in 155
+06:52:19,963 root INFO using 5 to reuse state 32 in 22
+06:52:19,963 root INFO using 2 to reuse state 79 in 464
+06:52:19,963 root INFO tasks left: 284
+06:52:19,965 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 25
+06:52:19,966 root INFO using 4 to reuse state 36 in 478
+06:52:19,966 root INFO using 3 to reuse state 84 in 643
+06:52:19,966 root INFO using 1 to reuse state 1 in 360
+06:52:19,966 root INFO using 6 to reuse state 53 in 223
+06:52:19,966 root INFO using 8 to reuse state 39 in 456
+06:52:19,966 root INFO using 9 to reuse state 86 in 345
+06:52:19,966 root INFO using 5 to reuse state 32 in 344
+06:52:19,966 root INFO using 7 to reuse state 19 in 74
+06:52:19,966 root INFO tasks left: 274
+06:52:19,968 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 24
+06:52:19,968 root INFO using 4 to reuse state 36 in 634
+06:52:19,968 root INFO using 1 to reuse state 1 in 402
+06:52:19,968 root INFO using 6 to reuse state 53 in 335
+06:52:19,969 root INFO using 8 to reuse state 39 in 669
+06:52:19,969 root INFO using 9 to reuse state 86 in 435
+06:52:19,969 root INFO using 5 to reuse state 32 in 498
+06:52:19,969 root INFO using 7 to reuse state 19 in 76
+06:52:19,969 root INFO using 2 to reuse state 66 in 63
+06:52:19,969 root INFO using 0 to reuse state 30 in 120
+06:52:19,969 root INFO tasks left: 264
+06:52:19,972 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 23
+06:52:19,972 root INFO using 4 to reuse state 36 in 636
+06:52:19,972 root INFO using 1 to reuse state 1 in 404
+06:52:19,972 root INFO using 6 to reuse state 53 in 361
+06:52:19,972 root INFO using 9 to reuse state 86 in 499
+06:52:19,972 root INFO using 5 to reuse state 32 in 588
+06:52:19,972 root INFO using 7 to reuse state 19 in 78
+06:52:19,972 root INFO using 2 to reuse state 66 in 438
+06:52:19,972 root INFO using 0 to reuse state 30 in 152
+06:52:19,972 root INFO using 3 to reuse state 4 in 42
+06:52:19,972 root INFO tasks left: 254
+06:52:19,975 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 22
+06:52:19,975 root INFO using 1 to reuse state 1 in 508
+06:52:19,975 root INFO using 6 to reuse state 53 in 403
+06:52:19,975 root INFO using 9 to reuse state 86 in 649
+06:52:19,975 root INFO using 5 to reuse state 32 in 762
+06:52:19,975 root INFO using 7 to reuse state 19 in 110
+06:52:19,975 root INFO using 2 to reuse state 66 in 583
+06:52:19,975 root INFO using 0 to reuse state 30 in 252
+06:52:19,975 root INFO using 3 to reuse state 4 in 440
+06:52:19,975 root INFO using 8 to reuse state 89 in 767
+06:52:19,975 root INFO tasks left: 244
+06:52:19,978 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 20
+06:52:19,978 root INFO using 1 to reuse state 1 in 668
+06:52:19,978 root INFO using 6 to reuse state 53 in 405
+06:52:19,978 root INFO using 9 to reuse state 86 in 651
+06:52:19,978 root INFO using 7 to reuse state 19 in 678
+06:52:19,978 root INFO using 0 to reuse state 30 in 283
+06:52:19,978 root INFO using 3 to reuse state 4 in 690
+06:52:19,978 root INFO using 8 to reuse state 89 in 769
+06:52:19,978 root INFO using 4 to reuse state 80 in 133
+06:52:19,978 root INFO tasks left: 234
+06:52:19,981 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 17
+06:52:19,981 root INFO using 6 to reuse state 53 in 509
+06:52:19,981 root INFO using 7 to reuse state 19 in 788
+06:52:19,981 root INFO using 0 to reuse state 30 in 284
+06:52:19,981 root INFO using 3 to reuse state 4 in 774
+06:52:19,981 root INFO using 4 to reuse state 80 in 169
+06:52:19,981 root INFO using 5 to reuse state 98 in 53
+06:52:19,981 root INFO using 2 to reuse state 45 in 71
+06:52:19,981 root INFO tasks left: 224
+06:52:19,984 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 16
+06:52:19,984 root INFO using 6 to reuse state 53 in 548
+06:52:19,984 root INFO using 0 to reuse state 30 in 286
+06:52:19,984 root INFO using 3 to reuse state 4 in 792
+06:52:19,984 root INFO using 4 to reuse state 80 in 177
+06:52:19,984 root INFO using 5 to reuse state 98 in 123
+06:52:19,984 root INFO using 2 to reuse state 45 in 301
+06:52:19,984 root INFO using 9 to reuse state 85 in 55
+06:52:19,984 root INFO using 8 to reuse state 43 in 54
+06:52:19,984 root INFO using 1 to reuse state 58 in 25
+06:52:19,984 root INFO tasks left: 214
+06:52:19,987 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 14
+06:52:19,987 root INFO using 0 to reuse state 30 in 288
+06:52:19,987 root INFO using 4 to reuse state 80 in 308
+06:52:19,987 root INFO using 5 to reuse state 98 in 195
+06:52:19,987 root INFO using 2 to reuse state 45 in 347
+06:52:19,987 root INFO using 9 to reuse state 85 in 85
+06:52:19,987 root INFO using 8 to reuse state 43 in 83
+06:52:19,987 root INFO using 1 to reuse state 58 in 27
+06:52:19,987 root INFO using 7 to reuse state 37 in 24
+06:52:19,987 root INFO tasks left: 204
+06:52:19,990 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 14
+06:52:19,990 root INFO using 0 to reuse state 30 in 290
+06:52:19,990 root INFO using 4 to reuse state 80 in 625
+06:52:19,990 root INFO using 5 to reuse state 98 in 197
+06:52:19,990 root INFO using 2 to reuse state 45 in 377
+06:52:19,990 root INFO using 9 to reuse state 85 in 87
+06:52:19,990 root INFO using 8 to reuse state 43 in 90
+06:52:19,990 root INFO using 1 to reuse state 58 in 29
+06:52:19,990 root INFO using 7 to reuse state 37 in 26
+06:52:19,990 root INFO using 6 to reuse state 73 in 51
+06:52:19,990 root INFO using 3 to reuse state 35 in 50
+06:52:19,990 root INFO tasks left: 194
+06:52:19,993 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 14
+06:52:19,993 root INFO using 0 to reuse state 30 in 292
+06:52:19,993 root INFO using 4 to reuse state 80 in 655
+06:52:19,993 root INFO using 5 to reuse state 98 in 199
+06:52:19,993 root INFO using 2 to reuse state 45 in 379
+06:52:19,993 root INFO using 9 to reuse state 85 in 91
+06:52:19,993 root INFO using 8 to reuse state 43 in 140
+06:52:19,993 root INFO using 1 to reuse state 58 in 31
+06:52:19,993 root INFO using 7 to reuse state 37 in 28
+06:52:19,993 root INFO using 6 to reuse state 73 in 153
+06:52:19,993 root INFO using 3 to reuse state 35 in 121
+06:52:19,993 root INFO tasks left: 184
+06:52:19,996 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 14
+06:52:19,996 root INFO using 0 to reuse state 30 in 342
+06:52:19,996 root INFO using 4 to reuse state 80 in 703
+06:52:19,996 root INFO using 5 to reuse state 98 in 381
+06:52:19,996 root INFO using 2 to reuse state 45 in 394
+06:52:19,996 root INFO using 9 to reuse state 85 in 115
+06:52:19,996 root INFO using 8 to reuse state 43 in 156
+06:52:19,996 root INFO using 1 to reuse state 58 in 89
+06:52:19,996 root INFO using 7 to reuse state 37 in 30
+06:52:19,996 root INFO using 6 to reuse state 73 in 266
+06:52:19,996 root INFO using 3 to reuse state 35 in 138
+06:52:19,996 root INFO tasks left: 174
+06:52:19,999 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 13
+06:52:19,999 root INFO using 0 to reuse state 30 in 448
+06:52:19,999 root INFO using 4 to reuse state 80 in 766
+06:52:19,999 root INFO using 5 to reuse state 98 in 383
+06:52:19,999 root INFO using 9 to reuse state 85 in 141
+06:52:19,999 root INFO using 8 to reuse state 43 in 202
+06:52:19,999 root INFO using 1 to reuse state 58 in 143
+06:52:19,999 root INFO using 7 to reuse state 37 in 88
+06:52:19,999 root INFO using 6 to reuse state 73 in 477
+06:52:19,999 root INFO using 3 to reuse state 35 in 253
+06:52:19,999 root INFO tasks left: 164
+06:52:20,2 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 13
+06:52:20,2 root INFO using 0 to reuse state 30 in 450
+06:52:20,2 root INFO using 4 to reuse state 80 in 768
+06:52:20,2 root INFO using 5 to reuse state 98 in 395
+06:52:20,2 root INFO using 9 to reuse state 85 in 157
+06:52:20,2 root INFO using 8 to reuse state 43 in 204
+06:52:20,2 root INFO using 1 to reuse state 58 in 207
+06:52:20,2 root INFO using 7 to reuse state 37 in 124
+06:52:20,2 root INFO using 6 to reuse state 73 in 486
+06:52:20,2 root INFO using 3 to reuse state 35 in 256
+06:52:20,2 root INFO using 2 to reuse state 48 in 81
+06:52:20,2 root INFO tasks left: 154
+06:52:20,5 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 12
+06:52:20,5 root INFO using 0 to reuse state 30 in 586
+06:52:20,5 root INFO using 5 to reuse state 98 in 479
+06:52:20,5 root INFO using 9 to reuse state 85 in 203
+06:52:20,5 root INFO using 8 to reuse state 43 in 243
+06:52:20,5 root INFO using 1 to reuse state 58 in 385
+06:52:20,5 root INFO using 7 to reuse state 37 in 126
+06:52:20,5 root INFO using 6 to reuse state 73 in 550
+06:52:20,5 root INFO using 3 to reuse state 35 in 293
+06:52:20,5 root INFO using 2 to reuse state 48 in 113
+06:52:20,5 root INFO tasks left: 144
+06:52:20,8 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 11
+06:52:20,9 root INFO using 0 to reuse state 30 in 712
+06:52:20,9 root INFO using 9 to reuse state 85 in 205
+06:52:20,9 root INFO using 8 to reuse state 43 in 245
+06:52:20,9 root INFO using 1 to reuse state 58 in 387
+06:52:20,9 root INFO using 7 to reuse state 37 in 384
+06:52:20,9 root INFO using 6 to reuse state 73 in 569
+06:52:20,9 root INFO using 3 to reuse state 35 in 294
+06:52:20,9 root INFO using 2 to reuse state 48 in 164
+06:52:20,9 root INFO using 4 to reuse state 20 in 80
+06:52:20,9 root INFO tasks left: 134
+06:52:20,11 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 9
+06:52:20,11 root INFO using 9 to reuse state 85 in 259
+06:52:20,11 root INFO using 8 to reuse state 43 in 258
+06:52:20,11 root INFO using 1 to reuse state 58 in 389
+06:52:20,11 root INFO using 7 to reuse state 37 in 386
+06:52:20,11 root INFO using 3 to reuse state 35 in 296
+06:52:20,11 root INFO using 2 to reuse state 48 in 201
+06:52:20,11 root INFO using 4 to reuse state 20 in 112
+06:52:20,11 root INFO using 5 to reuse state 83 in 47
+06:52:20,11 root INFO tasks left: 124
+06:52:20,14 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 9
+06:52:20,14 root INFO using 9 to reuse state 85 in 341
+06:52:20,14 root INFO using 8 to reuse state 43 in 281
+06:52:20,14 root INFO using 1 to reuse state 58 in 391
+06:52:20,14 root INFO using 7 to reuse state 37 in 388
+06:52:20,14 root INFO using 3 to reuse state 35 in 298
+06:52:20,15 root INFO using 2 to reuse state 48 in 279
+06:52:20,15 root INFO using 4 to reuse state 20 in 278
+06:52:20,15 root INFO using 5 to reuse state 83 in 135
+06:52:20,15 root INFO using 6 to reuse state 18 in 16
+06:52:20,15 root INFO tasks left: 115
+06:52:20,17 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 9
+06:52:20,17 root INFO using 9 to reuse state 85 in 349
+06:52:20,17 root INFO using 8 to reuse state 43 in 339
+06:52:20,17 root INFO using 1 to reuse state 58 in 397
+06:52:20,17 root INFO using 7 to reuse state 37 in 390
+06:52:20,17 root INFO using 3 to reuse state 35 in 343
+06:52:20,17 root INFO using 2 to reuse state 48 in 421
+06:52:20,17 root INFO using 4 to reuse state 20 in 420
+06:52:20,17 root INFO using 5 to reuse state 83 in 181
+06:52:20,17 root INFO using 6 to reuse state 18 in 46
+06:52:20,17 root INFO tasks left: 106
+06:52:20,20 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 9
+06:52:20,20 root INFO using 9 to reuse state 85 in 351
+06:52:20,20 root INFO using 8 to reuse state 43 in 348
+06:52:20,20 root INFO using 1 to reuse state 58 in 433
+06:52:20,20 root INFO using 7 to reuse state 37 in 432
+06:52:20,20 root INFO using 3 to reuse state 35 in 372
+06:52:20,20 root INFO using 2 to reuse state 48 in 423
+06:52:20,20 root INFO using 4 to reuse state 20 in 422
+06:52:20,20 root INFO using 5 to reuse state 83 in 221
+06:52:20,20 root INFO using 6 to reuse state 18 in 48
+06:52:20,20 root INFO tasks left: 97
+06:52:20,23 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 9
+06:52:20,23 root INFO using 9 to reuse state 85 in 371
+06:52:20,23 root INFO using 8 to reuse state 43 in 350
+06:52:20,23 root INFO using 1 to reuse state 58 in 453
+06:52:20,23 root INFO using 7 to reuse state 37 in 452
+06:52:20,23 root INFO using 3 to reuse state 35 in 374
+06:52:20,23 root INFO using 2 to reuse state 48 in 425
+06:52:20,23 root INFO using 4 to reuse state 20 in 424
+06:52:20,23 root INFO using 5 to reuse state 83 in 233
+06:52:20,23 root INFO using 6 to reuse state 18 in 232
+06:52:20,23 root INFO tasks left: 88
+06:52:20,125 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 7
+06:52:20,126 root INFO using 9 to reuse state 85 in 393
+06:52:20,126 root INFO using 8 to reuse state 43 in 392
+06:52:20,126 root INFO using 3 to reuse state 35 in 538
+06:52:20,126 root INFO using 2 to reuse state 48 in 427
+06:52:20,126 root INFO using 4 to reuse state 20 in 426
+06:52:20,126 root INFO using 5 to reuse state 83 in 239
+06:52:20,126 root INFO using 6 to reuse state 18 in 234
+06:52:20,126 root INFO tasks left: 79
+06:52:20,128 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 7
+06:52:20,128 root INFO using 9 to reuse state 85 in 531
+06:52:20,128 root INFO using 8 to reuse state 43 in 540
+06:52:20,128 root INFO using 3 to reuse state 35 in 590
+06:52:20,128 root INFO using 2 to reuse state 48 in 462
+06:52:20,128 root INFO using 4 to reuse state 20 in 776
+06:52:20,128 root INFO using 5 to reuse state 83 in 319
+06:52:20,128 root INFO using 6 to reuse state 18 in 236
+06:52:20,128 root INFO tasks left: 72
+06:52:20,130 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 6
+06:52:20,130 root INFO using 9 to reuse state 85 in 533
+06:52:20,130 root INFO using 8 to reuse state 43 in 542
+06:52:20,130 root INFO using 3 to reuse state 35 in 660
+06:52:20,130 root INFO using 4 to reuse state 20 in 780
+06:52:20,130 root INFO using 5 to reuse state 83 in 401
+06:52:20,130 root INFO using 6 to reuse state 18 in 238
+06:52:20,130 root INFO tasks left: 65
+06:52:20,132 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,133 root INFO using 9 to reuse state 85 in 541
+06:52:20,133 root INFO using 8 to reuse state 43 in 544
+06:52:20,133 root INFO using 3 to reuse state 35 in 682
+06:52:20,133 root INFO using 5 to reuse state 83 in 467
+06:52:20,133 root INFO using 6 to reuse state 18 in 240
+06:52:20,133 root INFO tasks left: 59
+06:52:20,134 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,134 root INFO using 9 to reuse state 85 in 543
+06:52:20,134 root INFO using 8 to reuse state 43 in 546
+06:52:20,134 root INFO using 3 to reuse state 35 in 684
+06:52:20,134 root INFO using 5 to reuse state 83 in 469
+06:52:20,134 root INFO using 6 to reuse state 18 in 318
+06:52:20,134 root INFO tasks left: 54
+06:52:20,136 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,136 root INFO using 9 to reuse state 85 in 545
+06:52:20,136 root INFO using 8 to reuse state 43 in 570
+06:52:20,136 root INFO using 3 to reuse state 35 in 714
+06:52:20,136 root INFO using 5 to reuse state 83 in 527
+06:52:20,136 root INFO using 6 to reuse state 18 in 367
+06:52:20,136 root INFO tasks left: 49
+06:52:20,138 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,138 root INFO using 9 to reuse state 85 in 547
+06:52:20,138 root INFO using 8 to reuse state 43 in 572
+06:52:20,138 root INFO using 3 to reuse state 35 in 778
+06:52:20,138 root INFO using 5 to reuse state 83 in 529
+06:52:20,138 root INFO using 6 to reuse state 18 in 368
+06:52:20,138 root INFO tasks left: 44
+06:52:20,139 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,140 root INFO using 9 to reuse state 85 in 571
+06:52:20,140 root INFO using 8 to reuse state 43 in 574
+06:52:20,140 root INFO using 3 to reuse state 35 in 782
+06:52:20,140 root INFO using 5 to reuse state 83 in 553
+06:52:20,140 root INFO using 6 to reuse state 18 in 416
+06:52:20,140 root INFO tasks left: 39
+06:52:20,141 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 5
+06:52:20,141 root INFO using 9 to reuse state 85 in 573
+06:52:20,141 root INFO using 8 to reuse state 43 in 592
+06:52:20,141 root INFO using 3 to reuse state 35 in 784
+06:52:20,141 root INFO using 5 to reuse state 83 in 567
+06:52:20,141 root INFO using 6 to reuse state 18 in 418
+06:52:20,141 root INFO tasks left: 34
+06:52:20,143 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 4
+06:52:20,143 root INFO using 9 to reuse state 85 in 575
+06:52:20,143 root INFO using 8 to reuse state 43 in 627
+06:52:20,143 root INFO using 3 to reuse state 35 in 786
+06:52:20,143 root INFO using 6 to reuse state 18 in 446
+06:52:20,143 root INFO tasks left: 29
+06:52:20,145 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,145 root INFO using 9 to reuse state 85 in 593
+06:52:20,145 root INFO using 8 to reuse state 43 in 638
+06:52:20,145 root INFO using 6 to reuse state 18 in 472
+06:52:20,145 root INFO tasks left: 25
+06:52:20,146 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,146 root INFO using 9 to reuse state 85 in 639
+06:52:20,146 root INFO using 8 to reuse state 43 in 662
+06:52:20,146 root INFO using 6 to reuse state 18 in 494
+06:52:20,146 root INFO tasks left: 22
+06:52:20,147 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,147 root INFO using 9 to reuse state 85 in 687
+06:52:20,147 root INFO using 8 to reuse state 43 in 686
+06:52:20,147 root INFO using 6 to reuse state 18 in 526
+06:52:20,147 root INFO tasks left: 19
+06:52:20,148 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,148 root INFO using 9 to reuse state 85 in 705
+06:52:20,148 root INFO using 8 to reuse state 43 in 716
+06:52:20,148 root INFO using 6 to reuse state 18 in 528
+06:52:20,148 root INFO tasks left: 16
+06:52:20,149 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,149 root INFO using 9 to reuse state 85 in 717
+06:52:20,149 root INFO using 8 to reuse state 43 in 722
+06:52:20,149 root INFO using 6 to reuse state 18 in 582
+06:52:20,149 root INFO tasks left: 13
+06:52:20,151 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,151 root INFO using 9 to reuse state 85 in 719
+06:52:20,151 root INFO using 8 to reuse state 43 in 724
+06:52:20,151 root INFO using 6 to reuse state 18 in 604
+06:52:20,151 root INFO tasks left: 10
+06:52:20,152 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,152 root INFO using 9 to reuse state 85 in 723
+06:52:20,152 root INFO using 8 to reuse state 43 in 756
+06:52:20,152 root INFO using 6 to reuse state 18 in 700
+06:52:20,152 root INFO tasks left: 7
+06:52:20,153 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 3
+06:52:20,153 root INFO using 9 to reuse state 85 in 725
+06:52:20,153 root INFO using 8 to reuse state 43 in 773
+06:52:20,153 root INFO using 6 to reuse state 18 in 758
+06:52:20,153 root INFO tasks left: 4
+06:52:20,154 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 1
+06:52:20,154 root INFO using 9 to reuse state 85 in 757
+06:52:20,154 root INFO tasks left: 1
+06:52:20,157 root INFO free workers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], task queue size 0
+06:52:20,157 root INFO tasks left: 0
+06:52:20,157 root INFO Overmind run finished successfully with 92 iterations, elasped time 0.34360456466674805 sec.

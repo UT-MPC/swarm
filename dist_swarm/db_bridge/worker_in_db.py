@@ -6,10 +6,10 @@ from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, TASK_DETAILS, TASK_I
                       WTIMESTAMP, ACTION_TYPE, TIME
 
 class WorkerInDB():
-    def __init__(self, table_name, worker_id):    
+    def __init__(self, swarm_name, worker_namespace, worker_id):    
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
-        self.table = self.dynamodb.Table(table_name+'-worker-state')
-        self.finished_tasks_table = self.dynamodb.Table(table_name+'-finished-tasks')
+        self.table = self.dynamodb.Table(worker_namespace+'-worker-state')
+        self.finished_tasks_table = self.dynamodb.Table(swarm_name+'-finished-tasks')
         self.worker_id = worker_id
 
         self.fetch_status()

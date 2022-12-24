@@ -19,7 +19,8 @@ from dynamo_db import TASK_END, TASK_FAILED, TASK_START, TASK_REALTIME_TIMEOUT
 # @TODO implement timeout here
 def run_task(worker_status, worker_id, task_config, device_state_cache):
     swarm_name = task_config['swarm_name']
-    worker_in_db = WorkerInDB(swarm_name, worker_id)
+    worker_namespace = task_config['worker_namespace']
+    worker_in_db = WorkerInDB(swarm_name, worker_namespace, worker_id)
     if worker_status != STOPPED:
         logging.info(f"RPC call for a new task {task_config['task_id']} is made while worker is busy")
         worker_in_db.update_finished_task(task_config['task_id'], False)
@@ -39,6 +40,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         func_list = task_config['func_list']
         device_load_config = task_config['load_config']
         timeout = task_config['timeout']
+        worker_namespace = task_config['worker_namespace']
         real_time_mode = task_config['real_time_mode']
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])

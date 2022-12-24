@@ -32,8 +32,9 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
 
     ### gRPC methods
     def SetWorkerInfo(self, request, context):
+        self.cache = {'device_states' : {}}   # clear cache
         self.worker_id = request.worker_id
-        self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_id)
+        self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
         self.worker_status = self.worker_in_db.status
         logging.info(f"worker id set to {self.worker_id}")
         return Status(status=self.worker_status)

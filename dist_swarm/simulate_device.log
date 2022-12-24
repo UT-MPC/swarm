@@ -71,3 +71,75 @@ INFO:root:Running task 0 in worker 0
 INFO:root:cached is dict_keys(['0'])
 INFO:root:device state 0 loaded from cache
 INFO:root:-- Task 0 successfully finished --
+2022-12-24 06:59:39,906,906 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 46, in RunTask
+    run_task_thread = threading.Thread(target=run_task, args=(self.worker_status, self.worker_id, config, self.cache))
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+
+2022-12-24 06:59:39,906,906 grpc._server ERROR Exception calling application: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 46, in RunTask
+    run_task_thread = threading.Thread(target=run_task, args=(self.worker_status, self.worker_id, config, self.cache))
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 52, in RunTask
+    return Status(status=self.worker_status)
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+2022-12-24 07:00:16,825,825 grpc._server ERROR Exception calling application: __init__() missing 1 required positional argument: 'worker_id'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 37, in SetWorkerInfo
+    self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_id)
+TypeError: __init__() missing 1 required positional argument: 'worker_id'
+2022-12-24 07:01:33,748,748 grpc._server ERROR Exception calling application: __init__() missing 1 required positional argument: 'worker_id'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 37, in SetWorkerInfo
+    self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_id)
+TypeError: __init__() missing 1 required positional argument: 'worker_id'
+2022-12-24 07:03:33,785,785 grpc._server ERROR Exception calling application: __init__() missing 1 required positional argument: 'worker_id'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 37, in SetWorkerInfo
+    self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_id)
+TypeError: __init__() missing 1 required positional argument: 'worker_id'
+2022-12-24 08:03:38,574,574 grpc._server ERROR Exception calling application: An error occurred (ResourceNotFoundException) when calling the Query operation: Requested resource not found
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 37, in SetWorkerInfo
+    self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
+  File "../dist_swarm/db_bridge/worker_in_db.py", line 15, in __init__
+    self.fetch_status()
+  File "../dist_swarm/db_bridge/worker_in_db.py", line 22, in fetch_status
+    KeyConditionExpression=Key(WORKER_ID).eq(self.worker_id))
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/factory.py", line 520, in do_action
+    response = action(self, *args, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/action.py", line 83, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the Query operation: Requested resource not found
+2022-12-24 08:04:42,313,313 root INFO worker id set to 0
+2022-12-24 08:05:08,195,195 root INFO Running task 0 in worker 0
+2022-12-24 08:05:08,195,195 root INFO cached is dict_keys([])
+2022-12-24 08:59:18,553,553 root INFO worker id set to 0
+2022-12-24 08:59:24,309,309 root INFO Running task 0 in worker 0
+2022-12-24 08:59:24,309,309 root INFO cached is dict_keys([])
+2022-12-24 09:02:40,430,430 root INFO worker id set to 0
+2022-12-24 09:02:42,797,797 root INFO Running task 0 in worker 0
+2022-12-24 09:02:42,797,797 root INFO cached is dict_keys([])
+2022-12-24 09:03:46,750,750 root INFO worker id set to 0
+2022-12-24 09:03:48,419,419 root INFO Running task 0 in worker 0
+2022-12-24 09:03:48,420,420 root INFO cached is dict_keys([])
+2022-12-24 09:04:27,749,749 root INFO -- Task 0 successfully finished --
