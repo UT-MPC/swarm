@@ -143,3 +143,11 @@ botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotF
 2022-12-24 09:03:48,419,419 root INFO Running task 0 in worker 0
 2022-12-24 09:03:48,420,420 root INFO cached is dict_keys([])
 2022-12-24 09:04:27,749,749 root INFO -- Task 0 successfully finished --
+2022-12-26 06:25:05,499,499 root INFO worker id set to 0
+2022-12-26 06:25:14,672,672 root INFO Running task 0 in worker 0
+2022-12-26 06:25:14,672,672 root INFO cached is dict_keys([])
+2022-12-26 06:25:55,297,297 root INFO Running task 0 in worker 0
+2022-12-26 06:25:55,297,297 root INFO cached is dict_keys([])
+2022-12-26 06:30:03,135,135 root INFO worker id set to 0
+2022-12-26 06:30:04,740,740 root INFO Running task 0 in worker 0
+2022-12-26 06:30:04,740,740 root INFO cached is dict_keys([])

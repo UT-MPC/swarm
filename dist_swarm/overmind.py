@@ -328,7 +328,7 @@ class Overmind():
 
             # get "Stopped" workers and check if one of them holds recent device state
             # TODO prevent worker_dbs to be initialized multiple times
-            worker_dbs = [WorkerInDB(self.swarm_name, id) for id, ip in enumerate(self.worker_nodes)]
+            worker_dbs = [WorkerInDB(self.swarm_name, self.worker_namespace, id) for id, ip in enumerate(self.worker_nodes)]
             
 
             task_id_to_worker = {}

@@ -1,5 +1,5 @@
 {
-    "swarm_name": "ovm_example_100_levy",
+    "swarm_name": "ovm_example_100_levy_rt_mode",
     "worker_namespace": "ds-deployment",
     "start": 10,
     "end": 30,

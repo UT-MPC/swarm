@@ -32,6 +32,7 @@ ERROR_MSG = "ErrorMsg"
 
 # Action Types
 WORKER_CREATED = "WorkerCreated"
+WORKER_ADDED = "WorkerAdded"  # worker added to a swarm
 TASK_START = "TaskStart"
 TASK_FAILED = "TaskFailed"
 TASK_TIMEOUT = "TaskTimeout"
@@ -42,4 +43,5 @@ TASK_REALTIME_TIMEOUT = "TaskRealTimeTimeout"  # timeout in real-time mode
 TASK_ID = "TaskId"
 IS_FINISHED = "IsFinished"
 IS_PROCESSED = "IsProcessed"  # is it processed by overmind controller
+IS_TIMED_OUT = "IsTimedOut"  # timed out in swarm context. the encounter was not long enough
 TIME = "Time"

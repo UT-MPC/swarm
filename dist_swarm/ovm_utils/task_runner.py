@@ -66,6 +66,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
                 load_config = device_load_config[str(ngbr)]
             neighbors.append(load_device(swarm_name, ngbr, **load_config))
         
+        realtime_timed_out = False
         # invoke function 
         for i in range(len(func_list)):
             if func_list[i]["func_name"][0] != '!':
@@ -80,6 +81,10 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
                 if not real_time_mode or real_time_timeout >= measured_time:
                     device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
                     device_in_db.update_timestamp(end)
+                    device_in_db.update_encounter_history(TASK_END)
+                else:
+                    device_in_db.update_encounter_history(TASK_REALTIME_TIMEOUT)
+                    realtime_timed_out = True
 
         # save to cache before saving to DB
         # because save_device deletes model and data from the device
@@ -105,7 +110,7 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
     try:
         worker_in_db.update_status(STOPPED) 
         worker_in_db.append_history(**new_history)
-        worker_in_db.update_finished_task(task_id, True, Decimal(measured_time))
+        worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 

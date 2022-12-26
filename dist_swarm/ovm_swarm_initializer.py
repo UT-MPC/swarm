@@ -19,9 +19,9 @@ from get_dataset import get_dataset
 from get_optimizer import get_optimizer
 from get_device import get_device_class
 import models as custom_models
-from dynamo_db import DEVICE_ID, GOAL_DIST, HOSTNAME, IS_PROCESSED, LOCAL_DIST, MODEL_INFO, TASK_ID, TOTAL_ENC_IDX,\
+from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, GOAL_DIST, HOSTNAME, IS_PROCESSED, LOCAL_DIST, MODEL_INFO, TASK_ID, TOTAL_ENC_IDX,\
     DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, \
-    MODEL_INFO, WORKER_ID, WORKER_STATUS, WORKER_HISTORY, WORKER_CREATED, WTIMESTAMP, ACTION_TYPE
+    MODEL_INFO, WORKER_ADDED, WORKER_ID, WORKER_STATUS, WORKER_HISTORY, WORKER_CREATED, WTIMESTAMP, ACTION_TYPE
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from aws_settings import REGION
@@ -67,20 +67,22 @@ class OVMSwarmInitializer():
             pass 
 
     def _create_finished_tasks_table(self, tag):
-        self._create_table(TASK_ID, tag+'-finished-tasks', 100, 100, IS_PROCESSED)
+        self._create_table(TASK_ID, tag+'-finished-tasks', 20, 20, IS_PROCESSED)
 
     def _create_db_state_table(self, tag):
-        self._create_table(DEVICE_ID, tag, 100, 100)
+        self._create_table(DEVICE_ID, tag, 20, 20)
 
     def _get_worker_state_table_name(self):
         return self.worker_namespace + '-worker-state'
 
-    def _create_worker_state_table(self, tag):
-        self._create_table(WORKER_ID, self._get_worker_state_table_name(), 100, 100)
+    def _create_worker_state_table(self):
+        self._create_table(WORKER_ID, self._get_worker_state_table_name(), 40, 300, clear_table=False)
 
     # def _create_rds_table(self, )
 
-    def _create_table(self, key, table_name, read_cap_units=100, write_cap_units=100, secondary_index=None):  
+    def _create_table(self, key, table_name, 
+                      read_cap_units=100, write_cap_units=100, secondary_index=None,
+                      clear_table=True):  
         """
         stores the state of the worker nodes
         """
@@ -141,12 +143,13 @@ class OVMSwarmInitializer():
             print(e)
 
         # # delete all the existing items in the db
-        self._delete_all_items_on_table(table_name)
+        if clear_table:
+            self._delete_all_items_on_table(table_name)
 
     def send_set_worker_state_request(self, swarm_name, worker_id):
         with grpc.insecure_channel(self.worker_ips[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
             stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
-            worker_info = simulate_device_pb2.WorkerInfo(swarm_name=swarm_name, worker_id=worker_id)
+            worker_info = simulate_device_pb2.WorkerInfo(swarm_name=swarm_name, worker_namespace=self.worker_namespace, worker_id=worker_id)
             status = stub.SetWorkerInfo.future(worker_info)
             res = status.result()
             logging.info(f"{self.worker_ips[worker_id]} set as {worker_id}")
@@ -155,7 +158,7 @@ class OVMSwarmInitializer():
         table = dynamodb.Table(self._get_worker_state_table_name())
         with table.batch_writer() as batch:
             batch.put_item(Item={WORKER_ID: worker_id, WORKER_STATUS: STOPPED,
-                               WORKER_HISTORY: [{WTIMESTAMP: strftime("%Y-%m-%d %H:%M:%S", gmtime()), ACTION_TYPE: WORKER_CREATED}]})
+                               WORKER_HISTORY: [{WTIMESTAMP: strftime("%Y-%m-%d %H:%M:%S", gmtime()), ACTION_TYPE: WORKER_ADDED}]})
         set_number_thread = threading.Thread(target=self.send_set_worker_state_request, args=(tag, worker_id,))
         set_number_thread.start()
     
@@ -217,7 +220,7 @@ class OVMSwarmInitializer():
                 batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
                     GOAL_DIST: convert_to_map(goal_dist),
                     LOCAL_DIST: convert_to_map(local_dist), TOTAL_ENC_IDX: len(enc_df.index),
-                    EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
+                    ENCOUNTER_HISTORY: [], EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
             
 
             ## initialize device 
@@ -268,7 +271,7 @@ class OVMSwarmInitializer():
         
         # configure worker tables
         if create_tables:
-            self._create_worker_state_table(tag)
+            self._create_worker_state_table()
         for worker_id in range(len(self.worker_ips)):
             self._initialize_worker(tag, worker_id)
         

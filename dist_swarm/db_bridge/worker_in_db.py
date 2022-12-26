@@ -65,7 +65,11 @@ class WorkerInDB():
         except:
             pass
 
-    def update_finished_task(self, task_id, is_finished, measured_time):
+    def update_finished_task(self, task_id, is_finished, is_timed_out, measured_time):
         resp = self.finished_tasks_table.put_item(
-            Item={TASK_ID: task_id, IS_FINISHED: is_finished, IS_PROCESSED: False, TIME: measured_time}
+            Item={TASK_ID: task_id, 
+                  IS_FINISHED: is_finished, 
+                  IS_TIMED_OUT: is_timed_out,
+                  IS_PROCESSED: False, 
+                  TIME: measured_time}
         )

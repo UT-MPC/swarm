@@ -72,7 +72,7 @@ class DeviceInDB():
                         "#encounter_history": ENCOUNTER_HISTORY,
                     },
                     ExpressionAttributeValues={
-                        ":encounter_result": encounter_result,
+                        ":encounter_result": [encounter_result],
                     },
                     UpdateExpression="SET #encounter_history = list_append(#encounter_history, :encounter_result)"
         )
