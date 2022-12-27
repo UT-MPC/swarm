@@ -2,7 +2,7 @@ from distutils.log import error
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
+from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, IS_TIMED_OUT, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
                       WTIMESTAMP, ACTION_TYPE, TIME
 
 class WorkerInDB():
