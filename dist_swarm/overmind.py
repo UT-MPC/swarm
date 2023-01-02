@@ -301,7 +301,7 @@ class Overmind():
         ## !!Warning, rt_mode here has an error
         logging.info("----- swarm run start -----")
         run_swarm_start_time = time.time()
-        cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
+        self.cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
         self.task_queue = []
         self.processed_tasks = []
         self.next_checkpoint = CHECKPOINT_INTERVAL
@@ -317,7 +317,7 @@ class Overmind():
         self.successful_tasks = 0
         self.timed_out_tasks = 0
 
-        self.allocated_tasks = dict.fromkeys(range(len(self.worker_nodes)), 0)
+        self.allocated_tasks = {}
         self.last_avail = dict.fromkeys(range(self.number_of_devices), 0)
 
         # @TODO store which task is allocated to which and re-allocate when timeout
@@ -370,7 +370,7 @@ class Overmind():
                         self.tasks[next_task].real_time_mode = True
                         self.tasks[next_task].reset_start_time(self.last_avail)
                             
-                    if self.indegrees[next_task] <= 0:
+                    if self.indegrees[next_task] == 0:
                         self.tasks[next_task].determine_skip()
                         self.task_queue.append(next_task)
 
@@ -411,8 +411,10 @@ class Overmind():
             # first assign based on cached device state
             for task_id in self.task_queue:
                 # @TODO support mutable neighbors
-                if self.tasks[task_id].learner_id in cached_devices_to_worker_nodes and task_id not in task_id_to_worker:
-                    target_worker_id = cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
+                if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \
+                    task_id not in task_id_to_worker and \
+                    self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
+                    target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
                     task_id_to_worker[task_id] = target_worker_id
                     free_workers.remove(target_worker_id)
                     logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
@@ -429,13 +431,13 @@ class Overmind():
             # print(f"{task_id_to_worker}")
             logging.info(f"tasks left: {self.task_num}")
 
-            cached_devices_to_worker_nodes = {}
+            self.cached_devices_to_worker_nodes = {}
             # call RunTask asynchronously 
             for task_id in task_id_to_worker:
                 task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
                 task_thread.start()
                 self.allocated_tasks[task_id_to_worker[task_id]] = task_id
-                cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
+                self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
 
             sleep(polling_interval)
         
