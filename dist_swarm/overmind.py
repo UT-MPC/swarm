@@ -6,7 +6,7 @@ import traceback
 import grpc
 sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
-from dist_swarm.db_bridge.worker_in_db import WorkerInDB
+from dist_swarm.db_bridge.worker_in_db import WorkerInDB, WorkerInRDS
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from grpc_components.status import RUNNING, STOPPED
 import json
@@ -15,12 +15,13 @@ import logging
 import threading
 import time
 from time import sleep
+import pickle
 import datetime
 import typing
-from pathlib import PurePath
+from pathlib import PurePath, Path
 from pandas import read_pickle, read_csv
 import boto3
-from dynamo_db import IS_FINISHED, IS_PROCESSED, TASK_ID, TIME
+from dynamo_db import IS_FINISHED, IS_PROCESSED, IS_TIMED_OUT, TASK_ID, TIME
 from boto3.dynamodb.conditions import Key
 
 from ovm_swarm_initializer import OVMSwarmInitializer
@@ -37,7 +38,7 @@ MAX_ITERATIONS = 10_000_000
 
 class Task():
     def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list, worker_namespace,
-                 timeout=2**8, real_time_mode=False, communication_time=0):
+                 timeout=2**8, real_time_mode=False, communication_time=0, dependant_on_mutable=False):
         self.swarm_name = swarm_name
         self.worker_namespace = worker_namespace
         self.task_id = task_id
@@ -48,7 +49,9 @@ class Task():
         self.timeout = timeout
         self.load_config = {str(learner_id): self.get_new_load_config()}
         self.real_time_mode = real_time_mode
+        self.communication_time = communication_time
         self.real_time_timeout = self.end - self.start - communication_time
+        self.dependant_on_mutable = dependant_on_mutable
 
         self.skip = False  # skip the processing of this task
         
@@ -93,6 +96,16 @@ class Task():
 
     def get_new_load_config(self, load_model: bool=True, load_dataset: bool=True):
         return {"load_model": load_model, "load_dataset": load_dataset}
+
+    def reset_start_time(self, last_avail):
+        self.start = max(self.start, last_avail[self.learner_id])
+        if self.dependant_on_mutable:
+            for nid in self.neighbor_id_list:
+                self.start = max(self.start, last_avail[nid])
+        self.real_time_timeout = self.end - self.start - self.communication_time
+    
+    def is_skipped(self, process_time=0):
+        return self.end - self.start < process_time
         
 
 class Overmind():
@@ -109,12 +122,18 @@ class Overmind():
         self.worker_namespace = self.config["worker_namespace"]
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"]
 
-        logging.basicConfig(filename=f'{self.swarm_name}_{datetime.datetime.now()}.log', 
+        self.log_path = f'ovm_logs/{self.swarm_name}/{datetime.datetime.now()}'
+        Path(self.log_path).mkdir(parents=True, exist_ok=True)
+        logging.basicConfig(filename=self.log_path + '/overmind.log', 
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',level=logging.INFO)
 
         self.initializer = OVMSwarmInitializer()
         self.initializer.initialize(config_file, not skip_init_tables)
+        self.worker_db = WorkerInRDS(self.initializer.rds_cursor, self.worker_nodes)
+
+        self.worker_ip_to_id = self.initializer.worker_ip_to_id
+        self.worker_id_to_ip = {v: k for k, v in self.worker_ip_to_id.items()}
 
     def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None):
         # read encounter dataset
@@ -134,6 +153,7 @@ class Overmind():
         if dependency is None:
             device_class = get_device_class(self.device_config["device_strategy"])
             dependency = device_class.get_dependency()
+        self.dependant_to_mutable = dependency["on_mutable"]
 
         # read connection data and populate task list
         task_id = 0
@@ -149,7 +169,7 @@ class Overmind():
 
         dep_graph = {}  # (preceding task id, task id)
         last_tasks = {}  # (device id, last task idx) 
-        last_times = {}  # (device id, last time device is done with oppcl)
+        last_times = dict.fromkeys(range(self.number_of_devices), 0)  # (device id, last time device is done with oppcl)
         tasks = {}  # (task id, task object)
         indegrees = {}
 
@@ -158,50 +178,66 @@ class Overmind():
             device2_id = (int)(row[CLIENT2])
             if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
                 continue
-            start_time = max(row[TIME_START], last_times[device1_id] if device1_id in last_times else 0)
-            start_time = max(start_time, last_times[device2_id] if device2_id in last_times else 0)
+            start_time = row[TIME_START]
             if not rt_mode:
-                end_time = start_time + oppcl_time
+                start_time_1 = max(start_time, last_times[device1_id])
+                start_time_2 = max(start_time, last_times[device2_id])
+                end_time_1 = start_time_1 + oppcl_time
+                end_time_2 = start_time_2 + oppcl_time
             else:
-                end_time = row[TIME_END]
-            if (row[TIME_END] - start_time >= oppcl_time):
-                task_1_2 = Task(self.swarm_name, task_id, start_time, end_time, device1_id, [device2_id], self.worker_namespace,
+                start_time_1 = start_time
+                start_time_2 = start_time
+                end_time_1 = row[TIME_END]
+                end_time_2 = row[TIME_END]
+
+            task_1_timeout = row[TIME_END] - start_time_1 < oppcl_time
+            task_2_timeout = row[TIME_END] - start_time_2 < oppcl_time
+
+            if (not task_1_timeout) and (not task_2_timeout):
+                task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, [device2_id], self.worker_namespace,
                                 real_time_mode=rt_mode, communication_time=self.communication_time)
-                task_2_1 = Task(self.swarm_name, task_id+1, start_time, end_time, device2_id, [device1_id], self.worker_namespace,
+                task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_id, [device1_id], self.worker_namespace,
                                 real_time_mode=rt_mode, communication_time=self.communication_time)
                 task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_1_2.add_eval()
                 task_2_1.add_eval()
                 
-                indegrees[task_id] = 0
-                indegrees[task_id+1] = 0
-                dep_graph[task_id] = []
-                dep_graph[task_id+1] = []
-                tasks[task_id] = task_1_2
-                tasks[task_id+1] = task_2_1
+                if not task_1_timeout:
+                    indegrees[task_id] = 0
+                    dep_graph[task_id] = []
+                    tasks[task_id] = task_1_2
+
+                if not task_2_timeout:
+                    indegrees[task_id+1] = 0
+                    dep_graph[task_id+1] = []
+                    tasks[task_id+1] = task_2_1
 
                 # we assume that all delegations are dependent on data, at least
-                if device1_id in last_tasks:
+                if (not task_1_timeout) and device1_id in last_tasks:
                     for lt in last_tasks[device1_id]:
                         dep_graph[lt].append(task_1_2.task_id)
                         indegrees[task_1_2.task_id] += 1
+
                     if dependency["on_mutable"]:
                         for lt in last_tasks[device2_id]:
                             dep_graph[lt].append(task_1_2.task_id)
-                            indegrees[task_2_1.task_id] += 1
+                            indegrees[task_1_2.task_id] += 1
 
-                if device2_id in last_tasks:
+                if (not task_2_timeout) and device2_id in last_tasks:
                     for lt in last_tasks[device2_id]:
                         dep_graph[lt].append(task_2_1.task_id)
                         indegrees[task_2_1.task_id] += 1
+
                     if dependency["on_mutable"]:
                         for lt in last_tasks[device1_id]:
                             dep_graph[lt].append(task_2_1.task_id)
                             indegrees[task_2_1.task_id] += 1
 
-                last_tasks[device1_id] = [task_1_2.task_id]
-                last_tasks[device2_id] = [task_2_1.task_id]
+                if not task_1_timeout:
+                    last_tasks[device1_id] = [task_1_2.task_id]
+                if not task_2_timeout:
+                    last_tasks[device2_id] = [task_2_1.task_id]
                 # if task is dependent on mutable state of the neighbor,
                 # succeeding tasks should also be dependent on tasks where the device
                 # participated as a neighbor
@@ -210,8 +246,11 @@ class Overmind():
                     last_tasks[device2_id].append(task_1_2.task_id)
 
                 task_id += 2
-                last_times[device1_id] = row[TIME_START] + oppcl_time
-                last_times[device2_id] = row[TIME_START] + oppcl_time
+                if not rt_mode:
+                    if not task_1_timeout:
+                        last_times[device1_id] = max(last_times[device1_id], start_time_1 + oppcl_time)
+                    if not task_2_timeout:
+                        last_times[device2_id] = max(last_times[device2_id], start_time_2 + oppcl_time)
 
         self.task_num = task_id
         self.dep_graph = dep_graph
@@ -222,14 +261,15 @@ class Overmind():
         self.finished_tasks_table = self.dynamodb.Table(self.swarm_name +'-finished-tasks')
     
     def send_run_task_request(self, worker_id, task):
-        if task.skip:
-            self.processed_tasks.append(task.task_id)
-            for next_task in self.dep_graph[task.task_id]:
-                self.indegrees[next_task] -= 1
-                self.tasks[next_task].start = max(self.tasks[next_task].start, task.start)
-            return
+        # task.reset_start_time(self.last_avail)
+        # if task.is_skipped():  # possible error here
+        #     self.processed_tasks.append(task.task_id)
+        #     for next_task in self.dep_graph[task.task_id]:
+        #         self.indegrees[next_task] -= 1
+        #         self.tasks[next_task].reset_start_time(self.last_avail)
+        #     return
         try:
-            with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+            with grpc.insecure_channel(self.worker_id_to_ip[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
                 stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
                 config = simulate_device_pb2.Config(config=json.dumps(task.get_config()))
                 status = stub.RunTask.future(config)
@@ -240,7 +280,7 @@ class Overmind():
     
     def send_check_running_request(self, worker_id):
         try:
-            with grpc.insecure_channel(self.worker_nodes[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+            with grpc.insecure_channel(self.worker_id_to_ip[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
                 stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
                 status = stub.CheckRunning(simulate_device_pb2.Empty())
                 return status.status == RUNNING
@@ -255,6 +295,7 @@ class Overmind():
             self.initializer._initialize_worker(self.swarm_name, worker_id)
     
     def run_swarm(self, polling_interval=5, rt_mode=False):
+        ## !!Warning, rt_mode here has an error
         logging.info("----- swarm run start -----")
         run_swarm_start_time = time.time()
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
@@ -264,14 +305,16 @@ class Overmind():
             if self.indegrees[task_id] == 0:
                 self.task_queue.append(task_id)
 
-        last_avail = {}  # last time that a worker was "idle"
-        for wi in range(len(self.worker_nodes)):
-            last_avail[wi] = 0
+        worker_last_avail = {}  # last time that a worker was "idle"
+        for wi in self.worker_db.worker_db_ids:
+            worker_last_avail[wi] = 0
 
         iterations = 0
+        self.successful_tasks = 0
+        self.timed_out_tasks = 0
 
         self.allocated_tasks = dict.fromkeys(range(len(self.worker_nodes)), 0)
-        self.last_avail = dict.fromkeys(range(len(self.worker_nodes)), 0)
+        self.last_avail = dict.fromkeys(range(self.number_of_devices), 0)
 
         # @TODO store which task is allocated to which and re-allocate when timeout
         while self.task_num > 0 and iterations < MAX_ITERATIONS:
@@ -289,17 +332,35 @@ class Overmind():
                 # decrementing indegrees of tasks that are dependent on that task
                 if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
                     task_id = task_item[TASK_ID]
+                    learner_id = self.tasks[task_id].learner_id
+                    neighbor_ids = self.tasks[task_id].neighbor_id_list
                     self.processed_tasks.append(task_id)
+
+                    # get end time of the task
                     elasped_time = float(task_item[TIME]) + 2 * self.model_send_time
                     freed_time = self.tasks[task_id].start + elasped_time
+                    if not task_item[IS_TIMED_OUT]:
+                        if freed_time > self.tasks[task_id].end:
+                            logging.info(f"DISCREPANCY!: when not timed out, timed out: freed_time: {freed_time}, end: {self.tasks[task_id].end}")
+                        self.successful_tasks += 1
+                        self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
+                        if self.dependant_to_mutable:
+                            for nid in neighbor_ids:
+                                self.last_avail[nid] = max(self.last_avail[nid], freed_time)
+                    else:
+                        self.timed_out_tasks += 1
+                        # if this is "end" we assume that our contact prediction is very bad
+                        # logging.info(f"freed_time: {freed_time}, end time: {self.tasks[task_id].end}")
+                        freed_time = self.tasks[task_id].start
+                    
+
                     for next_task in self.dep_graph[task_id]:
                         # print(f"next task {next_task}")
                         self.indegrees[next_task] -= 1
                         if rt_mode:
                             self.tasks[next_task].real_time_mode = True
-                            if self.tasks[next_task].end < freed_time:
-                                self.tasks[next_task].skip = True
-                                self.tasks[next_task].start = freed_time
+                            self.tasks[next_task].reset_start_time(self.last_avail)
+                                
                         if self.indegrees[next_task] <= 0:
                             self.tasks[next_task].determine_skip()
                             self.task_queue.append(next_task)
@@ -327,23 +388,22 @@ class Overmind():
                             self.task_queue.append(nt)
 
             # get "Stopped" workers and check if one of them holds recent device state
-            # TODO prevent worker_dbs to be initialized multiple times
-            worker_dbs = [WorkerInDB(self.swarm_name, self.worker_namespace, id) for id, ip in enumerate(self.worker_nodes)]
-            
-
+            # worker_dbs = [WorkerInDB(self.swarm_name, self.worker_namespace, id) for id, ip in enumerate(self.worker_nodes)]
+            # free_workers = [worker.worker_id for worker in worker_dbs if worker.status != RUNNING]
             task_id_to_worker = {}
-            free_workers = [worker.worker_id for worker in worker_dbs if worker.status != RUNNING]
+            
+            free_workers = self.worker_db.get_stopped_workers()
             # "revive" the worker if running for more than 30 iterations
-            for w in self.last_avail:
-                self.last_avail[w] += 10
-            for w in free_workers:
-                self.last_avail[w] = 0
-            for w in self.last_avail:
-                if self.last_avail[w] > 300:
-                    logging.info(f"reviving worker {w}")
-                    self.revive_worker(worker_dbs[w], w)
-                    self.last_avail[w] = 0
-                    self.task_queue.insert(0, self.allocated_tasks[w])
+            # for w in worker_last_avail:
+            #     worker_last_avail[w] += 10
+            # for w in free_workers:
+            #     worker_last_avail[w] = 0
+            # for w in worker_last_avail:
+            #     if worker_last_avail[w] > 300:
+            #         logging.info(f"reviving worker {w}")
+            #         self.revive_worker(worker_dbs[w], w)
+            #         worker_last_avail[w] = 0
+            #         self.task_queue.insert(0, self.allocated_tasks[w])
 
             logging.info(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
 
@@ -353,10 +413,10 @@ class Overmind():
                 # @TODO support mutable neighbors
                 if self.tasks[task_id].learner_id in cached_devices_to_worker_nodes and task_id not in task_id_to_worker:
                     target_worker_id = cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
-                    if worker_dbs[target_worker_id].status == STOPPED and target_worker_id in free_workers:
-                        task_id_to_worker[task_id] = target_worker_id
-                        free_workers.remove(target_worker_id)
-                        logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
+                    task_id_to_worker[task_id] = target_worker_id
+                    free_workers.remove(target_worker_id)
+                    logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
+            
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
                 self.task_queue.remove(task_id)
@@ -364,8 +424,7 @@ class Overmind():
             # assign remaining tasks to "Stopped" worker nodes
             while len(free_workers) > 0 and len(self.task_queue) > 0:
                 worker_id = free_workers.pop()
-                if worker_dbs[worker_id].status == STOPPED:
-                    task_id_to_worker[self.task_queue.pop()] = worker_id
+                task_id_to_worker[self.task_queue.pop()] = worker_id
 
             # print(f"{task_id_to_worker}")
             logging.info(f"tasks left: {self.task_num}")
@@ -382,11 +441,26 @@ class Overmind():
         
         logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")
 
+    def save_checkpoint(self, log_dict, checkpoint_num):
+        # save data for current progress, which are the following
+        # device states
+        # finished tasks
+        # elasped time (which is given in log_dict)
 
-        
+        # save device states
+        self._save_dynamodb_table(self.swarm_name, 'device_table', checkpoint_num)
 
-        
-        
+        # save finished tasks
+        self._save_dynamodb_table(self.swarm_name + '-finished-tasks', 'tasks_table', checkpoint_num)
 
-        
+        # save log_dict
+        filepath = self.log_path + f'/etc_{checkpoint_num}_{datetime.datetime.now()}.log'
+        with open(filepath, 'wb') as handle:
+            pickle.dump(log_dict, handle, protocol=pickle.HIGHEST_PROTOCOL) 
 
+    def _save_dynamodb_table(self, table_name, pickle_file_name, checkpoint_num):
+        table = self.dynamodb.Table(table_name)
+        resp = table.scan()
+        filepath = self.log_path + f'/{pickle_file_name}_{checkpoint_num}_{datetime.datetime.now()}.log'
+        with open(filepath, 'wb') as handle:
+            pickle.dump(resp, handle, protocol=pickle.HIGHEST_PROTOCOL)

@@ -174,3 +174,31 @@ botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotF
 2022-12-26 18:12:59,518,518 root INFO Running task 0 in worker 0
 2022-12-26 18:12:59,519,519 root INFO cached is dict_keys([])
 2022-12-26 18:13:47,315,315 root INFO -- Task 0 successfully finished --
+2023-01-02 06:14:35,568,568 root INFO worker id set to 0
+2023-01-02 06:14:35,568,568 grpc._server ERROR Exception calling application: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 46, in SetWorkerInfo
+    return Status(status=self.worker_status)
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+2023-01-02 06:14:52,395,395 root INFO worker id set to 0
+2023-01-02 06:14:52,395,395 grpc._server ERROR Exception calling application: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 46, in SetWorkerInfo
+    return Status(status=self.worker_status)
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+2023-01-02 06:15:16,790,790 root INFO worker id set to 0
+2023-01-02 06:15:16,790,790 grpc._server ERROR Exception calling application: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 46, in SetWorkerInfo
+    return Status(status=self.worker_status)
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+2023-01-02 06:23:36,684,684 root INFO worker id set to 0
+2023-01-02 06:23:58,697,697 root INFO Running task 0 in worker 0
+2023-01-02 06:23:58,697,697 root INFO cached is dict_keys([])
+2023-01-02 06:24:35,546,546 root INFO -- Task 0 successfully finished --

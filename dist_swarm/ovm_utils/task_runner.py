@@ -13,22 +13,21 @@ sys.path.insert(0,'..')
 
 from ovm_utils.device_storing_util import load_device, save_device
 from dist_swarm.db_bridge.device_in_db import DeviceInDB
-from dist_swarm.db_bridge.worker_in_db import WorkerInDB
+from dist_swarm.db_bridge.worker_in_db import WorkerInRDS
 from dynamo_db import TASK_END, TASK_FAILED, TASK_START, TASK_REALTIME_TIMEOUT
 
 # @TODO implement timeout here
-def run_task(worker_status, worker_id, task_config, device_state_cache):
+def run_task(worker_db, worker_status, worker_id, task_config, device_state_cache):
     swarm_name = task_config['swarm_name']
     worker_namespace = task_config['worker_namespace']
-    worker_in_db = WorkerInDB(swarm_name, worker_namespace, worker_id)
     if worker_status != STOPPED:
         logging.info(f"RPC call for a new task {task_config['task_id']} is made while worker is busy")
-        worker_in_db.update_finished_task(task_config['task_id'], False)
+        # worker_in_db.update_finished_task(task_config['task_id'], False)
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
                        "action_type": TASK_FAILED, "task": task_config, "error_msg": traceback.format_exc()}
         return new_history, {}
-    worker_in_db.update_status(RUNNING)
-    worker_in_db.append_history(strftime("%Y-%m-%d %H:%M:%S", gmtime()), TASK_START, task_config)
+    worker_db.update_status(worker_id, RUNNING)
+    # worker_in_db.append_history(strftime("%Y-%m-%d %H:%M:%S", gmtime()), TASK_START, task_config)
     logging.info(f"Running task {task_config['task_id']} in worker {worker_id}")
     logging.info(f"cached is {device_state_cache['device_states'].keys()}")
 
@@ -102,15 +101,15 @@ def run_task(worker_status, worker_id, task_config, device_state_cache):
         traceback.print_exc()
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
                        "action_type": TASK_FAILED, "task": task_config, "error_msg": traceback.format_exc()}
-        worker_in_db.append_history(**new_history)
-        worker_in_db.update_status(STOPPED)
+        # worker_in_db.append_history(**new_history)
+        worker_db.update_status(worker_id, STOPPED)
         return new_history
 
     logging.info(f"-- Task {task_id} successfully finished --")
     try:
-        worker_in_db.update_status(STOPPED) 
-        worker_in_db.append_history(**new_history)
-        worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
+        worker_db.update_status(worker_id, STOPPED)
+        # worker_in_db.append_history(**new_history)
+        # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 

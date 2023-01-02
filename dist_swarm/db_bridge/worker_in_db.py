@@ -1,9 +1,11 @@
 from distutils.log import error
 import boto3
 from boto3.dynamodb.conditions import Key
+import logging
 
 from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, IS_TIMED_OUT, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
                       WTIMESTAMP, ACTION_TYPE, TIME
+from grpc_components.status import STOPPED
 
 class WorkerInDB():
     def __init__(self, swarm_name, worker_namespace, worker_id):    
@@ -73,3 +75,36 @@ class WorkerInDB():
                   IS_PROCESSED: False, 
                   TIME: measured_time}
         )
+
+class WorkerInRDS():
+    def __init__(self, cursor, worker_ips):
+        self.worker_ips = worker_ips
+        self.cursor = cursor
+        self.worker_db_ids = []  # ids of workers in RDS
+
+        for ip in worker_ips:
+            resp = self.cursor.get_column('worker_id', 'external_ip', ip)
+            if len(resp) == 0:
+                logging.error(f'get column for ip {ip} failed')
+            else:
+                self.worker_db_ids.append(resp[0][0])
+
+    def get_stopped_workers(self):
+        # return ids of stopped workers
+        all_stopped = self.cursor.get_column('worker_id', 'worker_state', STOPPED)
+        res = []
+        for item in all_stopped:
+            if item[0] in self.worker_db_ids:
+                res.append(item[0])
+    
+    def get_worker_id(self, worker_ip):
+        resp = self.cursor.get_column('worker_id', 'external_ip', worker_ip)
+        if len(resp) == 0:
+            logging.error(f'get worker id for ip {worker_ip} failed')
+            return []
+        else:
+            return resp[0][0]
+
+    def update_status(self, worker_id, status):
+        self.cursor.update_record_by_col('worker_id', worker_id, 'worker_state', status)
+        

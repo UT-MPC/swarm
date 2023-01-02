@@ -1,7 +1,7 @@
 {
     "dataset": "mnist",
     "model": "2nn",
-    "tag": "ovm_example_100_levy_rt_mode",
+    "tag": "ovm_example_100_levy",
     "worker_ips": [
         "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",
         "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051",
@@ -29,17 +29,29 @@
                         }
     },
     "device_config": {
-        "device_strategy": "greedy",
-        "id": 0,
+        "device_strategy": "fl-client",
+        "id": 1,
         "pretrained_model": "none",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_clients_100_epi_5_dur_100_step_02.pickle",
+            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50_step_02.pickle",
             "computation_time": 0.14,
             "communication_rate": 16000000
         },
+        "device_groups": [
+            {
+                "device_config": {
+                    "device_strategy": "fl-server"
+                },
+                "id": 0,
+                "number_of_devices": 1,
+                "encounter_config": {
+                    "computation_time": 300
+                }
+            }
+        ],
         "train_config": {
             "__comment__": "formerly called hyperparams",
             "batch-size": 50,

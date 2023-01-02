@@ -1,4 +1,6 @@
+import re
 import sys
+from dist_swarm.db_bridge.rds_bridge import RDSCursor
 
 from dist_swarm.db_bridge.worker_in_db import WorkerInDB
 sys.path.insert(0,'..')
@@ -13,6 +15,7 @@ from ovm_utils.task_runner import run_task
 from grpc_components import simulate_device_pb2_grpc
 from grpc_components.simulate_device_pb2 import Empty, Status
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED, STOPPED
+from dist_swarm.db_bridge.worker_in_db import WorkerInRDS
 from oppcl_device import OppCLDevice
 
 # data frame column names for encounter data
@@ -34,8 +37,12 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
     def SetWorkerInfo(self, request, context):
         self.cache = {'device_states' : {}}   # clear cache
         self.worker_id = request.worker_id
-        self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
-        self.worker_status = self.worker_in_db.status
+        self.cursor = RDSCursor(request.rds_host, request.rds_dbname, request.rds_user,
+                                request.rds_password, request.rds_table)
+        self.worker_db = WorkerInRDS(self.cursor, [])
+        self.worker_status = STOPPED
+        # self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
+        # self.worker_status = self.worker_in_db.status
         logging.info(f"worker id set to {self.worker_id}")
         return Status(status=self.worker_status)
 
@@ -43,7 +50,7 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         config = json.load(StringIO(request.config))
         # call the function to run a single training task
         try:
-            run_task_thread = threading.Thread(target=run_task, args=(self.worker_status, self.worker_id, config, self.cache))
+            run_task_thread = threading.Thread(target=run_task, args=(self.worker_db, self.worker_status, self.worker_id, config, self.cache))
             run_task_thread.start()
             self.current_task = [run_task_thread]
             return Status(status=self.worker_status)

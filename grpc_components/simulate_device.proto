@@ -59,4 +59,9 @@ message WorkerInfo {
   string swarm_name = 1;
   string worker_namespace = 2;
   int32 worker_id = 3;
+  string rds_host = 4;
+  string rds_dbname = 5;
+  string rds_user = 6;
+  string rds_password = 7;
+  string rds_table = 8;
 }

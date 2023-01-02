@@ -1,0 +1,7 @@
+03:20:16,997 root ERROR Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 24, in execute_sql
+    self.cursor.execute(query)
+psycopg2.OperationalError: could not receive data from server: Connection timed out
+SSL SYSCALL error: Connection timed out
+
+
