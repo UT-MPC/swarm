@@ -6,7 +6,7 @@ import traceback
 import grpc
 sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
-from dist_swarm.db_bridge.worker_in_db import WorkerInDB, WorkerInRDS
+from dist_swarm.db_bridge.worker_in_db import TaskInRDS, WorkerInDB, WorkerInRDS
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from grpc_components.status import RUNNING, STOPPED
 import json
@@ -134,6 +134,8 @@ class Overmind():
 
         self.worker_ip_to_id = self.initializer.worker_ip_to_id
         self.worker_id_to_ip = {v: k for k, v in self.worker_ip_to_id.items()}
+
+        self.tasks_db = TaskInRDS(self.initializer.rds_tasks_cursor)
 
     def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None):
         # read encounter dataset
@@ -295,12 +297,14 @@ class Overmind():
             self.initializer._initialize_worker(self.swarm_name, worker_id)
     
     def run_swarm(self, polling_interval=5, rt_mode=False):
+        CHECKPOINT_INTERVAL = 1000
         ## !!Warning, rt_mode here has an error
         logging.info("----- swarm run start -----")
         run_swarm_start_time = time.time()
         cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
         self.task_queue = []
         self.processed_tasks = []
+        self.next_checkpoint = CHECKPOINT_INTERVAL
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
                 self.task_queue.append(task_id)
@@ -319,63 +323,59 @@ class Overmind():
         # @TODO store which task is allocated to which and re-allocate when timeout
         while self.task_num > 0 and iterations < MAX_ITERATIONS:
             iterations += 1
-            resp = self.finished_tasks_table.scan()
+
+            finished_not_processed_tasks = self.tasks_db.get_not_processed_finished_tasks()
+
+            # checkpointing
+            if len(self.processed_tasks) >= self.next_checkpoint:
+                self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, len(self.processed_tasks))
+                self.next_checkpoint += CHECKPOINT_INTERVAL
 
             # re-allocate failed tasks
-            for task_item in resp['Items']:
-                if not task_item[IS_FINISHED]:
-                    self.task_queue.append(task_item[TASK_ID])
+            for task_item in finished_not_processed_tasks:
+                if not task_item[3]:
+                    self.task_queue.append(task_item[0])
                     # TODO delete task item from DB
 
-            for task_item in resp['Items']:
+            for task_item in finished_not_processed_tasks:
                 # "process" the finished task, which is
                 # decrementing indegrees of tasks that are dependent on that task
-                if not task_item[IS_PROCESSED] and task_item[IS_FINISHED]:  
-                    task_id = task_item[TASK_ID]
-                    learner_id = self.tasks[task_id].learner_id
-                    neighbor_ids = self.tasks[task_id].neighbor_id_list
-                    self.processed_tasks.append(task_id)
+                task_id = task_item[0]
+                learner_id = self.tasks[task_id].learner_id
+                neighbor_ids = self.tasks[task_id].neighbor_id_list
+                self.processed_tasks.append(task_id)
 
-                    # get end time of the task
-                    elasped_time = float(task_item[TIME]) + 2 * self.model_send_time
-                    freed_time = self.tasks[task_id].start + elasped_time
-                    if not task_item[IS_TIMED_OUT]:
-                        if freed_time > self.tasks[task_id].end:
-                            logging.info(f"DISCREPANCY!: when not timed out, timed out: freed_time: {freed_time}, end: {self.tasks[task_id].end}")
-                        self.successful_tasks += 1
-                        self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
-                        if self.dependant_to_mutable:
-                            for nid in neighbor_ids:
-                                self.last_avail[nid] = max(self.last_avail[nid], freed_time)
-                    else:
-                        self.timed_out_tasks += 1
-                        # if this is "end" we assume that our contact prediction is very bad
-                        # logging.info(f"freed_time: {freed_time}, end time: {self.tasks[task_id].end}")
-                        freed_time = self.tasks[task_id].start
-                    
+                # get end time of the task
+                elasped_time = float(task_item[5]) + 2 * self.model_send_time
+                freed_time = self.tasks[task_id].start + elasped_time
+                if not task_item[4]:
+                    if freed_time > self.tasks[task_id].end:
+                        logging.info(f"DISCREPANCY!: when not timed out, timed out: freed_time: {freed_time}, end: {self.tasks[task_id].end}")
+                    self.successful_tasks += 1
+                    self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
+                    if self.dependant_to_mutable:
+                        for nid in neighbor_ids:
+                            self.last_avail[nid] = max(self.last_avail[nid], freed_time)
+                else:
+                    self.timed_out_tasks += 1
+                    # if this is "end" we assume that our contact prediction is very bad
+                    # logging.info(f"freed_time: {freed_time}, end time: {self.tasks[task_id].end}")
+                    freed_time = self.tasks[task_id].start
+                
 
-                    for next_task in self.dep_graph[task_id]:
-                        # print(f"next task {next_task}")
-                        self.indegrees[next_task] -= 1
-                        if rt_mode:
-                            self.tasks[next_task].real_time_mode = True
-                            self.tasks[next_task].reset_start_time(self.last_avail)
-                                
-                        if self.indegrees[next_task] <= 0:
-                            self.tasks[next_task].determine_skip()
-                            self.task_queue.append(next_task)
+                for next_task in self.dep_graph[task_id]:
+                    # print(f"next task {next_task}")
+                    self.indegrees[next_task] -= 1
+                    if rt_mode:
+                        self.tasks[next_task].real_time_mode = True
+                        self.tasks[next_task].reset_start_time(self.last_avail)
+                            
+                    if self.indegrees[next_task] <= 0:
+                        self.tasks[next_task].determine_skip()
+                        self.task_queue.append(next_task)
 
-                    self.finished_tasks_table.update_item(
-                        Key={TASK_ID: task_id},
-                        ExpressionAttributeNames={
-                            "#is_processed": IS_PROCESSED
-                        },
-                        ExpressionAttributeValues={
-                            ":is_processed": True
-                        },
-                        UpdateExpression="SET #is_processed = :is_processed",
-                    )
-                    self.task_num -= 1
+                self.tasks_db.mark_processed(task_id)
+                self.task_num -= 1
 
             # @TODO find out a reason why some tasks remain not processed while 
             # their indegrees <= 0 

@@ -150,7 +150,9 @@ class OVMSwarmInitializer():
     def send_set_worker_state_request(self, swarm_name, worker_id):
         with grpc.insecure_channel(self.worker_id_to_ip[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
             stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
-            worker_info = simulate_device_pb2.WorkerInfo(swarm_name=swarm_name, worker_namespace=self.worker_namespace, worker_id=worker_id)
+            worker_info = simulate_device_pb2.WorkerInfo(swarm_name=swarm_name, worker_namespace=self.worker_namespace, worker_id=worker_id,
+                            rds_host=self.rds_endpoint, rds_dbname=self.rds_dbname, rds_user=self.rds_user, 
+                            rds_password=self.rds_password, rds_table='k8s')
             status = stub.SetWorkerInfo.future(worker_info)
             res = status.result()
             logging.info(f"{self.worker_id_to_ip[worker_id]} set as {worker_id}")
@@ -179,10 +181,21 @@ class OVMSwarmInitializer():
         self.rds_endpoint = rds_config['rds_endpoint']
         self.rds_user = rds_config['rds_user']
         self.rds_password = rds_config['rds_password']
-        self.rds_table = rds_config['rds_dbname']
+        self.rds_dbname = rds_config['rds_dbname']
+        self.rds_config = rds_config
 
         # @TODO create k8s table if not exist
-        self.rds_cursor = RDSCursor(self.rds_endpoint, self.rds_table, self.rds_user, self.rds_password, 'k8s')
+        self.rds_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, 'k8s')
+        self.rds_tasks_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, self.swarm_name+'_finished_tasks')
+        self.rds_tasks_cursor.execute_sql(f'create table if not exists {self.table} ( \
+                                            serial_id serial PRIMARY KEY, \
+                                            task_id INTEGER NOT NULL, \
+                                            is_processed BOOLEAN NOT NULL, \
+                                            is_finished BOOLEAN NOT NULL, \
+                                            sim_time NUMERIC (10, 4), \
+                                            real_time NUMERIC (10, 4), \
+                                            undefined VARCHAR (20) \
+                                            )')
 
         x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
         num_classes = len(np.unique(y_train_orig))
@@ -228,14 +241,14 @@ class OVMSwarmInitializer():
         self.worker_id_to_ip = {}
         for idx in range(len(self.worker_ips)):
             # find worker on RDS and insert if not exist
-            self.rds_cursor.insert_record(['external_ip', 'worker_state'], [self.worker_ips[idx], 'STOPPED'])
+            self.rds_cursor.insert_record(['external_ip', 'worker_state'], [self.worker_ips[idx], STOPPED])
             worker_id_resp = self.rds_cursor.get_column('worker_id', 'external_ip', self.worker_ips[idx])
             self.worker_ip_to_id[self.worker_ips[idx]] = worker_id_resp[0][0]
             self.worker_id_to_ip[worker_id_resp[0][0]] = self.worker_ips[idx]
             self._initialize_worker(tag, worker_id_resp[0][0])
-        
-        if create_tables:
-            self._create_finished_tasks_table(tag)
+       
+        # if create_tables:
+        #     self._create_finished_tasks_table(tag)
     
     def _create_and_save_device(self, idnum, config, device_config,
                                 num_classes, x_train, y_train_orig,

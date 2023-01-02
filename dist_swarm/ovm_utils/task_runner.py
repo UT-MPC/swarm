@@ -17,7 +17,7 @@ from dist_swarm.db_bridge.worker_in_db import WorkerInRDS
 from dynamo_db import TASK_END, TASK_FAILED, TASK_START, TASK_REALTIME_TIMEOUT
 
 # @TODO implement timeout here
-def run_task(worker_db, worker_status, worker_id, task_config, device_state_cache):
+def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_state_cache):
     swarm_name = task_config['swarm_name']
     worker_namespace = task_config['worker_namespace']
     if worker_status != STOPPED:
@@ -30,7 +30,7 @@ def run_task(worker_db, worker_status, worker_id, task_config, device_state_cach
     # worker_in_db.append_history(strftime("%Y-%m-%d %H:%M:%S", gmtime()), TASK_START, task_config)
     logging.info(f"Running task {task_config['task_id']} in worker {worker_id}")
     logging.info(f"cached is {device_state_cache['device_states'].keys()}")
-
+    task_start_time = time.time()
     try:
         # change the state of current worker
         task_id = task_config['task_id']
@@ -105,10 +105,12 @@ def run_task(worker_db, worker_status, worker_id, task_config, device_state_cach
         worker_db.update_status(worker_id, STOPPED)
         return new_history
 
+    total_time = time.time() - task_start_time
     logging.info(f"-- Task {task_id} successfully finished --")
     try:
         worker_db.update_status(worker_id, STOPPED)
         # worker_in_db.append_history(**new_history)
+        task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time)
         # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")

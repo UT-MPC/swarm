@@ -96,6 +96,7 @@ class WorkerInRDS():
         for item in all_stopped:
             if item[0] in self.worker_db_ids:
                 res.append(item[0])
+        return res
     
     def get_worker_id(self, worker_ip):
         resp = self.cursor.get_column('worker_id', 'external_ip', worker_ip)
@@ -108,3 +109,19 @@ class WorkerInRDS():
     def update_status(self, worker_id, status):
         self.cursor.update_record_by_col('worker_id', worker_id, 'worker_state', status)
         
+class TaskInRDS():
+    def __init__(self, cursor):
+        self.cursor = cursor
+
+    def get_not_processed_finished_tasks(self):
+        return self.cursor.get_column_multi_and({'is_processed': 'FALSE', 'is_finished': 'TRUE'})
+
+    def insert_newly_finished_task(self, task_id, is_timed_out, sim_time, real_time):
+        self.cursor.insert_record_wo_quotes(['task_id', 'is_processed', 'is_finished', 
+                                                'is_timed_out', 'sim_time', 'real_time'],
+                                            [str(task_id), 'FALSE', 'TRUE', 
+                                                'TRUE' if is_timed_out else 'FALSE', 
+                                                str(sim_time), str(real_time)])
+
+    def mark_processed(self, task_id):
+        self.cursor.update_record_by_col('task_id', str(task_id), 'is_processed', 'TRUE')

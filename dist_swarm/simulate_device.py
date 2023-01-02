@@ -1,8 +1,7 @@
 import re
 import sys
 from dist_swarm.db_bridge.rds_bridge import RDSCursor
-
-from dist_swarm.db_bridge.worker_in_db import WorkerInDB
+from dist_swarm.db_bridge.worker_in_db import TaskInRDS, WorkerInDB
 sys.path.insert(0,'..')
 import os
 import logging
@@ -39,7 +38,10 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         self.worker_id = request.worker_id
         self.cursor = RDSCursor(request.rds_host, request.rds_dbname, request.rds_user,
                                 request.rds_password, request.rds_table)
+        self.task_cursor = RDSCursor(request.rds_host, request.rds_dbname, request.rds_user,
+                                request.rds_password, request.swarm_name+'_finished_tasks')
         self.worker_db = WorkerInRDS(self.cursor, [])
+        self.task_db = TaskInRDS(self.task_cursor)
         self.worker_status = STOPPED
         # self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
         # self.worker_status = self.worker_in_db.status
@@ -50,7 +52,9 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         config = json.load(StringIO(request.config))
         # call the function to run a single training task
         try:
-            run_task_thread = threading.Thread(target=run_task, args=(self.worker_db, self.worker_status, self.worker_id, config, self.cache))
+            run_task_thread = threading.Thread(target=run_task, 
+                                args=(self.worker_db, self.task_db, self.worker_status, 
+                                    self.worker_id, config, self.cache))
             run_task_thread.start()
             self.current_task = [run_task_thread]
             return Status(status=self.worker_status)
