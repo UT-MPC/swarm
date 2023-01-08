@@ -466,7 +466,7 @@ class Overmind():
     def _save_rds_table(self, cursor, filename, checkpoint_num):
         record = cursor.get_all_records()
         filepath = self.log_path + f'/rds_{filename}_{checkpoint_num}.log'
-        self._save_as_pickle(self, record, filepath)
+        self._save_as_pickle(record, filepath)
 
     def _save_as_pickle(self, obj, filepath):
         with open(filepath, 'wb') as handle:

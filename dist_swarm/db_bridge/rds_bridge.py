@@ -16,7 +16,7 @@ class RDSCursor:
         connection_config += f'dbname={self.dbname} '
         connection_config += f'user={self.user} '
         connection_config += f'password={self.password} '
-        connection_config += f'connect_timeout=5'
+        # connection_config += f'connect_timeout=5'
         self.connection_config = connection_config
 
         self.connect()
@@ -34,11 +34,13 @@ class RDSCursor:
             self.conn.commit()
         except OperationalError:
             logging.error(f'{traceback.format_exc()}')
+            print(traceback.format_exc())
             self.connect()
             self.cursor.execute(query)
             self.conn.commit()
         except:
             logging.error(f'{traceback.format_exc()}')
+            print(traceback.format_exc())
             if not self.conn.closed:
                 self.conn.rollback()
         return
