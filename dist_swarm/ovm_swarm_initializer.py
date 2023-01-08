@@ -11,6 +11,7 @@ import json
 import logging
 import numpy as np
 import threading
+import concurrent
 import psycopg2
 from pathlib import Path, PurePath
 from pandas import read_pickle, read_csv
@@ -173,22 +174,30 @@ class OVMSwarmInitializer():
         self.config = config
         self.swarm_name = config['tag']
         tag = config['tag']
+        self.swarm_name = tag
         swarm_config = config['swarm_config']
         self.worker_ips = config['worker_ips']
         self.worker_namespace = config['worker_namespace']
+        self.swarm_init_group = config['swarm_init_group']
 
         # setup RDS cursor
         rds_config = config['rds_config']
+        self.rds_config = rds_config
         self.rds_endpoint = rds_config['rds_endpoint']
         self.rds_user = rds_config['rds_user']
         self.rds_password = rds_config['rds_password']
         self.rds_dbname = rds_config['rds_dbname']
-        self.rds_config = rds_config
+
+        self.tasks_table_name = self.swarm_name + '_finished_tasks'
 
         # @TODO create k8s table if not exist
         self.rds_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, 'k8s')
         self.rds_tasks_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, self.swarm_name+'_finished_tasks')
+<<<<<<< HEAD
         self.rds_tasks_cursor.execute_sql(f'create table if not exists {self.swarm_name}_finished_tasks ( \
+=======
+        self.rds_tasks_cursor.execute_sql(f'create table if not exists {self.tasks_table_name} ( \
+>>>>>>> 141ea1705f94120a9fd92a1450cf9f38b7c6a3b4
                                             serial_id serial PRIMARY KEY, \
                                             task_id INTEGER NOT NULL, \
                                             is_processed BOOLEAN NOT NULL, \
@@ -229,13 +238,17 @@ class OVMSwarmInitializer():
                                              x_test, y_test_orig, enc_df)
                 cur_id += 1
 
-        for idnum in range(cur_id, cur_id + swarm_config['number_of_devices']):
-            if not create_tables:
-                continue
+        futures = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
+            for idnum in range(cur_id, cur_id + swarm_config['number_of_devices']):
+                if not create_tables:
+                    continue
+                futures.append(executor.submit(self._create_and_save_device,
+                                idnum, config, config['device_config'],
+                                num_classes, x_train, y_train_orig,
+                                x_test, y_test_orig, enc_df))
 
-            self._create_and_save_device(idnum, config, config['device_config'],
-                                         num_classes, x_train, y_train_orig,
-                                         x_test, y_test_orig, enc_df)
+            concurrent.futures.wait(futures)
         
         # configure worker tables
         # if create_tables:
@@ -328,7 +341,9 @@ class OVMSwarmInitializer():
                                     hyperparams)
 
         # save device model, dataset, and device object on S3 
-        save_device(device, config['tag'], -1)
+        save_device(device, config['tag'], config['swarm_init_group'], -1, False)
+
+        logging.info(f"device {idnum} initialization complete")
 
 def convert_to_map(dist):
     new_dist = {}

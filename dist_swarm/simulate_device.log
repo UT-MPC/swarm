@@ -222,3 +222,45 @@ LINE 1: INSERT INTO ovm_example_finished_tasks (task_id, is_processe...
 2023-01-02 09:36:32,557,557 root INFO cached is dict_keys(['0'])
 2023-01-02 09:36:32,557,557 root INFO device state 0 loaded from cache
 2023-01-02 09:37:04,500,500 root INFO -- Task 0 successfully finished --
+2023-01-07 18:34:31,780,780 root INFO worker id set to 0
+2023-01-07 18:34:39,785,785 root INFO Running task 99999 in worker 0
+2023-01-07 18:34:39,786,786 root INFO cached is dict_keys([])
+2023-01-07 18:35:39,619,619 root INFO -- Task 99999 successfully finished --
+2023-01-07 18:40:39,040,40 root INFO worker id set to 0
+2023-01-07 18:40:40,603,603 root INFO Running task 99999 in worker 0
+2023-01-07 18:40:40,603,603 root INFO cached is dict_keys([])
+2023-01-07 18:44:28,136,136 root INFO worker id set to 0
+2023-01-07 18:44:38,175,175 root INFO Running task 99999 in worker 0
+2023-01-07 18:44:38,175,175 root INFO cached is dict_keys([])
+2023-01-07 18:45:38,449,449 root INFO -- Task 99999 successfully finished --
+2023-01-07 18:54:15,730,730 root INFO Running task 99999 in worker 0
+2023-01-07 18:54:15,731,731 root INFO cached is dict_keys(['0'])
+2023-01-07 18:54:15,731,731 root INFO device state 0 loaded from cache
+2023-01-07 18:54:56,785,785 root INFO -- Task 99999 successfully finished --
+2023-01-08 02:11:50,766,766 root INFO worker id set to 0
+2023-01-08 02:11:53,385,385 root INFO Running task 99999 in worker 0
+2023-01-08 02:11:53,385,385 root INFO cached is dict_keys([])
+2023-01-08 02:14:50,176,176 root INFO worker id set to 0
+2023-01-08 02:14:50,374,374 root INFO Running task 99999 in worker 0
+2023-01-08 02:14:50,374,374 root INFO cached is dict_keys([])
+2023-01-08 02:15:44,830,830 root INFO -- Task 99999 successfully finished --
+2023-01-08 02:15:44,944,944 root INFO updated status
+2023-01-08 02:15:45,086,86 root INFO inserted new task
+2023-01-08 02:20:43,089,89 root INFO worker id set to 0
+2023-01-08 02:20:43,482,482 root INFO Running task 99999 in worker 0
+2023-01-08 02:20:43,482,482 root INFO cached is dict_keys([])
+2023-01-08 02:21:43,036,36 root INFO -- Task 99999 successfully finished --
+2023-01-08 02:21:43,149,149 root INFO updated status
+2023-01-08 02:21:43,267,267 root INFO inserted new task
+2023-01-08 02:25:54,552,552 root INFO worker id set to 0
+2023-01-08 02:25:54,824,824 root INFO Running task 99999 in worker 0
+2023-01-08 02:25:54,824,824 root INFO cached is dict_keys([])
+2023-01-08 02:26:51,071,71 root INFO -- Task 99999 successfully finished --
+2023-01-08 02:26:51,184,184 root INFO updated status
+2023-01-08 02:26:51,302,302 root INFO inserted new task
+2023-01-08 02:31:08,537,537 root INFO worker id set to 0
+2023-01-08 02:31:09,729,729 root INFO Running task 99999 in worker 0
+2023-01-08 02:31:09,729,729 root INFO cached is dict_keys([])
+2023-01-08 02:32:03,992,992 root INFO -- Task 99999 successfully finished --
+2023-01-08 02:32:04,106,106 root INFO updated status
+2023-01-08 02:32:04,220,220 root INFO inserted new task

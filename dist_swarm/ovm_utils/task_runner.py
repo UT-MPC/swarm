@@ -91,14 +91,14 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
 
         # save device (s)
-        save_device(learner, swarm_name, task_id)
+        save_device(learner, swarm_name, "local", task_id, True)
         # @TODO save neighbor device states if instructed
         
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
                        "action_type": TASK_REALTIME_TIMEOUT 
                        if real_time_mode and real_time_timeout < measured_time else TASK_END, "task": task_config}
     except:
-        traceback.print_exc()
+        logging.error(f'{traceback.format_exc()}')
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
                        "action_type": TASK_FAILED, "task": task_config, "error_msg": traceback.format_exc()}
         # worker_in_db.append_history(**new_history)
@@ -110,8 +110,10 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
     try:
         worker_db.update_status(worker_id, STOPPED)
         # worker_in_db.append_history(**new_history)
+        logging.info(f"updated status")
         task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time)
         # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
+        logging.info(f"inserted new task")
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 

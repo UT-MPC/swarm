@@ -1,4 +1,5 @@
 from re import search
+from psycopg2 import OperationalError
 import psycopg2
 import logging
 import traceback
@@ -14,12 +15,15 @@ class RDSCursor:
         connection_config = f'host={self.host} '
         connection_config += f'dbname={self.dbname} '
         connection_config += f'user={self.user} '
-        connection_config += f'password={self.password}'
-        
-        self.conn = psycopg2.connect(connection_config)
-        self.cursor = self.conn.cursor()
+        connection_config += f'password={self.password} '
+        # connection_config += f'connect_timeout=5'
+        self.connection_config = connection_config
 
+        self.connect()
         
+    def connect(self):
+        self.conn = psycopg2.connect(self.connection_config)
+        self.cursor = self.conn.cursor()
 
     def clear_all(self):
         self.execute_sql(f'delete from {self.table}')
@@ -28,9 +32,17 @@ class RDSCursor:
         try:
             self.cursor.execute(query)
             self.conn.commit()
+        except OperationalError:
+            logging.error(f'{traceback.format_exc()}')
+            print(traceback.format_exc())
+            self.connect()
+            self.cursor.execute(query)
+            self.conn.commit()
         except:
             logging.error(f'{traceback.format_exc()}')
-            self.conn.rollback()
+            print(traceback.format_exc())
+            if not self.conn.closed:
+                self.conn.rollback()
         return
 
     def get_all_records(self):
