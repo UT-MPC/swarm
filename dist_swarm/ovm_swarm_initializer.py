@@ -172,30 +172,35 @@ class OVMSwarmInitializer():
         config = json.loads(config_json)
         self.config = config
         tag = config['tag']
+        self.swarm_name = tag
         swarm_config = config['swarm_config']
         self.worker_ips = config['worker_ips']
         self.worker_namespace = config['worker_namespace']
 
         # setup RDS cursor
         rds_config = config['rds_config']
+        self.rds_config = rds_config
         self.rds_endpoint = rds_config['rds_endpoint']
         self.rds_user = rds_config['rds_user']
         self.rds_password = rds_config['rds_password']
         self.rds_dbname = rds_config['rds_dbname']
-        self.rds_config = rds_config
+
+        self.tasks_table_name = self.swarm_name + '_finished_tasks'
 
         # @TODO create k8s table if not exist
         self.rds_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, 'k8s')
         self.rds_tasks_cursor = RDSCursor(self.rds_endpoint, self.rds_dbname, self.rds_user, self.rds_password, self.swarm_name+'_finished_tasks')
-        self.rds_tasks_cursor.execute_sql(f'create table if not exists {self.table} ( \
+        self.rds_tasks_cursor.execute_sql(f'create table if not exists {self.tasks_table_name} ( \
                                             serial_id serial PRIMARY KEY, \
                                             task_id INTEGER NOT NULL, \
                                             is_processed BOOLEAN NOT NULL, \
                                             is_finished BOOLEAN NOT NULL, \
+                                            is_timed_out BOOLEAN NOT NULL, \
                                             sim_time NUMERIC (10, 4), \
                                             real_time NUMERIC (10, 4), \
                                             undefined VARCHAR (20) \
                                             )')
+        self.rds_tasks_cursor.clear_all()
 
         x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
         num_classes = len(np.unique(y_train_orig))

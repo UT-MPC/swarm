@@ -6,12 +6,13 @@ import traceback
 import grpc
 sys.path.insert(0,'..')
 sys.path.insert(0,'../grpc_components')
+import logging
+
 from dist_swarm.db_bridge.worker_in_db import TaskInRDS, WorkerInDB, WorkerInRDS
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from grpc_components.status import RUNNING, STOPPED
 import json
 import os
-import logging
 import threading
 import time
 from time import sleep
@@ -301,12 +302,15 @@ class Overmind():
         ## !!Warning, rt_mode here has an error
         logging.info("----- swarm run start -----")
         run_swarm_start_time = time.time()
-        cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
+        self.cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
+        self.cached_worker_nodes_to_devices = {}
         self.task_queue = []
         self.processed_tasks = []
         self.next_checkpoint = CHECKPOINT_INTERVAL
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
+                if rt_mode:
+                    self.tasks[task_id].real_time_mode = True
                 self.task_queue.append(task_id)
 
         worker_last_avail = {}  # last time that a worker was "idle"
@@ -325,7 +329,7 @@ class Overmind():
             iterations += 1
 
             finished_not_processed_tasks = self.tasks_db.get_not_processed_finished_tasks()
-
+            # print(f"not fin: {finished_not_processed_tasks}")
             # checkpointing
             if len(self.processed_tasks) >= self.next_checkpoint:
                 self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, len(self.processed_tasks))
@@ -334,13 +338,14 @@ class Overmind():
             # re-allocate failed tasks
             for task_item in finished_not_processed_tasks:
                 if not task_item[3]:
-                    self.task_queue.append(task_item[0])
+                    self.task_queue.append(task_item[1])
+                    logging.info(f"re-allocating failed task {task_item}")
                     # TODO delete task item from DB
 
             for task_item in finished_not_processed_tasks:
                 # "process" the finished task, which is
                 # decrementing indegrees of tasks that are dependent on that task
-                task_id = task_item[0]
+                task_id = task_item[1]
                 learner_id = self.tasks[task_id].learner_id
                 neighbor_ids = self.tasks[task_id].neighbor_id_list
                 self.processed_tasks.append(task_id)
@@ -370,22 +375,12 @@ class Overmind():
                         self.tasks[next_task].real_time_mode = True
                         self.tasks[next_task].reset_start_time(self.last_avail)
                             
-                    if self.indegrees[next_task] <= 0:
+                    if self.indegrees[next_task] == 0 and next_task not in self.processed_tasks:
                         self.tasks[next_task].determine_skip()
                         self.task_queue.append(next_task)
 
                 self.tasks_db.mark_processed(task_id)
                 self.task_num -= 1
-
-            # @TODO find out a reason why some tasks remain not processed while 
-            # their indegrees <= 0 
-            if len(self.task_queue) == 0:
-                for pt in self.processed_tasks:
-                    for nt in self.dep_graph[pt]:
-                        if self.indegrees[nt] <= 0 \
-                        and nt not in self.processed_tasks \
-                        and nt not in self.task_queue:
-                            self.task_queue.append(nt)
 
             # get "Stopped" workers and check if one of them holds recent device state
             # worker_dbs = [WorkerInDB(self.swarm_name, self.worker_namespace, id) for id, ip in enumerate(self.worker_nodes)]
@@ -409,10 +404,13 @@ class Overmind():
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
+            # print(f"cached: {self.cached_devices_to_worker_nodes}")
             for task_id in self.task_queue:
                 # @TODO support mutable neighbors
-                if self.tasks[task_id].learner_id in cached_devices_to_worker_nodes and task_id not in task_id_to_worker:
-                    target_worker_id = cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
+                if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \
+                    task_id not in task_id_to_worker and \
+                    self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
+                    target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
                     task_id_to_worker[task_id] = target_worker_id
                     free_workers.remove(target_worker_id)
                     logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
@@ -427,18 +425,19 @@ class Overmind():
                 task_id_to_worker[self.task_queue.pop()] = worker_id
 
             # print(f"{task_id_to_worker}")
+            # print(f"{self.task_queue}")
             logging.info(f"tasks left: {self.task_num}")
 
-            cached_devices_to_worker_nodes = {}
             # call RunTask asynchronously 
             for task_id in task_id_to_worker:
                 task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
                 task_thread.start()
                 self.allocated_tasks[task_id_to_worker[task_id]] = task_id
-                cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
+                self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
 
             sleep(polling_interval)
         
+        self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, 'last')
         logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")
 
     def save_checkpoint(self, log_dict, checkpoint_num):
@@ -451,16 +450,24 @@ class Overmind():
         self._save_dynamodb_table(self.swarm_name, 'device_table', checkpoint_num)
 
         # save finished tasks
-        self._save_dynamodb_table(self.swarm_name + '-finished-tasks', 'tasks_table', checkpoint_num)
+        self._save_rds_table(self.initializer.rds_tasks_cursor, 'tasks_table', checkpoint_num)
 
         # save log_dict
-        filepath = self.log_path + f'/etc_{checkpoint_num}_{datetime.datetime.now()}.log'
+        filepath = self.log_path + f'/etc_{checkpoint_num}.log'
         with open(filepath, 'wb') as handle:
             pickle.dump(log_dict, handle, protocol=pickle.HIGHEST_PROTOCOL) 
 
     def _save_dynamodb_table(self, table_name, pickle_file_name, checkpoint_num):
         table = self.dynamodb.Table(table_name)
         resp = table.scan()
-        filepath = self.log_path + f'/{pickle_file_name}_{checkpoint_num}_{datetime.datetime.now()}.log'
+        filepath = self.log_path + f'/{pickle_file_name}_{checkpoint_num}.log'
+        self._save_as_pickle(resp, filepath)
+
+    def _save_rds_table(self, cursor, filename, checkpoint_num):
+        record = cursor.get_all_records()
+        filepath = self.log_path + f'/rds_{filename}_{checkpoint_num}.log'
+        self._save_as_pickle(self, record, filepath)
+
+    def _save_as_pickle(self, obj, filepath):
         with open(filepath, 'wb') as handle:
-            pickle.dump(resp, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
