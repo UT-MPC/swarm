@@ -41,6 +41,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         timeout = task_config['timeout']
         worker_namespace = task_config['worker_namespace']
         real_time_mode = task_config['real_time_mode']
+        print(f"type: {type(real_time_mode)}")
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
         measured_time = 0
@@ -73,11 +74,15 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                 
                 # @TODO handle multiple neighbors and multiple function calls before eval()
                 start = time.time()
-                func(neighbors[0], **func_list[i]["params"])
+                for nbgr in neighbors:
+                    print(f"{type(nbgr)} and {func_list[i]}")
+                
+                    func(nbgr, **func_list[i]["params"])
                 measured_time += time.time() - start
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
+                print('timed out!')
                 hist = learner.eval()
-                if not real_time_mode or real_time_timeout >= measured_time:
+                if real_time_mode == 'False' or real_time_timeout >= measured_time:
                     device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
                     device_in_db.update_timestamp(end)
                     device_in_db.update_encounter_history(TASK_END)
@@ -113,7 +118,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         logging.info(f"updated status")
         task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time)
         # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
-        logging.info(f"inserted new task")
+        logging.info(f"inserted finished task")
     except:
         logging.error(f"Task {task_id} returned an error while updating status: {traceback.format_exc()}")
 

@@ -79,7 +79,7 @@ def save_device_dataset(device: base_device.Device, path, swarm_name, id, enc_id
 
 def save_data_object(obj, name, path, swarm_name, id, enc_idx, overwrite=True):
     s3 = boto3.resource('s3')
-    tmp_local_file_path = path + f"/dataset_{id}.pickle"
+    tmp_local_file_path = path + f"/dataset_{name}_{id}.pickle"
     if overwrite or not Path(tmp_local_file_path).exists():
         with open(tmp_local_file_path, 'wb') as handle:
             pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)

@@ -1,25 +1,23 @@
 {
     "dataset": "mnist",
     "model": "2nn",
-    "tag": "ovm_example_100_levy",
+    "tag": "ovm_federated_learning",
+    "swarm_init_group": "fl",
     "worker_ips": [
-        "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",
-        "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051",
-        "a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051",
-        "a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051",
-        "acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051",
-        "a86d15c50c0ef4fd889c208b91306322-1434235675.us-east-2.elb.amazonaws.com:50051",
-        "a73d0841439be4c72a7f99c2a8ee014c-461204456.us-east-2.elb.amazonaws.com:50051",
-        "a2db8d3e5406b4932acea5b23c9031f7-510381442.us-east-2.elb.amazonaws.com:50051",
-        "a53fdee8cddc64425960db2cfccd9cfe-1399437765.us-east-2.elb.amazonaws.com:50051",
-        "ac707e718b19942a9a6cae3863f20aef-1947071726.us-east-2.elb.amazonaws.com:50051"
+        "localhost:50051"
     ],
-    "worker_namespace": "ds-deployment",
+    "learning_scenario": "federated",
+    "rds_config": {
+        "rds_endpoint": "ovm-workers.cluster-cssbjidz4kjh.us-east-2.rds.amazonaws.com",
+        "rds_user": "postgres",
+        "rds_password": "overmind",
+        "rds_dbname": "workers"
+        },
     "swarm_config": {
-        "number_of_devices": 100,
-        "local_set_size": 2,
-        "local_data_size": 150,
-        "goal_set_size": 5,
+        "number_of_devices": 3,
+        "local_set_size": 10,
+        "local_data_size": 200,
+        "goal_set_size": 10,
         "district_9": [[1,2], [3,4], [5,6],
                        [7,8], [9,0], [1,2],
                        [4,5], [6,7], [8,9]],
@@ -29,29 +27,56 @@
                         }
     },
     "device_config": {
-        "device_strategy": "fl-client",
-        "id": 1,
-        "pretrained_model": "none",
-        "model_size": 10,
-        "model_size_in_bits": 6224000,
-        "device_power": 8,
-        "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50_step_02.pickle",
-            "computation_time": 0.14,
-            "communication_rate": 16000000
-        },
         "device_groups": [
             {
                 "device_config": {
-                    "device_strategy": "fl-server"
-                },
-                "id": 0,
-                "number_of_devices": 1,
-                "encounter_config": {
-                    "computation_time": 300
+                    "device_strategy": "fl-server",
+                    "id": 0,
+                    "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+                    "encounter_config": {
+                        "invoked_functions": [
+                            {"func_name": "update_weights", "params": {}},
+                            {"func_name": "!evaluate"}
+                        ]
+                    },
+                    "train_config": {
+                        "__comment__": "formerly called hyperparams",
+                        "batch-size": 50,
+                        "orig-lr": 0.1,
+                        "max_rounds": 3,
+                        "evaluation-metrics": "loss-and-accuracy",
+                        "kappa": 7,
+                        "offset": 0.96,
+                        "apply-rate": 5,
+                        "test-data-per-label": 800,
+                        "similarity-threshold": 0.5,
+                        "low-similarity-threshold": 0.5,
+                        "num-rounds": 250,
+                        "time-per-round": 100,
+                        "decay": 0.998,
+                        "optimizer": "adam",
+                        "optimizer-params": {
+                            "learning_rate": 0.001
+                        },
+                        "update-client-num": 3
+                    }
                 }
             }
         ],
+        "device_strategy": "fl-client",
+        "id": 0,
+        "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+        "model_size": 10,
+        "model_size_in_bits": 1,
+        "device_power": 8,
+        "encounter_config": {
+            "encounter_data_file": "encounter_data/federated_learning_example.pickle",
+            "computation_time": 0.0,
+            "communication_rate": 16000000,
+            "invoked_functions": [
+                {"func_name": "fl_update", "params": {"epoch": 1}}
+            ]
+        },
         "train_config": {
             "__comment__": "formerly called hyperparams",
             "batch-size": 50,

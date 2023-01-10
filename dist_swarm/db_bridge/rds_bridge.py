@@ -3,6 +3,7 @@ from psycopg2 import OperationalError
 import psycopg2
 import logging
 import traceback
+import time
 
 class RDSCursor:
     def __init__(self, host, dbname, user, password, table):
@@ -24,16 +25,23 @@ class RDSCursor:
     def connect(self):
         self.conn = psycopg2.connect(self.connection_config)
         self.cursor = self.conn.cursor()
+        self.connection_time = time.time()
 
     def clear_all(self):
         self.execute_sql(f'delete from {self.table}')
 
     def execute_sql(self, query):
+        if time.time() - self.connection_time > 20 * 60:
+            self.conn.close()
+
+        if self.conn.closed:
+            self.connect()
+
         try:
             self.cursor.execute(query)
             self.conn.commit()
         except OperationalError:
-            logging.error(f'{traceback.format_exc()}')
+            logging.error(f'OperationalError caught: {traceback.format_exc()}')
             print(traceback.format_exc())
             self.connect()
             self.cursor.execute(query)

@@ -2,6 +2,7 @@
     "dataset": "mnist",
     "model": "2nn",
     "tag": "ovm_example_100_levy_rt_mode",
+    "swarm_init_group": "levy_100_mnist",
     "worker_ips": [
         "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",
         "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051",
@@ -34,6 +35,7 @@
                         "device_powers": [10, 8, 6, 4, 2]
                         }
     },
+    "learning_scenario": "oppcl",
     "device_config": {
         "device_strategy": "greedy",
         "id": 0,

@@ -176,7 +176,7 @@ class OVMSwarmInitializer():
         self.swarm_name = tag
         swarm_config = config['swarm_config']
         self.worker_ips = config['worker_ips']
-        self.worker_namespace = config['worker_namespace']
+        self.worker_namespace = "deprecated"
         self.swarm_init_group = config['swarm_init_group']
 
         # setup RDS cursor
@@ -228,7 +228,7 @@ class OVMSwarmInitializer():
         if 'device_groups' in global_device_config:
             device_groups = global_device_config['device_groups']
             for dg in device_groups:
-                self._create_and_save_device(idnum, config, dg['device_config'],
+                self._create_and_save_device(cur_id, config, dg['device_config'],
                                              num_classes, x_train, y_train_orig,
                                              x_test, y_test_orig, enc_df)
                 cur_id += 1
@@ -318,7 +318,7 @@ class OVMSwarmInitializer():
 
         # prepare params for device
         x_local, y_local_orig = train_data_provider.fetch()
-        hyperparams = config['device_config']['train_config']
+        hyperparams = device_config['train_config']
         compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']}
         train_config = {'batch_size': hyperparams['batch-size'], 'shuffle': True}
 

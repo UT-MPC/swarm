@@ -22,14 +22,12 @@
         "rds_password": "overmind",
         "rds_dbname": "workers"
         },
+    "learning_scenario": "oppcl",
     "swarm_config": {
         "number_of_devices": 100,
-        "local_set_size": 2,
-        "local_data_size": 150,
-        "goal_set_size": 5,
-        "district_9": [[1,2], [3,4], [5,6],
-                       [7,8], [9,0], [1,2],
-                       [4,5], [6,7], [8,9]],
+        "local_set_size": 10,
+        "local_data_size": 200,
+        "goal_set_size": 10,
         "device_sizes": {
                         "model_sizes": [10, 10, 8, 6, 4],
                         "device_powers": [10, 8, 6, 4, 2]
@@ -44,12 +42,16 @@
         "device_power": 8,
         "encounter_config": {
             "encounter_data_file": "encounter_data/levy_clients_100_epi_20_dur_100_step_02.pickle",
-            "computation_time": 0.14,
-            "communication_rate": 16000000
+            "computation_time": 0.0,
+            "communication_rate": 1600000000,
+            "invoked_functions": [
+                {"func_name": "delegate", "params": {"epoch": 1, "iteration": 1}},
+                {"func_name": "!evaluate"}
+            ]
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
-            "batch-size": 50,
+            "batch-size": 100,
             "orig-lr": 0.1,
             "max_rounds": 3,
             "evaluation-metrics": "loss-and-accuracy",
