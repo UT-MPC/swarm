@@ -32,7 +32,7 @@
                 "device_config": {
                     "device_strategy": "fl-server",
                     "id": 0,
-                    "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+                    "pretrained_model": "../pretrained/mnist_2nn_init.h5",
                     "encounter_config": {
                         "invoked_functions": [
                             {"func_name": "update_weights", "params": {}},
@@ -65,7 +65,7 @@
         ],
         "device_strategy": "fl-client",
         "id": 0,
-        "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+        "pretrained_model": "../pretrained/mnist_2nn_init.h5",
         "model_size": 10,
         "model_size_in_bits": 1,
         "device_power": 8,
