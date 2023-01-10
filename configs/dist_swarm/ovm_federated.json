@@ -1,0 +1,103 @@
+{
+    "dataset": "mnist",
+    "model": "2nn",
+    "tag": "ovm_federated_learning",
+    "swarm_init_group": "fl",
+    "worker_ips": [
+        "localhost:50051"
+    ],
+    "learning_scenario": "federated",
+    "rds_config": {
+        "rds_endpoint": "ovm-workers.cluster-cssbjidz4kjh.us-east-2.rds.amazonaws.com",
+        "rds_user": "postgres",
+        "rds_password": "overmind",
+        "rds_dbname": "workers"
+        },
+    "swarm_config": {
+        "number_of_devices": 3,
+        "local_set_size": 10,
+        "local_data_size": 200,
+        "goal_set_size": 10,
+        "district_9": [[1,2], [3,4], [5,6],
+                       [7,8], [9,0], [1,2],
+                       [4,5], [6,7], [8,9]],
+        "device_sizes": {
+                        "model_sizes": [10, 10, 8, 6, 4],
+                        "device_powers": [10, 8, 6, 4, 2]
+                        }
+    },
+    "device_config": {
+        "device_groups": [
+            {
+                "device_config": {
+                    "device_strategy": "fl-server",
+                    "id": 0,
+                    "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+                    "encounter_config": {
+                        "invoked_functions": [
+                            {"func_name": "update_weights", "params": {}},
+                            {"func_name": "!evaluate"}
+                        ]
+                    },
+                    "train_config": {
+                        "__comment__": "formerly called hyperparams",
+                        "batch-size": 50,
+                        "orig-lr": 0.1,
+                        "max_rounds": 3,
+                        "evaluation-metrics": "loss-and-accuracy",
+                        "kappa": 7,
+                        "offset": 0.96,
+                        "apply-rate": 5,
+                        "test-data-per-label": 800,
+                        "similarity-threshold": 0.5,
+                        "low-similarity-threshold": 0.5,
+                        "num-rounds": 250,
+                        "time-per-round": 100,
+                        "decay": 0.998,
+                        "optimizer": "adam",
+                        "optimizer-params": {
+                            "learning_rate": 0.001
+                        },
+                        "update-client-num": 3
+                    }
+                }
+            }
+        ],
+        "device_strategy": "fl-client",
+        "id": 0,
+        "pretrained_model": "../pretrained/test_base_2nn_mnist.pickle",
+        "model_size": 10,
+        "model_size_in_bits": 1,
+        "device_power": 8,
+        "encounter_config": {
+            "encounter_data_file": "encounter_data/federated_learning_example.pickle",
+            "computation_time": 0.0,
+            "communication_rate": 16000000,
+            "invoked_functions": [
+                {"func_name": "fl_update", "params": {"epoch": 1}}
+            ]
+        },
+        "train_config": {
+            "__comment__": "formerly called hyperparams",
+            "batch-size": 50,
+            "orig-lr": 0.1,
+            "max_rounds": 3,
+            "evaluation-metrics": "loss-and-accuracy",
+            "kappa": 7,
+            "offset": 0.96,
+            "apply-rate": 5,
+            "test-data-per-label": 800,
+            "similarity-threshold": 0.5,
+            "low-similarity-threshold": 0.5,
+            "num-rounds": 250,
+            "time-per-round": 100,
+            "decay": 0.998,
+            "optimizer": "adam",
+            "optimizer-params": {
+                "learning_rate": 0.001
+            }
+        },
+        "__comment__": "This is an examplar json that is sent to simulate_device_services"
+    },
+    "__comment__": "This is an examplar json that is used by controller"
+}

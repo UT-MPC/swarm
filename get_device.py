@@ -90,4 +90,10 @@ def get_device_class(class_name):
     elif class_name == 'gradient replay':
         return device.gr_device.JSDGradientReplayDevice
 
+    ##### OVM FL Devices
+    if class_name == 'fl-server':
+        return device.federated_device.OVMFLServerDevice
+    elif class_name == 'fl-client':
+        return device.federated_device.OVMFLClientDevice
+
     raise ValueError('Cannot find device name {}'.format(class_name))

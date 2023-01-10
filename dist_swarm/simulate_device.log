@@ -264,3 +264,732 @@ LINE 1: INSERT INTO ovm_example_finished_tasks (task_id, is_processe...
 2023-01-08 02:32:03,992,992 root INFO -- Task 99999 successfully finished --
 2023-01-08 02:32:04,106,106 root INFO updated status
 2023-01-08 02:32:04,220,220 root INFO inserted new task
+2023-01-08 22:09:47,302,302 root INFO worker id set to 665
+2023-01-08 22:21:28,441,441 root INFO worker id set to 665
+2023-01-08 22:24:55,236,236 root INFO worker id set to 665
+2023-01-08 22:27:48,834,834 root INFO worker id set to 665
+2023-01-08 22:29:32,909,909 root INFO worker id set to 665
+2023-01-08 22:32:25,419,419 root INFO worker id set to 665
+2023-01-08 22:34:38,149,149 root INFO worker id set to 665
+2023-01-08 22:40:21,657,657 root INFO worker id set to 665
+2023-01-08 22:42:48,847,847 root INFO worker id set to 665
+2023-01-08 23:20:44,413,413 root INFO worker id set to 665
+2023-01-08 23:23:50,365,365 root INFO worker id set to 665
+2023-01-08 23:29:34,652,652 root INFO worker id set to 665
+2023-01-08 23:32:54,588,588 root INFO worker id set to 665
+2023-01-08 23:34:37,539,539 root INFO worker id set to 665
+2023-01-08 23:36:09,047,47 root INFO worker id set to 665
+2023-01-08 23:38:16,242,242 root INFO worker id set to 665
+2023-01-08 23:52:53,978,978 root INFO worker id set to 665
+2023-01-08 23:55:03,422,422 root INFO worker id set to 665
+2023-01-08 23:56:16,978,978 root INFO worker id set to 665
+2023-01-09 00:06:07,257,257 root INFO worker id set to 665
+2023-01-09 00:16:52,900,900 root INFO worker id set to 665
+2023-01-09 00:20:09,583,583 root INFO worker id set to 665
+2023-01-09 00:26:11,909,909 root INFO worker id set to 665
+2023-01-09 00:27:37,350,350 root INFO worker id set to 665
+2023-01-09 00:30:37,373,373 root INFO worker id set to 665
+2023-01-09 00:35:15,248,248 root INFO worker id set to 665
+2023-01-09 00:41:35,038,38 root INFO worker id set to 665
+2023-01-09 00:43:01,402,402 root INFO worker id set to 665
+2023-01-09 00:44:29,735,735 root INFO worker id set to 665
+2023-01-09 00:46:05,714,714 root INFO worker id set to 665
+2023-01-09 00:53:08,738,738 root INFO worker id set to 665
+2023-01-09 00:53:39,190,190 root INFO worker id set to 665
+2023-01-09 01:01:42,875,875 root INFO worker id set to 665
+2023-01-09 01:03:55,139,139 root INFO worker id set to 665
+2023-01-09 01:05:45,446,446 root INFO worker id set to 665
+2023-01-09 01:07:37,234,234 root INFO worker id set to 665
+2023-01-09 01:07:55,194,194 root INFO worker id set to 665
+2023-01-09 01:14:18,692,692 root INFO worker id set to 665
+2023-01-09 01:16:29,068,68 root INFO worker id set to 665
+2023-01-09 01:18:00,762,762 root INFO worker id set to 665
+2023-01-09 01:20:32,479,479 root INFO worker id set to 665
+2023-01-09 01:24:26,391,391 root INFO worker id set to 665
+2023-01-09 01:29:46,867,867 root INFO worker id set to 665
+2023-01-09 01:33:00,489,489 root INFO worker id set to 665
+2023-01-09 01:37:32,260,260 root INFO Running task 9 in worker 665
+2023-01-09 01:37:32,260,260 root INFO cached is dict_keys([])
+2023-01-09 01:37:32,680,680 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    learner = load_device(swarm_name, learner_id, **learner_load_config)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 139, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-09 01:37:37,487,487 root INFO Running task 8 in worker 665
+2023-01-09 01:37:37,487,487 root INFO cached is dict_keys([])
+2023-01-09 01:37:37,862,862 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    learner = load_device(swarm_name, learner_id, **learner_load_config)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 139, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-09 01:37:42,721,721 root INFO Running task 7 in worker 665
+2023-01-09 01:37:42,721,721 root INFO cached is dict_keys([])
+2023-01-09 01:37:43,109,109 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    learner = load_device(swarm_name, learner_id, **learner_load_config)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 139, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-09 01:37:47,953,953 root INFO Running task 6 in worker 665
+2023-01-09 01:37:47,954,954 root INFO cached is dict_keys([])
+2023-01-09 01:37:48,330,330 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    learner = load_device(swarm_name, learner_id, **learner_load_config)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 139, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-09 01:37:53,183,183 root INFO Running task 5 in worker 665
+2023-01-09 01:37:53,184,184 root INFO cached is dict_keys([])
+2023-01-09 01:37:53,561,561 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    learner = load_device(swarm_name, learner_id, **learner_load_config)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 139, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-09 01:37:58,421,421 root INFO Running task 4 in worker 665
+2023-01-09 01:37:58,421,421 root INFO cached is dict_keys([])
+2023-01-09 01:46:02,573,573 root INFO worker id set to 665
+2023-01-09 01:54:40,131,131 root INFO worker id set to 665
+2023-01-09 01:54:43,238,238 root INFO Running task 9 in worker 665
+2023-01-09 01:54:43,239,239 root INFO cached is dict_keys([])
+2023-01-09 01:55:21,390,390 root INFO -- Task 9 successfully finished --
+2023-01-09 01:55:21,505,505 root INFO updated status
+2023-01-09 01:55:21,622,622 root INFO inserted new task
+2023-01-09 01:55:25,394,394 root INFO Running task 8 in worker 665
+2023-01-09 01:55:25,394,394 root INFO cached is dict_keys(['10'])
+2023-01-09 01:56:01,709,709 root INFO -- Task 8 successfully finished --
+2023-01-09 01:56:01,825,825 root INFO updated status
+2023-01-09 01:56:01,944,944 root INFO inserted new task
+2023-01-09 01:56:37,404,404 root INFO worker id set to 665
+2023-01-09 01:56:38,666,666 root INFO Running task 1 in worker 665
+2023-01-09 01:56:38,666,666 root INFO cached is dict_keys([])
+2023-01-09 01:57:13,397,397 root INFO -- Task 1 successfully finished --
+2023-01-09 01:57:13,512,512 root INFO updated status
+2023-01-09 01:57:13,626,626 root INFO inserted new task
+2023-01-09 01:57:15,506,506 root INFO Running task 0 in worker 665
+2023-01-09 01:57:15,506,506 root INFO cached is dict_keys(['2'])
+2023-01-09 01:57:56,740,740 root INFO -- Task 0 successfully finished --
+2023-01-09 01:57:56,855,855 root INFO updated status
+2023-01-09 01:57:56,969,969 root INFO inserted new task
+2023-01-09 01:57:57,492,492 root INFO Running task 2 in worker 665
+2023-01-09 01:57:57,493,493 root INFO cached is dict_keys(['1'])
+2023-01-09 01:58:41,156,156 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 72, in run_task
+    func = getattr(learner, func_list[i]["func_name"])
+AttributeError: 'OVMFLServerDevice' object has no attribute 'fl_update'
+
+2023-01-09 02:05:13,796,796 root INFO worker id set to 665
+2023-01-09 02:06:35,365,365 root INFO worker id set to 665
+2023-01-09 02:06:40,000,0 root INFO Running task 1 in worker 665
+2023-01-09 02:06:40,000,0 root INFO cached is dict_keys([])
+2023-01-09 02:07:18,660,660 root INFO -- Task 1 successfully finished --
+2023-01-09 02:07:18,773,773 root INFO updated status
+2023-01-09 02:07:18,887,887 root INFO inserted new task
+2023-01-09 02:07:22,080,80 root INFO Running task 0 in worker 665
+2023-01-09 02:07:22,080,80 root INFO cached is dict_keys(['2'])
+2023-01-09 02:07:56,743,743 root INFO -- Task 0 successfully finished --
+2023-01-09 02:07:56,856,856 root INFO updated status
+2023-01-09 02:07:56,993,993 root INFO inserted new task
+2023-01-09 02:07:59,120,120 root INFO Running task 2 in worker 665
+2023-01-09 02:07:59,120,120 root INFO cached is dict_keys(['1'])
+2023-01-09 02:08:37,864,864 root INFO worker id set to 665
+2023-01-09 02:08:56,610,610 root INFO -- Task 2 successfully finished --
+2023-01-09 02:08:56,725,725 root INFO updated status
+2023-01-09 02:08:56,854,854 root INFO inserted new task
+2023-01-09 02:08:59,970,970 root INFO Running task 4 in worker 665
+2023-01-09 02:08:59,971,971 root INFO cached is dict_keys([])
+2023-01-09 02:09:35,472,472 root INFO -- Task 4 successfully finished --
+2023-01-09 02:09:35,595,595 root INFO updated status
+2023-01-09 02:09:35,710,710 root INFO inserted new task
+2023-01-09 02:09:36,846,846 root INFO Running task 1 in worker 665
+2023-01-09 02:09:36,846,846 root INFO cached is dict_keys(['2'])
+2023-01-09 02:09:36,846,846 root INFO device state 2 loaded from cache
+2023-01-09 02:09:58,198,198 root INFO -- Task 1 successfully finished --
+2023-01-09 02:09:58,314,314 root INFO updated status
+2023-01-09 02:09:58,430,430 root INFO inserted new task
+2023-01-09 02:10:03,088,88 root INFO Running task 3 in worker 665
+2023-01-09 02:10:03,088,88 root INFO cached is dict_keys(['2'])
+2023-01-09 02:10:41,320,320 root INFO -- Task 3 successfully finished --
+2023-01-09 02:10:41,442,442 root INFO updated status
+2023-01-09 02:10:41,562,562 root INFO inserted new task
+2023-01-09 02:10:45,392,392 root INFO Running task 0 in worker 665
+2023-01-09 02:10:45,393,393 root INFO cached is dict_keys(['1'])
+2023-01-09 02:10:45,393,393 root INFO device state 1 loaded from cache
+2023-01-09 02:11:08,361,361 root INFO -- Task 0 successfully finished --
+2023-01-09 02:11:08,476,476 root INFO updated status
+2023-01-09 02:11:08,591,591 root INFO inserted new task
+2023-01-09 02:11:11,738,738 root INFO Running task 5 in worker 665
+2023-01-09 02:11:11,739,739 root INFO cached is dict_keys(['1'])
+2023-01-09 02:12:01,624,624 root INFO -- Task 5 successfully finished --
+2023-01-09 02:12:01,741,741 root INFO updated status
+2023-01-09 02:12:01,856,856 root INFO inserted new task
+2023-01-09 02:27:16,307,307 root INFO worker id set to 665
+2023-01-09 02:27:17,318,318 root INFO Running task 1 in worker 665
+2023-01-09 02:27:17,318,318 root INFO cached is dict_keys([])
+2023-01-09 02:27:57,443,443 root INFO -- Task 1 successfully finished --
+2023-01-09 02:27:57,556,556 root INFO updated status
+2023-01-09 02:27:57,670,670 root INFO inserted new task
+2023-01-09 02:27:59,380,380 root INFO Running task 0 in worker 665
+2023-01-09 02:27:59,380,380 root INFO cached is dict_keys(['2'])
+2023-01-09 02:28:36,620,620 root INFO -- Task 0 successfully finished --
+2023-01-09 02:28:36,735,735 root INFO updated status
+2023-01-09 02:28:36,850,850 root INFO inserted new task
+2023-01-09 02:28:41,491,491 root INFO Running task 2 in worker 665
+2023-01-09 02:28:41,491,491 root INFO cached is dict_keys(['1'])
+2023-01-09 02:29:29,925,925 root INFO -- Task 2 successfully finished --
+2023-01-09 02:29:30,044,44 root INFO updated status
+2023-01-09 02:29:30,159,159 root INFO inserted new task
+2023-01-09 02:29:33,994,994 root INFO Running task 4 in worker 665
+2023-01-09 02:29:33,994,994 root INFO cached is dict_keys(['0'])
+2023-01-09 02:30:18,484,484 root INFO -- Task 4 successfully finished --
+2023-01-09 02:30:18,600,600 root INFO updated status
+2023-01-09 02:30:18,718,718 root INFO inserted new task
+2023-01-09 02:30:21,354,354 root INFO Running task 3 in worker 665
+2023-01-09 02:30:21,355,355 root INFO cached is dict_keys(['2'])
+2023-01-09 02:30:57,869,869 root INFO -- Task 3 successfully finished --
+2023-01-09 02:30:57,983,983 root INFO updated status
+2023-01-09 02:30:58,097,97 root INFO inserted new task
+2023-01-09 02:31:03,768,768 root INFO Running task 5 in worker 665
+2023-01-09 02:31:03,768,768 root INFO cached is dict_keys(['1'])
+2023-01-09 02:31:52,191,191 root INFO -- Task 5 successfully finished --
+2023-01-09 02:31:52,306,306 root INFO updated status
+2023-01-09 02:31:52,422,422 root INFO inserted new task
+2023-01-09 02:43:14,466,466 root INFO worker id set to 665
+2023-01-09 02:43:20,732,732 root INFO Running task 1 in worker 665
+2023-01-09 02:43:20,732,732 root INFO cached is dict_keys([])
+2023-01-09 02:43:56,277,277 root INFO -- Task 1 successfully finished --
+2023-01-09 02:43:56,390,390 root INFO updated status
+2023-01-09 02:43:56,503,503 root INFO inserted new task
+2023-01-09 02:43:57,604,604 root INFO Running task 0 in worker 665
+2023-01-09 02:43:57,604,604 root INFO cached is dict_keys(['2'])
+2023-01-09 02:44:35,955,955 root INFO -- Task 0 successfully finished --
+2023-01-09 02:44:36,070,70 root INFO updated status
+2023-01-09 02:44:36,185,185 root INFO inserted new task
+2023-01-09 02:44:39,540,540 root INFO Running task 2 in worker 665
+2023-01-09 02:44:39,540,540 root INFO cached is dict_keys(['1'])
+2023-01-09 02:45:31,517,517 root INFO -- Task 2 successfully finished --
+2023-01-09 02:45:31,631,631 root INFO updated status
+2023-01-09 02:45:31,746,746 root INFO inserted new task
+2023-01-09 02:45:37,361,361 root INFO Running task 4 in worker 665
+2023-01-09 02:45:37,361,361 root INFO cached is dict_keys(['0'])
+2023-01-09 02:46:13,610,610 root INFO -- Task 4 successfully finished --
+2023-01-09 02:46:13,724,724 root INFO updated status
+2023-01-09 02:46:13,839,839 root INFO inserted new task
+2023-01-09 02:46:14,693,693 root INFO Running task 3 in worker 665
+2023-01-09 02:46:14,693,693 root INFO cached is dict_keys(['2'])
+2023-01-09 02:46:52,159,159 root INFO -- Task 3 successfully finished --
+2023-01-09 02:46:52,273,273 root INFO updated status
+2023-01-09 02:46:52,388,388 root INFO inserted new task
+2023-01-09 02:46:56,922,922 root INFO Running task 5 in worker 665
+2023-01-09 02:46:56,922,922 root INFO cached is dict_keys(['1'])
+2023-01-09 02:47:48,731,731 root INFO -- Task 5 successfully finished --
+2023-01-09 02:47:48,848,848 root INFO updated status
+2023-01-09 02:47:48,962,962 root INFO inserted new task
+2023-01-09 02:53:24,724,724 root INFO worker id set to 665
+2023-01-09 02:53:25,713,713 root INFO Running task 1 in worker 665
+2023-01-09 02:53:25,713,713 root INFO cached is dict_keys([])
+2023-01-09 02:54:02,011,11 root INFO -- Task 1 successfully finished --
+2023-01-09 02:54:02,128,128 root INFO updated status
+2023-01-09 02:54:02,242,242 root INFO inserted finished task
+2023-01-09 02:54:02,341,341 root INFO Running task 0 in worker 665
+2023-01-09 02:54:02,341,341 root INFO cached is dict_keys(['2'])
+2023-01-09 02:54:41,730,730 root INFO -- Task 0 successfully finished --
+2023-01-09 02:54:41,845,845 root INFO updated status
+2023-01-09 02:54:41,965,965 root INFO inserted finished task
+2023-01-09 02:54:44,476,476 root INFO Running task 2 in worker 665
+2023-01-09 02:54:44,476,476 root INFO cached is dict_keys(['1'])
+2023-01-09 02:55:32,526,526 root INFO -- Task 2 successfully finished --
+2023-01-09 02:55:32,643,643 root INFO updated status
+2023-01-09 02:55:32,758,758 root INFO inserted finished task
+2023-01-09 02:55:36,970,970 root INFO Running task 4 in worker 665
+2023-01-09 02:55:36,970,970 root INFO cached is dict_keys(['0'])
+2023-01-09 02:56:21,165,165 root INFO -- Task 4 successfully finished --
+2023-01-09 02:56:21,281,281 root INFO updated status
+2023-01-09 02:56:21,395,395 root INFO inserted finished task
+2023-01-09 02:56:24,340,340 root INFO Running task 3 in worker 665
+2023-01-09 02:56:24,340,340 root INFO cached is dict_keys(['2'])
+2023-01-09 02:57:04,072,72 root INFO -- Task 3 successfully finished --
+2023-01-09 02:57:04,188,188 root INFO updated status
+2023-01-09 02:57:04,304,304 root INFO inserted finished task
+2023-01-09 02:57:06,288,288 root INFO Running task 5 in worker 665
+2023-01-09 02:57:06,288,288 root INFO cached is dict_keys(['1'])
+2023-01-09 02:57:58,550,550 root INFO -- Task 5 successfully finished --
+2023-01-09 02:57:58,666,666 root INFO updated status
+2023-01-09 02:57:58,781,781 root INFO inserted finished task
+2023-01-09 14:01:26,250,250 root INFO worker id set to 665
+2023-01-09 14:03:49,715,715 root INFO worker id set to 665
+2023-01-09 14:10:53,478,478 root INFO worker id set to 665
+2023-01-09 14:11:14,821,821 root INFO Running task 1 in worker 665
+2023-01-09 14:11:14,821,821 root INFO cached is dict_keys([])
+2023-01-09 14:11:37,931,931 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+  File "../device/base_device.py", line 390, in fit_to
+    pred = model(X)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/base_layer.py", line 985, in __call__
+    outputs = call_fn(inputs, *args, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/sequential.py", line 372, in call
+    return super(Sequential, self).call(inputs, training=training, mask=mask)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/functional.py", line 386, in call
+    inputs, training=training, mask=mask)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/functional.py", line 484, in _run_internal_graph
+    input_t._keras_mask = mask
+AttributeError: 'str' object has no attribute '_keras_mask'
+
+2023-01-09 14:11:41,090,90 root INFO Running task 0 in worker 665
+2023-01-09 14:11:41,090,90 root INFO cached is dict_keys([])
+2023-01-09 14:11:58,519,519 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+  File "../device/base_device.py", line 390, in fit_to
+    pred = model(X)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/base_layer.py", line 985, in __call__
+    outputs = call_fn(inputs, *args, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/sequential.py", line 372, in call
+    return super(Sequential, self).call(inputs, training=training, mask=mask)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/functional.py", line 386, in call
+    inputs, training=training, mask=mask)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/functional.py", line 484, in _run_internal_graph
+    input_t._keras_mask = mask
+AttributeError: 'str' object has no attribute '_keras_mask'
+
+2023-01-09 14:17:49,774,774 root INFO worker id set to 665
+2023-01-09 14:17:56,799,799 root INFO Running task 1 in worker 665
+2023-01-09 14:17:56,799,799 root INFO cached is dict_keys([])
+2023-01-09 14:18:18,014,14 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, other, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:18:23,236,236 root INFO Running task 0 in worker 665
+2023-01-09 14:18:23,237,237 root INFO cached is dict_keys([])
+2023-01-09 14:18:43,650,650 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, other, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:26:00,854,854 root INFO worker id set to 665
+2023-01-09 14:40:18,018,18 root INFO worker id set to 665
+2023-01-09 14:40:31,949,949 root INFO Running task 1 in worker 665
+2023-01-09 14:40:31,949,949 root INFO cached is dict_keys([])
+2023-01-09 14:40:56,546,546 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:40:58,114,114 root INFO Running task 0 in worker 665
+2023-01-09 14:40:58,114,114 root INFO cached is dict_keys([])
+2023-01-09 14:41:24,552,552 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:45:07,894,894 root INFO worker id set to 665
+2023-01-09 14:45:19,540,540 root INFO Running task 1 in worker 665
+2023-01-09 14:45:19,540,540 root INFO cached is dict_keys([])
+2023-01-09 14:45:44,125,125 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:45:45,702,702 root INFO Running task 0 in worker 665
+2023-01-09 14:45:45,702,702 root INFO cached is dict_keys([])
+2023-01-09 14:46:11,963,963 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, epoch)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:50:10,534,534 root INFO worker id set to 665
+2023-01-09 14:50:13,762,762 root INFO Running task 1 in worker 665
+2023-01-09 14:50:13,762,762 root INFO cached is dict_keys([])
+2023-01-09 14:50:41,883,883 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    other._x_train = self._x_train
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:50:45,568,568 root INFO Running task 0 in worker 665
+2023-01-09 14:50:45,568,568 root INFO cached is dict_keys([])
+2023-01-09 14:51:08,615,615 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    other._x_train = self._x_train
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:54:23,010,10 root INFO worker id set to 665
+2023-01-09 14:54:26,111,111 root INFO Running task 1 in worker 665
+2023-01-09 14:54:26,111,111 root INFO cached is dict_keys([])
+2023-01-09 14:54:47,793,793 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, 1)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 14:54:52,370,370 root INFO Running task 0 in worker 665
+2023-01-09 14:54:52,370,370 root INFO cached is dict_keys([])
+2023-01-09 14:55:18,106,106 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 78, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/federated_device.py", line 120, in fl_update
+    self._weights = self.fit_to(self, 1)
+TypeError: fit_to() takes 3 positional arguments but 4 were given
+
+2023-01-09 15:01:46,402,402 root INFO worker id set to 665
+2023-01-09 15:02:00,655,655 root INFO Running task 1 in worker 665
+2023-01-09 15:02:00,655,655 root INFO cached is dict_keys([])
+2023-01-09 15:02:34,778,778 root INFO -- Task 1 successfully finished --
+2023-01-09 15:02:34,893,893 root INFO updated status
+2023-01-09 15:02:35,089,89 root INFO inserted finished task
+2023-01-09 15:02:37,590,590 root INFO Running task 0 in worker 665
+2023-01-09 15:02:37,590,590 root INFO cached is dict_keys(['2'])
+2023-01-09 15:03:09,505,505 root INFO -- Task 0 successfully finished --
+2023-01-09 15:03:09,622,622 root INFO updated status
+2023-01-09 15:03:09,737,737 root INFO inserted finished task
+2023-01-09 15:03:14,416,416 root INFO Running task 2 in worker 665
+2023-01-09 15:03:14,416,416 root INFO cached is dict_keys(['1'])
+2023-01-09 15:04:04,425,425 root INFO -- Task 2 successfully finished --
+2023-01-09 15:04:04,540,540 root INFO updated status
+2023-01-09 15:04:04,654,654 root INFO inserted finished task
+2023-01-09 15:04:06,831,831 root INFO Running task 4 in worker 665
+2023-01-09 15:04:06,831,831 root INFO cached is dict_keys(['0'])
+2023-01-09 15:04:40,995,995 root INFO -- Task 4 successfully finished --
+2023-01-09 15:04:41,110,110 root INFO updated status
+2023-01-09 15:04:41,225,225 root INFO inserted finished task
+2023-01-09 15:04:43,756,756 root INFO Running task 3 in worker 665
+2023-01-09 15:04:43,756,756 root INFO cached is dict_keys(['2'])
+2023-01-09 15:05:15,948,948 root INFO -- Task 3 successfully finished --
+2023-01-09 15:05:16,063,63 root INFO updated status
+2023-01-09 15:05:16,177,177 root INFO inserted finished task
+2023-01-09 15:05:20,848,848 root INFO Running task 5 in worker 665
+2023-01-09 15:05:20,849,849 root INFO cached is dict_keys(['1'])
+2023-01-09 15:06:07,770,770 root INFO -- Task 5 successfully finished --
+2023-01-09 15:06:07,885,885 root INFO updated status
+2023-01-09 15:06:08,009,9 root INFO inserted finished task
+2023-01-09 15:07:45,205,205 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 56, in RunTask
+    args=(self.worker_db, self.task_db, self.worker_status,
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_db'
+
+2023-01-09 15:07:45,205,205 grpc._server ERROR Exception calling application: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 56, in RunTask
+    args=(self.worker_db, self.task_db, self.worker_status,
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/grpc/_server.py", line 443, in _call_behavior
+    response_or_iterator = behavior(argument, context)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/simulate_device.py", line 63, in RunTask
+    return Status(status=self.worker_status)
+AttributeError: 'SimulateDeviceServicer' object has no attribute 'worker_status'
+2023-01-09 15:07:45,711,711 root INFO worker id set to 665
+2023-01-09 15:07:50,558,558 root INFO Running task 0 in worker 665
+2023-01-09 15:07:50,558,558 root INFO cached is dict_keys([])
+2023-01-09 15:08:22,694,694 root INFO -- Task 0 successfully finished --
+2023-01-09 15:08:22,808,808 root INFO updated status
+2023-01-09 15:09:05,247,247 root INFO worker id set to 665
+2023-01-09 15:09:05,411,411 root INFO Running task 1 in worker 665
+2023-01-09 15:09:05,411,411 root INFO cached is dict_keys([])
+2023-01-09 15:09:38,777,777 root INFO -- Task 1 successfully finished --
+2023-01-09 15:09:38,892,892 root INFO updated status
+2023-01-09 15:09:39,257,257 root INFO inserted finished task
+2023-01-09 15:09:42,510,510 root INFO Running task 0 in worker 665
+2023-01-09 15:09:42,510,510 root INFO cached is dict_keys(['2'])
+2023-01-09 15:10:15,599,599 root INFO -- Task 0 successfully finished --
+2023-01-09 15:10:15,714,714 root INFO updated status
+2023-01-09 15:10:15,830,830 root INFO inserted finished task
+2023-01-09 15:10:19,281,281 root INFO Running task 2 in worker 665
+2023-01-09 15:10:19,281,281 root INFO cached is dict_keys(['1'])
+2023-01-09 15:11:09,783,783 root INFO -- Task 2 successfully finished --
+2023-01-09 15:11:09,899,899 root INFO updated status
+2023-01-09 15:11:10,015,15 root INFO inserted finished task
+2023-01-09 15:11:11,926,926 root INFO Running task 4 in worker 665
+2023-01-09 15:11:11,926,926 root INFO cached is dict_keys(['0'])
+2023-01-09 15:11:45,856,856 root INFO -- Task 4 successfully finished --
+2023-01-09 15:11:45,971,971 root INFO updated status
+2023-01-09 15:11:46,132,132 root INFO inserted finished task
+2023-01-09 15:11:48,655,655 root INFO Running task 3 in worker 665
+2023-01-09 15:11:48,655,655 root INFO cached is dict_keys(['2'])
+2023-01-09 15:12:24,291,291 root INFO -- Task 3 successfully finished --
+2023-01-09 15:12:24,408,408 root INFO updated status
+2023-01-09 15:12:24,523,523 root INFO inserted finished task
+2023-01-09 15:12:25,450,450 root INFO Running task 5 in worker 665
+2023-01-09 15:12:25,450,450 root INFO cached is dict_keys(['1'])
+2023-01-09 15:13:16,502,502 root INFO -- Task 5 successfully finished --
+2023-01-09 15:13:16,621,621 root INFO updated status
+2023-01-09 15:13:16,735,735 root INFO inserted finished task
+2023-01-09 17:09:56,830,830 root INFO worker id set to 665
+2023-01-09 17:10:39,091,91 root INFO worker id set to 665
+2023-01-09 17:16:34,235,235 root INFO worker id set to 665
+2023-01-09 21:46:02,750,750 root INFO worker id set to 665
+2023-01-09 21:46:03,376,376 root INFO Running task 4 in worker 665
+2023-01-09 21:46:03,376,376 root INFO cached is dict_keys([])
+2023-01-09 21:46:39,329,329 root INFO -- Task 4 successfully finished --
+2023-01-09 21:46:39,445,445 root INFO updated status
+2023-01-09 21:46:39,563,563 root INFO inserted finished task
+2023-01-09 21:46:40,513,513 root INFO Running task 3 in worker 665
+2023-01-09 21:46:40,513,513 root INFO cached is dict_keys(['5'])
+2023-01-09 21:47:13,845,845 root INFO -- Task 3 successfully finished --
+2023-01-09 21:47:13,961,961 root INFO updated status
+2023-01-09 21:47:14,076,76 root INFO inserted finished task
+2023-01-09 21:47:17,169,169 root INFO Running task 2 in worker 665
+2023-01-09 21:47:17,169,169 root INFO cached is dict_keys(['4'])
+2023-01-09 21:47:46,401,401 root INFO -- Task 2 successfully finished --
+2023-01-09 21:47:46,516,516 root INFO updated status
+2023-01-09 21:47:46,630,630 root INFO inserted finished task
+2023-01-09 21:47:48,961,961 root INFO Running task 1 in worker 665
+2023-01-09 21:47:48,961,961 root INFO cached is dict_keys(['3'])
+2023-01-09 21:48:20,605,605 root INFO -- Task 1 successfully finished --
+2023-01-09 21:48:20,720,720 root INFO updated status
+2023-01-09 21:48:20,835,835 root INFO inserted finished task
+2023-01-09 21:48:25,756,756 root INFO Running task 0 in worker 665
+2023-01-09 21:48:25,756,756 root INFO cached is dict_keys(['2'])
+2023-01-09 21:48:58,935,935 root INFO -- Task 0 successfully finished --
+2023-01-09 21:48:59,053,53 root INFO updated status
+2023-01-09 21:48:59,166,166 root INFO inserted finished task
+2023-01-09 21:49:02,517,517 root INFO Running task 5 in worker 665
+2023-01-09 21:49:02,517,517 root INFO cached is dict_keys(['1'])
+2023-01-09 21:50:35,312,312 root INFO -- Task 5 successfully finished --
+2023-01-09 21:50:35,436,436 root INFO updated status
+2023-01-09 21:50:35,551,551 root INFO inserted finished task
+2023-01-09 21:50:36,958,958 root INFO Running task 10 in worker 665
+2023-01-09 21:50:36,958,958 root INFO cached is dict_keys(['0'])
+2023-01-09 21:51:12,049,49 root INFO -- Task 10 successfully finished --
+2023-01-09 21:51:12,168,168 root INFO updated status
+2023-01-09 21:51:12,285,285 root INFO inserted finished task
+2023-01-09 21:51:14,051,51 root INFO Running task 9 in worker 665
+2023-01-09 21:51:14,052,52 root INFO cached is dict_keys(['5'])
+2023-01-09 21:51:45,190,190 root INFO -- Task 9 successfully finished --
+2023-01-09 21:51:45,389,389 root INFO updated status
+2023-01-09 21:51:45,531,531 root INFO inserted finished task
+2023-01-09 21:51:50,861,861 root INFO Running task 8 in worker 665
+2023-01-09 21:51:50,861,861 root INFO cached is dict_keys(['4'])
+2023-01-09 21:52:25,950,950 root INFO -- Task 8 successfully finished --
+2023-01-09 21:52:26,065,65 root INFO updated status
+2023-01-09 21:52:26,190,190 root INFO inserted finished task
+2023-01-09 21:52:27,586,586 root INFO Running task 7 in worker 665
+2023-01-09 21:52:27,586,586 root INFO cached is dict_keys(['3'])
+2023-01-09 21:52:58,898,898 root INFO -- Task 7 successfully finished --
+2023-01-09 21:52:59,012,12 root INFO updated status
+2023-01-09 21:52:59,126,126 root INFO inserted finished task
+2023-01-09 21:53:04,499,499 root INFO Running task 6 in worker 665
+2023-01-09 21:53:04,499,499 root INFO cached is dict_keys(['2'])
+2023-01-09 21:53:36,532,532 root INFO -- Task 6 successfully finished --
+2023-01-09 21:53:36,646,646 root INFO updated status
+2023-01-09 21:53:36,760,760 root INFO inserted finished task
+2023-01-09 21:53:41,387,387 root INFO Running task 11 in worker 665
+2023-01-09 21:53:41,387,387 root INFO cached is dict_keys(['1'])
+2023-01-09 21:55:14,604,604 root INFO -- Task 11 successfully finished --
+2023-01-09 21:55:14,718,718 root INFO updated status
+2023-01-09 21:55:14,833,833 root INFO inserted finished task
+2023-01-09 21:55:16,093,93 root INFO Running task 12 in worker 665
+2023-01-09 21:55:16,093,93 root INFO cached is dict_keys(['0'])
+2023-01-09 21:55:16,093,93 root INFO device state 0 loaded from cache
+2023-01-09 21:56:28,205,205 root INFO -- Task 12 successfully finished --
+2023-01-09 21:56:28,387,387 root INFO updated status
+2023-01-09 21:56:28,504,504 root INFO inserted finished task
+2023-01-09 21:56:29,591,591 root INFO Running task 17 in worker 665
+2023-01-09 21:56:29,592,592 root INFO cached is dict_keys(['0'])
+2023-01-09 21:57:03,211,211 root INFO -- Task 17 successfully finished --
+2023-01-09 21:57:03,405,405 root INFO updated status
+2023-01-09 21:57:03,520,520 root INFO inserted finished task
+2023-01-09 21:57:06,479,479 root INFO Running task 16 in worker 665
+2023-01-09 21:57:06,479,479 root INFO cached is dict_keys(['5'])
+2023-01-09 21:57:37,490,490 root INFO -- Task 16 successfully finished --
+2023-01-09 21:57:37,651,651 root INFO updated status
+2023-01-09 21:57:37,840,840 root INFO inserted finished task
+2023-01-09 21:57:38,103,103 root INFO Running task 15 in worker 665
+2023-01-09 21:57:38,103,103 root INFO cached is dict_keys(['4'])
+2023-01-09 21:58:10,297,297 root INFO -- Task 15 successfully finished --
+2023-01-09 21:58:10,411,411 root INFO updated status
+2023-01-09 21:58:10,527,527 root INFO inserted finished task
+2023-01-09 21:58:15,013,13 root INFO Running task 14 in worker 665
+2023-01-09 21:58:15,014,14 root INFO cached is dict_keys(['3'])
+2023-01-09 21:58:51,609,609 root INFO -- Task 14 successfully finished --
+2023-01-09 21:58:51,724,724 root INFO updated status
+2023-01-09 21:58:51,838,838 root INFO inserted finished task
+2023-01-09 21:58:57,045,45 root INFO Running task 13 in worker 665
+2023-01-09 21:58:57,045,45 root INFO cached is dict_keys(['2'])
+2023-01-09 21:59:34,718,718 root INFO -- Task 13 successfully finished --
+2023-01-09 21:59:34,832,832 root INFO updated status
+2023-01-09 21:59:34,948,948 root INFO inserted finished task
+2023-01-09 21:59:38,991,991 root INFO Running task 18 in worker 665
+2023-01-09 21:59:38,991,991 root INFO cached is dict_keys(['1'])
+2023-01-09 22:00:59,845,845 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 84, in run_task
+    hist = learner.eval()
+  File "../device/federated_device.py", line 107, in eval
+    self.last_eval = super().eval()
+  File "../device/base_device.py", line 217, in eval
+    return self.eval_loss_and_accuracy()
+  File "../device/base_device.py", line 226, in eval_loss_and_accuracy
+    model = self._get_model()
+  File "../device/base_device.py", line 268, in _get_model
+    model.set_weights(self._weights)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/tensorflow/python/keras/engine/base_layer.py", line 1810, in set_weights
+    (self.name, len(weights), expected_num_weights, str(weights)[:50]))
+ValueError: You called `set_weights(weights)` on layer "sequential" with a weight list of length 0, but the layer was expecting 6 weights. Provided weights: []...
+
+2023-01-09 22:46:48,592,592 root INFO worker id set to 665
+2023-01-09 22:51:37,385,385 root INFO Running task 2 in worker 665
+2023-01-09 22:51:37,385,385 root INFO cached is dict_keys([])
+2023-01-09 22:52:10,260,260 root INFO -- Task 2 successfully finished --
+2023-01-09 22:52:10,426,426 root INFO updated status
+2023-01-09 22:52:14,763,763 root INFO Running task 1 in worker 665
+2023-01-09 22:52:14,763,763 root INFO cached is dict_keys(['3'])
+2023-01-09 22:52:45,835,835 root INFO -- Task 1 successfully finished --
+2023-01-09 22:52:46,063,63 root INFO updated status
+2023-01-09 22:52:46,813,813 root INFO Running task 0 in worker 665
+2023-01-09 22:52:46,813,813 root INFO cached is dict_keys(['2'])
+2023-01-09 22:53:21,192,192 root INFO -- Task 0 successfully finished --
+2023-01-09 22:53:21,404,404 root INFO updated status
+2023-01-09 23:08:24,805,805 root ERROR OperationalError caught: Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 41, in execute_sql
+    self.cursor.execute(query)
+psycopg2.OperationalError: no connection to the server
+
+
+2023-01-09 23:08:24,806,806 root ERROR OperationalError caught: Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 41, in execute_sql
+    self.cursor.execute(query)
+psycopg2.OperationalError: could not receive data from server: Connection timed out
+SSL SYSCALL error: Connection timed out
+
+
+2023-01-09 23:08:24,806,806 root ERROR OperationalError caught: Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 41, in execute_sql
+    self.cursor.execute(query)
+psycopg2.OperationalError: no connection to the server
+
+
+2023-01-09 23:08:25,189,189 root INFO inserted finished task
+2023-01-09 23:08:25,189,189 root INFO inserted finished task
+2023-01-09 23:08:25,203,203 root INFO inserted finished task

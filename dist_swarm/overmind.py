@@ -38,27 +38,27 @@ ENC_IDX="encounter index"
 MAX_ITERATIONS = 10_000_000
 
 class Task():
-    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list, worker_namespace,
-                 timeout=2**8, real_time_mode=False, communication_time=0, dependant_on_mutable=False):
+    def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list,
+                 timeout=2**16, real_time_mode=False, communication_time=0, dependant_on_mutable=False):
         self.swarm_name = swarm_name
-        self.worker_namespace = worker_namespace
+        self.worker_namespace = "deprecated"
         self.task_id = task_id
         self.start = start
         self.end = end
         self.learner_id = learner_id
         self.neighbor_id_list = neighbor_id_list
         self.timeout = timeout
-        self.load_config = {str(learner_id): self.get_new_load_config()}
         self.real_time_mode = real_time_mode
         self.communication_time = communication_time
         self.real_time_timeout = self.end - self.start - communication_time
         self.dependant_on_mutable = dependant_on_mutable
 
         self.skip = False  # skip the processing of this task
-        
-        for nbgr in neighbor_id_list:
-            self.load_config[str(nbgr)] = self.get_new_load_config()
         self.func_list = []
+
+        self.set_learner_load_config(True, False)
+        self.set_neighbor_load_config(False, True)
+        self.set_load_config()
 
     def update_real_time_timeout(self, communication_time):
         self.real_time_timeout = self.end - self.start - communication_time
@@ -92,11 +92,21 @@ class Task():
             "real_time_timeout": str(self.real_time_timeout),
         }
         
-    def set_load_config(self, id, load_model: bool, load_dataset: bool):
-        pass
+    def set_learner_load_config(self, learner_load_model: bool, learner_load_dataset: bool):
+        self.learner_load_model = learner_load_model
+        self.learner_load_dataset = learner_load_dataset
+    
+    def set_neighbor_load_config(self, neighbor_load_model: bool, neighbor_load_dataset: bool):
+        self.neighbor_load_model = neighbor_load_model
+        self.neighbor_load_dataset = neighbor_load_dataset
 
-    def get_new_load_config(self, load_model: bool=True, load_dataset: bool=True):
+    def get_new_load_config(self, load_model: bool = False, load_dataset: bool=True):
         return {"load_model": load_model, "load_dataset": load_dataset}
+
+    def set_load_config(self):
+        self.load_config = {str(self.learner_id): self.get_new_load_config(self.learner_load_model, self.learner_load_model)}
+        for nbgr in self.neighbor_id_list:
+            self.load_config[str(nbgr)] = self.get_new_load_config(self.neighbor_load_model, self.neighbor_load_dataset)
 
     def reset_start_time(self, last_avail):
         self.start = max(self.start, last_avail[self.learner_id])
@@ -120,8 +130,9 @@ class Overmind():
         self.device_config = self.config["device_config"]
         self.swarm_name = self.config['tag']
         self.worker_nodes : typing.List[str] = self.config["worker_ips"]
-        self.worker_namespace = self.config["worker_namespace"]
-        self.number_of_devices = self.config["swarm_config"]["number_of_devices"]
+        self.number_of_devices = self.config["swarm_config"]["number_of_devices"] + (len(self.device_config["device_groups"]) if "device_groups" in self.device_config else 0)
+        self.learning_scenario = self.config["learning_scenario"]
+        self.worker_namespace = "deprecated"
 
         self.log_path = f'ovm_logs/{self.swarm_name}/{datetime.datetime.now()}'
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
@@ -137,8 +148,8 @@ class Overmind():
         self.worker_id_to_ip = {v: k for k, v in self.worker_ip_to_id.items()}
 
         self.tasks_db = TaskInRDS(self.initializer.rds_tasks_cursor)
-
-    def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None):
+    
+    def build_dep_graph_multi_neighbors(self, rt_mode=False, dependency=None, oppcl_time=None):
         # read encounter dataset
         enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
@@ -171,6 +182,187 @@ class Overmind():
         print(f"oppcl time: {oppcl_time}")
 
         dep_graph = {}  # (preceding task id, task id)
+        last_tasks = dict.fromkeys(range(self.number_of_devices), set())  # (device id, last task idx) 
+        last_times = dict.fromkeys(range(self.number_of_devices), 0)  # (device id, last time device is done with oppcl)
+        tasks = {}  # (task id, task object)
+        indegrees = {}
+        # @TODO support hierarchical by specifying servers in config
+        self.server_list = [0]
+
+        for index, row in enc_df.iterrows():
+            device1_id = (int)(row[CLIENT1])
+            
+            if type(row[CLIENT2]) == type([]):
+                device2_ids = [int(c) for c in row[CLIENT2]]
+                max_device2_id = max(device2_ids)
+                is_same = (device1_id in device2_ids)
+            else:
+                device2_ids = [int(row[CLIENT2])]
+                max_device2_id = device2_ids[0]
+                is_same = (device1_id == device2_ids[0])
+
+            if max(device1_id, max_device2_id) >= self.number_of_devices or is_same:
+                continue
+
+            start_time = row[TIME_START]
+            if not rt_mode:
+                start_time_1 = max(start_time, last_times[device1_id])
+                device2_last_time = max(last_times[d2id] for d2id in device2_ids)
+                start_time_2 = max(start_time, device2_last_time)
+
+                end_time_1 = start_time_1 + oppcl_time
+                end_time_2 = start_time_2 + oppcl_time
+            else:
+                start_time_1 = start_time
+                start_time_2 = start_time
+                end_time_1 = row[TIME_END]
+                end_time_2 = row[TIME_END]
+
+            task_1_timeout = row[TIME_END] - start_time_1 < oppcl_time
+            task_2_timeout = row[TIME_END] - start_time_2 < oppcl_time
+
+            if (not task_1_timeout) and (not task_2_timeout):
+                task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, device2_ids, 
+                                real_time_mode=rt_mode, communication_time=self.communication_time)
+                task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_ids[0], [device1_id], 
+                                  real_time_mode=rt_mode, communication_time=self.communication_time)
+
+                if task_1_2.learner_id not in self.server_list:  # if client
+                    task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=True)
+                    task_1_2.set_neighbor_load_config(neighbor_load_model=True, neighbor_load_dataset=False)
+                    task_1_2.set_load_config()
+                    for func_config in self.device_config["encounter_config"]["invoked_functions"]:
+                        if func_config["func_name"][0] == '!':
+                            task_1_2.add_eval()
+                        else:
+                            task_1_2.add_func(func_config["func_name"], func_config["params"])
+                else:
+                    task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=False)
+                    task_1_2.set_neighbor_load_config(neighbor_load_model=True, neighbor_load_dataset=False)
+                    for func_config in self.device_config["device_groups"][0]["device_config"]["encounter_config"]["invoked_functions"]:
+                        if func_config["func_name"][0] == '!':
+                            task_1_2.add_eval()
+                        else:
+                            task_1_2.add_func(func_config["func_name"], func_config["params"])
+
+                if not task_1_timeout:
+                    indegrees[task_id] = 0
+                    dep_graph[task_id] = []
+                    tasks[task_id] = task_1_2
+
+                # we assume that all delegations are dependent on data, at least
+                if (not task_1_timeout):
+                    if device1_id in self.server_list:
+                        for lt in last_tasks[device1_id]:
+                            dep_graph[lt].append(task_1_2.task_id)
+                            indegrees[task_1_2.task_id] += 1
+                        last_tasks[device1_id] = set()
+                    else:
+                        for lt in last_tasks[device1_id]:
+                            dep_graph[lt].append(task_1_2.task_id)
+                            indegrees[task_1_2.task_id] += 1
+
+                    for device2_id in device2_ids:
+                        if device2_id not in self.server_list:
+                            for lt in last_tasks[device2_id]:
+                                dep_graph[lt].append(task_1_2.task_id)
+                                indegrees[task_1_2.task_id] += 1
+                
+                if not task_1_timeout:
+                    if device1_id not in self.server_list:
+                        last_tasks[device1_id] = set([task_1_2.task_id])
+                    for device2_id in device2_ids:
+                        last_tasks[device2_id] = set([task_1_2.task_id])
+
+
+                if not rt_mode and not task_1_timeout:
+                    last_times[device1_id] = max(last_times[device1_id], start_time_1 + oppcl_time)
+
+                # if task is dependent on mutable state of the neighbor,
+                # succeeding tasks should also be dependent on tasks where the device
+                # participated as a neighbor
+                if dependency["on_mutable"] and self.learning_scenario == "oppcl":
+                    last_tasks[device1_id].append(task_2_1.task_id)
+
+                # if learning is "mutual" not one-way, 
+                if self.learning_scenario == "oppcl":  # @TODO generalize to mutual vs. one-way
+                    for func_config in self.device_config["encounter_config"]["invoked_functions"]:
+                        if func_config["func_name"][0] == '!':
+                            task_2_1.add_eval()
+                        else:
+                            task_2_1.add_func(func_config["func_name"], func_config["params"])
+                
+                    if not task_2_timeout:
+                        indegrees[task_id+1] = 0
+                        dep_graph[task_id+1] = []
+                        tasks[task_id+1] = task_2_1
+
+                    for device2_id in device2_ids:
+                        if (not task_2_timeout) and device2_id in last_tasks:
+                            for lt in last_tasks[device2_id]:
+                                dep_graph[lt].append(task_2_1.task_id)
+                                indegrees[task_2_1.task_id] += 1
+
+                        if dependency["on_mutable"]:
+                            for lt in last_tasks[device1_id]:
+                                dep_graph[lt].append(task_2_1.task_id)
+                                indegrees[task_2_1.task_id] += 1
+              
+                    if not task_2_timeout:
+                        for device2_id in device2_ids:
+                            last_tasks[device2_id] = [task_2_1.task_id]
+
+                    if dependency["on_mutable"]:
+                        for device2_id in device2_ids:
+                            last_tasks[device2_id].append(task_1_2.task_id)
+
+                    if not rt_mode and not task_2_timeout:
+                        for device2_id in device2_ids:
+                            last_times[device2_id] = max(last_times[device2_id], start_time_2 + oppcl_time)
+
+                task_id += (1 + (1 if self.learning_scenario == "oppcl" else 0))
+
+        self.task_num = task_id
+        self.dep_graph = dep_graph
+        self.last_tasks = last_tasks
+        self.tasks = tasks
+        self.indegrees = indegrees
+
+
+    def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None):
+        # read encounter dataset
+        enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
+        enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
+        if enc_dataset_filename.split('.')[-1] == 'pickle':
+            with open(enc_dataset_path,'rb') as pfile:
+                enc_df = read_pickle(pfile)
+        else:
+            with open(enc_dataset_path,'rb') as pfile:
+                enc_df = read_csv(pfile)
+        self.enc_df = enc_df
+        last_end_time = 0
+        last_run_time = 0
+        
+        # get dependency info
+        if dependency is None:
+            device_class = get_device_class(self.device_config["device_strategy"])
+            dependency = device_class.get_dependency()
+        self.dependant_to_mutable = dependency["on_mutable"]
+
+        # read connection data and populate task list
+        task_id = 0
+        encounter_config = self.device_config['encounter_config']
+        self.model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
+        self.computation_time = encounter_config['computation_time']
+        self.communication_time = 2 * self.model_send_time 
+        if oppcl_time == None:
+            if not rt_mode:
+                oppcl_time = 2 * self.model_send_time + self.computation_time
+            else:
+                oppcl_time = 0.0000001
+        print(f"oppcl time: {oppcl_time}")
+
+        dep_graph = {}  # (preceding task id, task id)
         last_tasks = {}  # (device id, last task idx) 
         last_times = dict.fromkeys(range(self.number_of_devices), 0)  # (device id, last time device is done with oppcl)
         tasks = {}  # (task id, task object)
@@ -197,9 +389,9 @@ class Overmind():
             task_2_timeout = row[TIME_END] - start_time_2 < oppcl_time
 
             if (not task_1_timeout) and (not task_2_timeout):
-                task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, [device2_id], self.worker_namespace,
+                task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, [device2_id],
                                 real_time_mode=rt_mode, communication_time=self.communication_time)
-                task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_id, [device1_id], self.worker_namespace,
+                task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_id, [device1_id],
                                 real_time_mode=rt_mode, communication_time=self.communication_time)
                 task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
@@ -260,8 +452,6 @@ class Overmind():
         self.last_tasks = last_tasks
         self.tasks = tasks
         self.indegrees = indegrees
-
-        self.finished_tasks_table = self.dynamodb.Table(self.swarm_name +'-finished-tasks')
     
     def send_run_task_request(self, worker_id, task):
         # task.reset_start_time(self.last_avail)
@@ -279,6 +469,7 @@ class Overmind():
                 res = status.result()
         except Exception as e:
             logging.error("gRPC call returned with error")
+            self.initializer._initialize_worker(self.swarm_name, worker_id)
             traceback.print_stack()
     
     def send_check_running_request(self, worker_id):
@@ -388,32 +579,23 @@ class Overmind():
             task_id_to_worker = {}
             
             free_workers = self.worker_db.get_stopped_workers()
-            # "revive" the worker if running for more than 30 iterations
-            # for w in worker_last_avail:
-            #     worker_last_avail[w] += 10
-            # for w in free_workers:
-            #     worker_last_avail[w] = 0
-            # for w in worker_last_avail:
-            #     if worker_last_avail[w] > 300:
-            #         logging.info(f"reviving worker {w}")
-            #         self.revive_worker(worker_dbs[w], w)
-            #         worker_last_avail[w] = 0
-            #         self.task_queue.insert(0, self.allocated_tasks[w])
+            
 
             logging.info(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
             # print(f"cached: {self.cached_devices_to_worker_nodes}")
-            for task_id in self.task_queue:
-                # @TODO support mutable neighbors
-                if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \
-                    task_id not in task_id_to_worker and \
-                    self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
-                    target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
-                    task_id_to_worker[task_id] = target_worker_id
-                    free_workers.remove(target_worker_id)
-                    logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
+            if self.learning_scenario == "oppcl":
+                for task_id in self.task_queue:
+                    # @TODO support mutable neighbors
+                    if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \
+                        task_id not in task_id_to_worker and \
+                        self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
+                        target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
+                        task_id_to_worker[task_id] = target_worker_id
+                        free_workers.remove(target_worker_id)
+                        logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             
             # delete assigned tasks from task queue
             for task_id in task_id_to_worker:
@@ -452,7 +634,16 @@ class Overmind():
         # save finished tasks
         self._save_rds_table(self.initializer.rds_tasks_cursor, 'tasks_table', checkpoint_num)
 
-        # save log_dict
+        # save log_dict and other values
+        log_dict['config'] = self.config
+        log_dict['run_swarm'] = {}
+        log_dict['run_swarm']['tasks'] = self.tasks
+        log_dict['run_swarm']['task_queue'] = self.task_queue
+        log_dict['run_swarm']['processed_tasks'] = self.processed_tasks
+        log_dict['run_swarm']['indegrees'] = self.indegrees
+        log_dict['run_swarm']['dep_graph'] = self.dep_graph
+        
+
         filepath = self.log_path + f'/etc_{checkpoint_num}.log'
         with open(filepath, 'wb') as handle:
             pickle.dump(log_dict, handle, protocol=pickle.HIGHEST_PROTOCOL) 
