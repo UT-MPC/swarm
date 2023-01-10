@@ -39,7 +39,8 @@ MAX_ITERATIONS = 10_000_000
 
 class Task():
     def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list,
-                 timeout=2**16, real_time_mode=False, communication_time=0, dependant_on_mutable=False):
+                 timeout=2**16, real_time_mode=False, communication_time=0, dependant_on_mutable=False,
+                 learning_config='oppcl'):
         self.swarm_name = swarm_name
         self.worker_namespace = "deprecated"
         self.task_id = task_id
@@ -50,6 +51,8 @@ class Task():
         self.timeout = timeout
         self.real_time_mode = real_time_mode
         self.communication_time = communication_time
+        self.learning_config = learning_config
+
         self.real_time_timeout = self.end - self.start - communication_time
         self.dependant_on_mutable = dependant_on_mutable
 
@@ -90,6 +93,7 @@ class Task():
             "timeout": self.timeout,  # overmind controller assumes that server is dead when timeout is elasped
             "real_time_mode": str(self.real_time_mode),
             "real_time_timeout": str(self.real_time_timeout),
+            "learning_scenario": self.learning_config
         }
         
     def set_learner_load_config(self, learner_load_model: bool, learner_load_dataset: bool):
@@ -223,9 +227,11 @@ class Overmind():
 
             if (not task_1_timeout) and (not task_2_timeout):
                 task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, device2_ids, 
-                                real_time_mode=rt_mode, communication_time=self.communication_time)
+                                real_time_mode=rt_mode, communication_time=self.communication_time,
+                                learning_config='fl')
                 task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_ids[0], [device1_id], 
-                                  real_time_mode=rt_mode, communication_time=self.communication_time)
+                                  real_time_mode=rt_mode, communication_time=self.communication_time,
+                                  learning_config='fl')
 
                 if task_1_2.learner_id not in self.server_list:  # if client
                     task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=True)
@@ -237,8 +243,9 @@ class Overmind():
                         else:
                             task_1_2.add_func(func_config["func_name"], func_config["params"])
                 else:
-                    task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=False)
+                    task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=True)
                     task_1_2.set_neighbor_load_config(neighbor_load_model=True, neighbor_load_dataset=False)
+                    task_1_2.set_load_config()
                     for func_config in self.device_config["device_groups"][0]["device_config"]["encounter_config"]["invoked_functions"]:
                         if func_config["func_name"][0] == '!':
                             task_1_2.add_eval()
@@ -517,6 +524,9 @@ class Overmind():
 
         # @TODO store which task is allocated to which and re-allocate when timeout
         while self.task_num > 0 and iterations < MAX_ITERATIONS:
+            if not Path(self.log_path).exists():  # exit simulation when log file is deleted
+                return
+
             iterations += 1
 
             finished_not_processed_tasks = self.tasks_db.get_not_processed_finished_tasks()

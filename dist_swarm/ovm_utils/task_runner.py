@@ -40,8 +40,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         device_load_config = task_config['load_config']
         timeout = task_config['timeout']
         worker_namespace = task_config['worker_namespace']
-        real_time_mode = task_config['real_time_mode']
-        print(f"type: {type(real_time_mode)}")
+        real_time_mode = task_config['real_time_mode']  # string: 'True' or 'False'
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
         measured_time = 0
@@ -52,7 +51,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
             learner_load_config = device_load_config[str(learner_id)]
         # if device is already in cache, use that
         # @TODO do sanity check. Cached device is not up-to-date? reused in different swarm run?
-        if str(learner_id) in device_state_cache['device_states']:
+        if task_config['learning_scenario'] == 'oppcl' and str(learner_id) in device_state_cache['device_states']:
             learner = device_state_cache['device_states'][str(learner_id)]
             logging.info(f"device state {learner_id} loaded from cache")
         else:
@@ -80,7 +79,6 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                     func(nbgr, **func_list[i]["params"])
                 measured_time += time.time() - start
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
-                print('timed out!')
                 hist = learner.eval()
                 if real_time_mode == 'False' or real_time_timeout >= measured_time:
                     device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)

@@ -13,6 +13,7 @@ import numpy as np
 import threading
 import concurrent
 import psycopg2
+import tensorflow.keras as keras
 from pathlib import Path, PurePath
 from pandas import read_pickle, read_csv
 from time import gmtime, strftime
@@ -302,9 +303,14 @@ class OVMSwarmInitializer():
 
         # bootstrap parameters
         if device_config['pretrained_model'] != "none":
-            pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
-            with open(pretrained_model_path, 'rb') as handle:
-                init_weights = pickle.load(handle)
+            ext = device_config['pretrained_model'].split('.')[-1]
+            if ext == 'pickle':
+                pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
+                with open(pretrained_model_path, 'rb') as handle:
+                    init_weights = pickle.load(handle)
+            else:
+                model = keras.models.load_model(pretrained_model_path, compile=False)
+                init_weights = model.get_weights()
         else:
             init_weights = None
 
@@ -336,7 +342,7 @@ class OVMSwarmInitializer():
                                     hyperparams)
 
         # save device model, dataset, and device object on S3 
-        save_device(device, config['tag'], config['swarm_init_group'], -1, False)
+        save_device(device, config['tag'], config['swarm_init_group'], -1, True)
 
         logging.info(f"device {idnum} initialization complete")
 
