@@ -42,8 +42,8 @@
         "device_power": 8,
         "encounter_config": {
             "encounter_data_file": "encounter_data/levy_clients_100_epi_20_dur_100_step_02.pickle",
-            "computation_time": 0.0,
-            "communication_rate": 1600000000,
+            "computation_time": 0.14,
+            "communication_rate": 16000000,
             "invoked_functions": [
                 {"func_name": "delegate", "params": {"epoch": 1, "iteration": 1}},
                 {"func_name": "!evaluate"}
@@ -51,7 +51,7 @@
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
-            "batch-size": 100,
+            "batch-size": 50,
             "orig-lr": 0.1,
             "max_rounds": 3,
             "evaluation-metrics": "loss-and-accuracy",
