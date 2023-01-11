@@ -39,7 +39,7 @@ MAX_ITERATIONS = 10_000_000
 
 class Task():
     def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list,
-                 timeout=2**16, real_time_mode=False, communication_time=0, dependant_on_mutable=False,
+                 timeout=2**16, real_time_mode=False, communication_time=0, computation_time=0, dependant_on_mutable=False,
                  learning_config='oppcl'):
         self.swarm_name = swarm_name
         self.worker_namespace = "deprecated"
@@ -50,6 +50,7 @@ class Task():
         self.neighbor_id_list = neighbor_id_list
         self.timeout = timeout
         self.real_time_mode = real_time_mode
+        self.computation_time = computation_time
         self.communication_time = communication_time
         self.learning_config = learning_config
 
@@ -86,7 +87,8 @@ class Task():
             "task_id": self.task_id,
             "start": str(self.start),
             "end": str(self.end),
-            "comm_time": str(self.communication_time),
+            "communication_time": str(self.communication_time),
+            "computation_time": str(self.computation_time),
             "learner": self.learner_id,
             "neighbors": self.neighbor_id_list,
             "load_config": self.load_config,
@@ -381,43 +383,33 @@ class Overmind():
             device2_id = (int)(row[CLIENT2])
             if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
                 continue
-            start_time = row[TIME_START]
-            if not rt_mode:
-                start_time_1 = max(start_time, last_times[device1_id])
-                start_time_2 = max(start_time, last_times[device2_id])
-                end_time_1 = start_time_1 + oppcl_time
-                end_time_2 = start_time_2 + oppcl_time
-            else:
-                start_time_1 = start_time
-                start_time_2 = start_time
-                end_time_1 = row[TIME_END]
-                end_time_2 = row[TIME_END]
 
-            task_1_timeout = row[TIME_END] - start_time_1 < oppcl_time
-            task_2_timeout = row[TIME_END] - start_time_2 < oppcl_time
+            start_time = max(row[TIME_START], last_times[device1_id], last_times[device2_id])
+            end_time_1 = row[TIME_END]
+            end_time_2 = row[TIME_END]
 
-            if (not task_1_timeout) and (not task_2_timeout):
-                task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, [device2_id],
-                                real_time_mode=rt_mode, communication_time=self.communication_time)
-                task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_id, [device1_id],
-                                real_time_mode=rt_mode, communication_time=self.communication_time)
+            task_timeout = row[TIME_END] - start_time < oppcl_time
+
+            if not task_timeout:
+                task_1_2 = Task(self.swarm_name, task_id, start_time, end_time_1, device1_id, [device2_id],
+                                real_time_mode=rt_mode, communication_time=self.communication_time, computation_time=self.computation_time)
+                task_2_1 = Task(self.swarm_name, task_id+1, start_time, end_time_2, device2_id, [device1_id],
+                                real_time_mode=rt_mode, communication_time=self.communication_time, computation_time=self.computation_time)
                 task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_1_2.add_eval()
                 task_2_1.add_eval()
                 
-                if not task_1_timeout:
-                    indegrees[task_id] = 0
-                    dep_graph[task_id] = []
-                    tasks[task_id] = task_1_2
+                indegrees[task_id] = 0
+                dep_graph[task_id] = []
+                tasks[task_id] = task_1_2
 
-                if not task_2_timeout:
-                    indegrees[task_id+1] = 0
-                    dep_graph[task_id+1] = []
-                    tasks[task_id+1] = task_2_1
+                indegrees[task_id+1] = 0
+                dep_graph[task_id+1] = []
+                tasks[task_id+1] = task_2_1
 
                 # we assume that all delegations are dependent on data, at least
-                if (not task_1_timeout) and device1_id in last_tasks:
+                if device1_id in last_tasks:
                     for lt in last_tasks[device1_id]:
                         dep_graph[lt].append(task_1_2.task_id)
                         indegrees[task_1_2.task_id] += 1
@@ -427,7 +419,7 @@ class Overmind():
                             dep_graph[lt].append(task_1_2.task_id)
                             indegrees[task_1_2.task_id] += 1
 
-                if (not task_2_timeout) and device2_id in last_tasks:
+                if device2_id in last_tasks:
                     for lt in last_tasks[device2_id]:
                         dep_graph[lt].append(task_2_1.task_id)
                         indegrees[task_2_1.task_id] += 1
@@ -437,10 +429,8 @@ class Overmind():
                             dep_graph[lt].append(task_2_1.task_id)
                             indegrees[task_2_1.task_id] += 1
 
-                if not task_1_timeout:
-                    last_tasks[device1_id] = [task_1_2.task_id]
-                if not task_2_timeout:
-                    last_tasks[device2_id] = [task_2_1.task_id]
+                last_tasks[device1_id] = [task_1_2.task_id]
+                last_tasks[device2_id] = [task_2_1.task_id]
                 # if task is dependent on mutable state of the neighbor,
                 # succeeding tasks should also be dependent on tasks where the device
                 # participated as a neighbor
@@ -449,11 +439,8 @@ class Overmind():
                     last_tasks[device2_id].append(task_1_2.task_id)
 
                 task_id += 2
-                if not rt_mode:
-                    if not task_1_timeout:
-                        last_times[device1_id] = max(last_times[device1_id], start_time_1 + oppcl_time)
-                    if not task_2_timeout:
-                        last_times[device2_id] = max(last_times[device2_id], start_time_2 + oppcl_time)
+                last_times[device1_id] = max(last_times[device1_id], start_time + oppcl_time)
+                last_times[device2_id] = max(last_times[device2_id], start_time + oppcl_time)
 
         self.task_num = task_id
         self.dep_graph = dep_graph
@@ -553,22 +540,20 @@ class Overmind():
                 self.processed_tasks.append(task_id)
 
                 # get end time of the task
-                elasped_time = float(task_item[5]) + 2 * self.model_send_time
-                freed_time = self.tasks[task_id].start + elasped_time
-                if not task_item[4]:
-                    if freed_time > self.tasks[task_id].end:
-                        logging.info(f"DISCREPANCY!: when not timed out, timed out: freed_time: {freed_time}, end: {self.tasks[task_id].end}")
-                    self.successful_tasks += 1
-                    self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
-                    if self.dependant_to_mutable:
-                        for nid in neighbor_ids:
-                            self.last_avail[nid] = max(self.last_avail[nid], freed_time)
-                else:
+                if rt_mode and not task_item[4]:
+                    elasped_time = float(task_item[5]) + self.communication_time
+                    freed_time = self.tasks[task_id].start + elasped_time
+                elif rt_mode and task_item[4]:
                     self.timed_out_tasks += 1
-                    # if this is "end" we assume that our contact prediction is very bad
-                    # logging.info(f"freed_time: {freed_time}, end time: {self.tasks[task_id].end}")
                     freed_time = self.tasks[task_id].start
-                
+                else:  # if discrete mode
+                    freed_time = self.tasks[task_id].start + self.communication_time + self.computation_time
+
+                self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
+                self.successful_tasks += 1
+                if self.dependant_to_mutable:
+                    for nid in neighbor_ids:
+                        self.last_avail[nid] = max(self.last_avail[nid], freed_time)
 
                 for next_task in self.dep_graph[task_id]:
                     # print(f"next task {next_task}")
@@ -592,7 +577,7 @@ class Overmind():
             free_workers = self.worker_db.get_stopped_workers()
             
 
-            logging.info(f"free workers {free_workers}, task queue size {len(self.task_queue)}")
+            logging.info(f"free workers {sorted(free_workers)}, task queue size {len(self.task_queue)}")
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
