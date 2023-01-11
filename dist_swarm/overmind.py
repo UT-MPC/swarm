@@ -86,6 +86,7 @@ class Task():
             "task_id": self.task_id,
             "start": str(self.start),
             "end": str(self.end),
+            "comm_time": str(self.communication_time),
             "learner": self.learner_id,
             "neighbors": self.neighbor_id_list,
             "load_config": self.load_config,
