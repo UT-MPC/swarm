@@ -304,8 +304,8 @@ class OVMSwarmInitializer():
         # bootstrap parameters
         if device_config['pretrained_model'] != "none":
             ext = device_config['pretrained_model'].split('.')[-1]
+            pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
             if ext == 'pickle':
-                pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
                 with open(pretrained_model_path, 'rb') as handle:
                     init_weights = pickle.load(handle)
             else:

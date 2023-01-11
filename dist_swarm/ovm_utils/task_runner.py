@@ -43,6 +43,8 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         real_time_mode = task_config['real_time_mode']  # string: 'True' or 'False'
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
+        start = Decimal(task_config['start'])
+        comm_time = Decimal(task_config['comm_time'])
         measured_time = 0
 
         # load device
@@ -72,21 +74,25 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                 func = getattr(learner, func_list[i]["func_name"])
                 
                 # @TODO handle multiple neighbors and multiple function calls before eval()
-                start = time.time()
+                compute_start = time.time()
                 for nbgr in neighbors:
                     print(f"{type(nbgr)} and {func_list[i]}")
-                
                     func(nbgr, **func_list[i]["params"])
-                measured_time += time.time() - start
+                measured_time += time.time() - compute_start
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
                 hist = learner.eval()
-                if real_time_mode == 'False' or real_time_timeout >= measured_time:
-                    device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
-                    device_in_db.update_timestamp(end)
-                    device_in_db.update_encounter_history(TASK_END)
-                else:
+                if real_time_mode == 'True' and real_time_timeout < measured_time:
                     device_in_db.update_encounter_history(TASK_REALTIME_TIMEOUT)
                     realtime_timed_out = True
+                else:
+                    device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
+                    device_in_db.update_encounter_history(TASK_END)
+
+                if real_time_mode == 'False':
+                    device_in_db.update_timestamp(end)
+                else:
+                    device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
+                    
 
         # save to cache before saving to DB
         # because save_device deletes model and data from the device
