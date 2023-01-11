@@ -67,6 +67,11 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                 load_config = device_load_config[str(ngbr)]
             neighbors.append(load_device(swarm_name, ngbr, **load_config))
         
+        # save to cache before saving to DB
+        # because save_device deletes model and data from the device
+        device_state_cache['device_states'] = {}
+        device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
+        
         realtime_timed_out = False
         # invoke function 
         for i in range(len(func_list)):
@@ -94,14 +99,10 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                     device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
                     
 
-        # save to cache before saving to DB
-        # because save_device deletes model and data from the device
-        device_state_cache['device_states'] = {}
-        device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
-
         # save device (s)
         if not realtime_timed_out:
             save_device(learner, swarm_name, "local", task_id, True)
+            device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
         # @TODO save neighbor device states if instructed
         
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
