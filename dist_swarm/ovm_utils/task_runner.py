@@ -101,8 +101,8 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
 
         # save device (s)
         if not realtime_timed_out:
-            save_device(learner, swarm_name, "local", task_id, True)
             device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
+            save_device(learner, swarm_name, "local", task_id, True)
         # @TODO save neighbor device states if instructed
         
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
