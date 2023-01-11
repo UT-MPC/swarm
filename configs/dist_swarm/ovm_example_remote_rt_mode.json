@@ -27,9 +27,6 @@
         "local_set_size": 10,
         "local_data_size": 200,
         "goal_set_size": 10,
-        "district_9": [[1,2], [3,4], [5,6],
-                       [7,8], [9,0], [1,2],
-                       [4,5], [6,7], [8,9]],
         "device_sizes": {
                         "model_sizes": [10, 10, 8, 6, 4],
                         "device_powers": [10, 8, 6, 4, 2]
