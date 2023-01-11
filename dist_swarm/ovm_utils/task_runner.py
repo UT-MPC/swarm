@@ -44,7 +44,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         real_time_timeout = float(task_config['real_time_timeout'])
         end = Decimal(task_config['end'])
         start = Decimal(task_config['start'])
-        comm_time = Decimal(task_config['comm_time'])
+        comm_time = Decimal(task_config['communication_time'])
         comp_time = Decimal(task_config['computation_time'])
         measured_time = 0
 
