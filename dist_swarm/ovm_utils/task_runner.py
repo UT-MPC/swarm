@@ -45,6 +45,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         end = Decimal(task_config['end'])
         start = Decimal(task_config['start'])
         comm_time = Decimal(task_config['comm_time'])
+        comp_time = Decimal(task_config['computation_time'])
         measured_time = 0
 
         # load device
@@ -94,7 +95,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                     device_in_db.update_encounter_history(TASK_END)
 
                 if real_time_mode == 'False':
-                    device_in_db.update_timestamp(end)
+                    device_in_db.update_timestamp(end + comp_time + comm_time)
                 else:
                     device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
                     
