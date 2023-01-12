@@ -39,8 +39,8 @@ MAX_ITERATIONS = 10_000_000
 
 class Task():
     def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list,
-                 timeout=2**16, real_time_mode=False, communication_time=0, computation_time=0, dependant_on_mutable=False,
-                 learning_config='oppcl'):
+                 timeout=2**16, real_time_mode=False, communication_time=0, computation_time=0, 
+                 dependant_on_mutable=False, orig_enc_idx=0, learning_config='oppcl'):
         self.swarm_name = swarm_name
         self.worker_namespace = "deprecated"
         self.task_id = task_id
@@ -53,6 +53,7 @@ class Task():
         self.computation_time = computation_time
         self.communication_time = communication_time
         self.learning_config = learning_config
+        self.orig_enc_idx = orig_enc_idx
 
         self.real_time_timeout = self.end - self.start - communication_time
         self.dependant_on_mutable = dependant_on_mutable
@@ -96,7 +97,8 @@ class Task():
             "timeout": self.timeout,  # overmind controller assumes that server is dead when timeout is elasped
             "real_time_mode": str(self.real_time_mode),
             "real_time_timeout": str(self.real_time_timeout),
-            "learning_scenario": self.learning_config
+            "learning_scenario": self.learning_config,
+            "orig_enc_idx": str(self.orig_enc_idx)
         }
         
     def set_learner_load_config(self, learner_load_model: bool, learner_load_dataset: bool):
@@ -235,6 +237,7 @@ class Overmind():
                 task_2_1 = Task(self.swarm_name, task_id+1, start_time_2, end_time_2, device2_ids[0], [device1_id], 
                                   real_time_mode=rt_mode, communication_time=self.communication_time,
                                   learning_config='fl')
+
 
                 if task_1_2.learner_id not in self.server_list:  # if client
                     task_1_2.set_learner_load_config(learner_load_model=True, learner_load_dataset=True)
@@ -377,24 +380,23 @@ class Overmind():
         last_times = dict.fromkeys(range(self.number_of_devices), 0)  # (device id, last time device is done with oppcl)
         tasks = {}  # (task id, task object)
         indegrees = {}
-
         for index, row in enc_df.iterrows():
             device1_id = (int)(row[CLIENT1])
             device2_id = (int)(row[CLIENT2])
             if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
                 continue
-
             start_time = max(row[TIME_START], last_times[device1_id], last_times[device2_id])
             end_time_1 = row[TIME_END]
             end_time_2 = row[TIME_END]
-
             task_timeout = row[TIME_END] - start_time < oppcl_time
 
             if not task_timeout:
                 task_1_2 = Task(self.swarm_name, task_id, start_time, end_time_1, device1_id, [device2_id],
-                                real_time_mode=rt_mode, communication_time=self.communication_time, computation_time=self.computation_time)
+                                real_time_mode=rt_mode, communication_time=self.communication_time, 
+                                computation_time=self.computation_time, orig_enc_idx=index)
                 task_2_1 = Task(self.swarm_name, task_id+1, start_time, end_time_2, device2_id, [device1_id],
-                                real_time_mode=rt_mode, communication_time=self.communication_time, computation_time=self.computation_time)
+                                real_time_mode=rt_mode, communication_time=self.communication_time,
+                                computation_time=self.computation_time, orig_enc_idx=index)
                 task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
                 task_1_2.add_eval()
@@ -551,9 +553,9 @@ class Overmind():
 
                 self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
                 self.successful_tasks += 1
-                if self.dependant_to_mutable:
-                    for nid in neighbor_ids:
-                        self.last_avail[nid] = max(self.last_avail[nid], freed_time)
+                # if self.dependant_to_mutable:
+                # for nid in neighbor_ids:
+                #     self.last_avail[nid] = max(self.last_avail[nid], freed_time)
 
                 for next_task in self.dep_graph[task_id]:
                     # print(f"next task {next_task}")

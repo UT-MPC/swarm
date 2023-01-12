@@ -6,7 +6,8 @@ import time
 from decimal import Decimal
 
 from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
-            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX, MODEL_INFO
+            GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX, MODEL_INFO, \
+                ORIG_ENC_IDX
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
 class DeviceInDB():
@@ -76,7 +77,18 @@ class DeviceInDB():
                     },
                     UpdateExpression="SET #encounter_history = list_append(#encounter_history, :encounter_result)"
         )
-
+    
+    def update_enc_idx(self, orig_enc_idx):
+        resp = self.table.update_item(
+                    Key={DEVICE_ID: self.device_id},
+                    ExpressionAttributeNames={
+                        "#orig_enc_idx": ORIG_ENC_IDX,
+                    },
+                    ExpressionAttributeValues={
+                        ":orig_enc_idx": [orig_enc_idx],
+                    },
+                    UpdateExpression="SET #orig_enc_idx = list_append(#orig_enc_idx, :orig_enc_idx)"
+        )
     # def update_computation_time_history(self, computation_time_history) 
 
     def update_timestamp(self, timestamp):
