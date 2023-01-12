@@ -24,7 +24,7 @@ from get_dataset import get_dataset
 from get_optimizer import get_optimizer
 from get_device import get_device_class
 import models as custom_models
-from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, GOAL_DIST, HOSTNAME, IS_PROCESSED, LOCAL_DIST, MODEL_INFO, TASK_ID, TOTAL_ENC_IDX,\
+from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, GOAL_DIST, HOSTNAME, IS_PROCESSED, LOCAL_DIST, MODEL_INFO, ORIG_ENC_IDX, TASK_ID, TOTAL_ENC_IDX,\
     DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, \
     MODEL_INFO, WORKER_ADDED, WORKER_ID, WORKER_STATUS, WORKER_HISTORY, WORKER_CREATED, WTIMESTAMP, ACTION_TYPE
 from grpc_components.status import STOPPED
@@ -292,7 +292,8 @@ class OVMSwarmInitializer():
             batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
                 GOAL_DIST: convert_to_map(goal_dist),
                 LOCAL_DIST: convert_to_map(local_dist), TOTAL_ENC_IDX: len(enc_df.index),
-                ENCOUNTER_HISTORY: [], EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
+                ENCOUNTER_HISTORY: [], EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ORIG_ENC_IDX: [],
+                ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
         
 
         ## initialize device 

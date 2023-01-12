@@ -46,6 +46,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         start = Decimal(task_config['start'])
         comm_time = Decimal(task_config['communication_time'])
         comp_time = Decimal(task_config['computation_time'])
+        orig_enc_idx = task_config['orig_enc_idx']
         measured_time = 0
 
         # load device
@@ -98,6 +99,8 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
                     device_in_db.update_timestamp(start + comp_time + comm_time)
                 else:
                     device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
+                
+                device_in_db.update_enc_idx(orig_enc_idx)
                     
 
         # save device (s)
