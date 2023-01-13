@@ -494,6 +494,7 @@ class Overmind():
         self.cached_worker_nodes_to_devices = {}
         self.task_queue = []
         self.processed_tasks = []
+        self.deployed_tasks = []
         self.next_checkpoint = CHECKPOINT_INTERVAL
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
@@ -511,6 +512,7 @@ class Overmind():
 
         self.allocated_tasks = {}
         self.last_avail = dict.fromkeys(range(self.number_of_devices), 0)
+        self.cur_worker_to_task_id = {}
 
         # @TODO store which task is allocated to which and re-allocate when timeout
         while self.task_num > 0 and iterations < MAX_ITERATIONS:
@@ -569,6 +571,10 @@ class Overmind():
                         self.task_queue.append(next_task)
 
                 self.tasks_db.mark_processed(task_id)
+                try:
+                    self.deployed_tasks.remove(task_id)
+                except:
+                    logging.error(f"not deployed or already processed task {task_id} has been processed again")
                 self.task_num -= 1
 
             # get "Stopped" workers and check if one of them holds recent device state
@@ -581,6 +587,19 @@ class Overmind():
 
             logging.info(f"free workers {sorted(free_workers)}, task queue size {len(self.task_queue)}")
 
+            # check if any of the instances got restarted, if they are, re-allocate the tasks
+            running_workers = self.worker_db.get_running_workers()
+            for w in running_workers:
+                if not self.send_check_running_request(w):
+                    self.worker_db.update_status(w, STOPPED)
+                    self.initializer._initialize_worker(self.swarm_name, w)
+                    task_id = self.cur_worker_to_task_id[w]
+                    self.task_queue.append(task_id)
+                    self.cur_worker_to_task_id.pop(w)
+                    logging.error(f"worker {w} has been restarted, task {task_id} has been re-added to queue")
+                else:
+                    logging.info(f"worker {w} running nominally")
+
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
             # print(f"cached: {self.cached_devices_to_worker_nodes}")
@@ -592,6 +611,7 @@ class Overmind():
                         self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
                         target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
                         task_id_to_worker[task_id] = target_worker_id
+                        self.deployed_tasks.append(task_id)
                         free_workers.remove(target_worker_id)
                         logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             
@@ -602,7 +622,9 @@ class Overmind():
             # assign remaining tasks to "Stopped" worker nodes
             while len(free_workers) > 0 and len(self.task_queue) > 0:
                 worker_id = free_workers.pop()
-                task_id_to_worker[self.task_queue.pop()] = worker_id
+                task_to_deploy = self.task_queue.pop()
+                task_id_to_worker[task_to_deploy] = worker_id
+                self.deployed_tasks.append(task_to_deploy)
 
             # print(f"{task_id_to_worker}")
             # print(f"{self.task_queue}")
@@ -614,6 +636,7 @@ class Overmind():
                 task_thread.start()
                 self.allocated_tasks[task_id_to_worker[task_id]] = task_id
                 self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
+                self.cur_worker_to_task_id[task_id_to_worker[task_id]] = task_id
 
             sleep(polling_interval)
         

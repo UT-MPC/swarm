@@ -13,7 +13,7 @@ from io import StringIO
 from ovm_utils.task_runner import run_task
 from grpc_components import simulate_device_pb2_grpc
 from grpc_components.simulate_device_pb2 import Empty, Status
-from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED, STOPPED
+from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED, STOPPED, INITIALIZED, NOT_INITIALIZED
 from dist_swarm.db_bridge.worker_in_db import WorkerInRDS
 from oppcl_device import OppCLDevice
 
@@ -31,6 +31,7 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         # which means that this dict is erased whenever a task is ran
         self.cache = {'device_states' : {}}  
         self.current_task = []
+        self.is_initialized = False
 
     ### gRPC methods
     def SetWorkerInfo(self, request, context):
@@ -43,10 +44,17 @@ class SimulateDeviceServicer(simulate_device_pb2_grpc.SimulateDeviceServicer):
         self.worker_db = WorkerInRDS(self.cursor, [])
         self.task_db = TaskInRDS(self.task_cursor)
         self.worker_status = STOPPED
+        self.is_initialized = True
         # self.worker_in_db = WorkerInDB(request.swarm_name, request.worker_namespace, request.worker_id)
         # self.worker_status = self.worker_in_db.status
         logging.info(f"worker id set to {self.worker_id}")
         return Status(status=self.worker_status)
+    
+    def CheckInitialized(self, request, context):
+        if self.is_initialized:
+            return Status(status=INITIALIZED)
+        else:
+            return Status(status=NOT_INITIALIZED)
 
     def RunTask(self, request, context):
         config = json.load(StringIO(request.config))
