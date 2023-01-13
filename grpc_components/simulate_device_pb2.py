@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\037io.grpc.examples.simulatedeviceB\023SimulateDeviceProtoP\001\242\002\002SD',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"$\n\x06Status\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\"\xae\x01\n\nWorkerInfo\x12\x12\n\nswarm_name\x18\x01 \x01(\t\x12\x18\n\x10worker_namespace\x18\x02 \x01(\t\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x10\n\x08rds_host\x18\x04 \x01(\t\x12\x12\n\nrds_dbname\x18\x05 \x01(\t\x12\x10\n\x08rds_user\x18\x06 \x01(\t\x12\x14\n\x0crds_password\x18\x07 \x01(\t\x12\x11\n\trds_table\x18\x08 \x01(\t2\xc9\x04\n\x0eSimulateDevice\x12\x45\n\rSetWorkerInfo\x12\x1a.simulatedeivce.WorkerInfo\x1a\x16.simulatedeivce.Status\"\x00\x12;\n\x07RunTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\x08StopTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\tGetStatus\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12=\n\nResetState\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12?\n\x0c\x43heckRunning\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12\x36\n\x04Ping\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12<\n\nClearCache\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12\x41\n\rSimulateOppCL\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
+  serialized_pb=b'\n\x15simulate_device.proto\x12\x0esimulatedeivce\"\x07\n\x05\x45mpty\"\x18\n\x06\x43onfig\x12\x0e\n\x06\x63onfig\x18\x01 \x01(\t\"$\n\x06Status\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\"\xae\x01\n\nWorkerInfo\x12\x12\n\nswarm_name\x18\x01 \x01(\t\x12\x18\n\x10worker_namespace\x18\x02 \x01(\t\x12\x11\n\tworker_id\x18\x03 \x01(\x05\x12\x10\n\x08rds_host\x18\x04 \x01(\t\x12\x12\n\nrds_dbname\x18\x05 \x01(\t\x12\x10\n\x08rds_user\x18\x06 \x01(\t\x12\x14\n\x0crds_password\x18\x07 \x01(\t\x12\x11\n\trds_table\x18\x08 \x01(\t2\x8e\x05\n\x0eSimulateDevice\x12\x45\n\rSetWorkerInfo\x12\x1a.simulatedeivce.WorkerInfo\x1a\x16.simulatedeivce.Status\"\x00\x12;\n\x07RunTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\x08StopTask\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x12<\n\tGetStatus\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12=\n\nResetState\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12?\n\x0c\x43heckRunning\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12\x43\n\x10\x43heckInitialized\x12\x15.simulatedeivce.Empty\x1a\x16.simulatedeivce.Status\"\x00\x12\x36\n\x04Ping\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12<\n\nClearCache\x12\x15.simulatedeivce.Empty\x1a\x15.simulatedeivce.Empty\"\x00\x12\x41\n\rSimulateOppCL\x12\x16.simulatedeivce.Config\x1a\x16.simulatedeivce.Status\"\x00\x42=\n\x1fio.grpc.examples.simulatedeviceB\x13SimulateDeviceProtoP\x01\xa2\x02\x02SDb\x06proto3'
 )
 
 
@@ -246,7 +246,7 @@ _SIMULATEDEVICE = _descriptor.ServiceDescriptor(
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
   serialized_start=292,
-  serialized_end=877,
+  serialized_end=946,
   methods=[
   _descriptor.MethodDescriptor(
     name='SetWorkerInfo',
@@ -309,9 +309,19 @@ _SIMULATEDEVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='CheckInitialized',
+    full_name='simulatedeivce.SimulateDevice.CheckInitialized',
+    index=6,
+    containing_service=None,
+    input_type=_EMPTY,
+    output_type=_STATUS,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='Ping',
     full_name='simulatedeivce.SimulateDevice.Ping',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=_EMPTY,
     output_type=_EMPTY,
@@ -321,7 +331,7 @@ _SIMULATEDEVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ClearCache',
     full_name='simulatedeivce.SimulateDevice.ClearCache',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=_EMPTY,
     output_type=_EMPTY,
@@ -331,7 +341,7 @@ _SIMULATEDEVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SimulateOppCL',
     full_name='simulatedeivce.SimulateDevice.SimulateOppCL',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=_CONFIG,
     output_type=_STATUS,

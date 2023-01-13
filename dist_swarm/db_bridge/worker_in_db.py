@@ -5,7 +5,7 @@ import logging
 
 from dynamo_db import ERROR_MSG, IS_FINISHED, IS_PROCESSED, IS_TIMED_OUT, TASK_DETAILS, TASK_ID, WORKER_HISTORY, WORKER_ID, WORKER_STATUS,\
                       WTIMESTAMP, ACTION_TYPE, TIME
-from grpc_components.status import STOPPED
+from grpc_components.status import RUNNING, STOPPED
 
 class WorkerInDB():
     def __init__(self, swarm_name, worker_namespace, worker_id):    
@@ -94,6 +94,15 @@ class WorkerInRDS():
         all_stopped = self.cursor.get_column('worker_id', 'worker_state', STOPPED)
         res = []
         for item in all_stopped:
+            if item[0] in self.worker_db_ids:
+                res.append(item[0])
+        return res
+    
+    def get_running_workers(self):
+        # return ids of stopped workers
+        all_running = self.cursor.get_column('worker_id', 'worker_state', RUNNING)
+        res = []
+        for item in all_running:
             if item[0] in self.worker_db_ids:
                 res.append(item[0])
         return res
