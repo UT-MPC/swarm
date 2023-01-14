@@ -10,7 +10,7 @@ import logging
 
 from dist_swarm.db_bridge.worker_in_db import TaskInRDS, WorkerInDB, WorkerInRDS
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
-from grpc_components.status import RUNNING, STOPPED
+from grpc_components.status import INITIALIZED, RUNNING, STOPPED
 import json
 import os
 import threading
@@ -465,7 +465,7 @@ class Overmind():
                 status = stub.RunTask.future(config)
                 res = status.result()
         except Exception as e:
-            logging.error("gRPC call returned with error")
+            logging.error(f"gRPC call to {worker_id} returned with error")
             self.initializer._initialize_worker(self.swarm_name, worker_id)
             traceback.print_stack()
     
@@ -476,9 +476,15 @@ class Overmind():
                 status = stub.CheckRunning(simulate_device_pb2.Empty())
                 return status.status == RUNNING
         except Exception as e:
-            logging.error("gRPC call returned with error")
+            logging.error(f"gRPC call to {worker_id} returned with error")
             traceback.print_stack()
             return False
+    
+    def send_check_initialized_request(self, worker_id):
+        with grpc.insecure_channel(self.worker_id_to_ip[worker_id], options=(('grpc.enable_http_proxy', 0),)) as channel:
+            stub = simulate_device_pb2_grpc.SimulateDeviceStub(channel)
+            status = stub.CheckInitialized(simulate_device_pb2.Empty())
+            return status.status == INITIALIZED
 
     def revive_worker(self, worker_in_db, worker_id):
         if self.send_check_running_request(worker_id):
@@ -590,15 +596,20 @@ class Overmind():
             # check if any of the instances got restarted, if they are, re-allocate the tasks
             running_workers = self.worker_db.get_running_workers()
             for w in running_workers:
-                if not self.send_check_running_request(w):
+                try:
+                    is_init = self.send_check_initialized_request(w)
+                except:
+                    is_init = True
+                    logging.info(f"worker {w} is down")
+
+                if not is_init:
                     self.worker_db.update_status(w, STOPPED)
                     self.initializer._initialize_worker(self.swarm_name, w)
                     task_id = self.cur_worker_to_task_id[w]
                     self.task_queue.append(task_id)
                     self.cur_worker_to_task_id.pop(w)
                     logging.error(f"worker {w} has been restarted, task {task_id} has been re-added to queue")
-                else:
-                    logging.info(f"worker {w} running nominally")
+               
 
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
@@ -611,7 +622,6 @@ class Overmind():
                         self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
                         target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
                         task_id_to_worker[task_id] = target_worker_id
-                        self.deployed_tasks.append(task_id)
                         free_workers.remove(target_worker_id)
                         logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
             
@@ -624,7 +634,6 @@ class Overmind():
                 worker_id = free_workers.pop()
                 task_to_deploy = self.task_queue.pop()
                 task_id_to_worker[task_to_deploy] = worker_id
-                self.deployed_tasks.append(task_to_deploy)
 
             # print(f"{task_id_to_worker}")
             # print(f"{self.task_queue}")
@@ -634,6 +643,7 @@ class Overmind():
             for task_id in task_id_to_worker:
                 task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
                 task_thread.start()
+                self.deployed_tasks.append(task_id)
                 self.allocated_tasks[task_id_to_worker[task_id]] = task_id
                 self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
                 self.cur_worker_to_task_id[task_id_to_worker[task_id]] = task_id

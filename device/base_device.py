@@ -49,6 +49,7 @@ class Device():
         self.test_data_provider = test_data_provider
         self._num_classes = test_data_provider.num_classes
         self._hyperparams = hyperparams
+        self.batch_size = hyperparams['batch-size']
         if hyperparams != None:
             self._evaluation_metrics = hyperparams['evaluation-metrics']
             if 'similarity-threshold' in hyperparams:
@@ -382,22 +383,25 @@ class Device():
         """
         model = self._model_fn()
         model.set_weights(self._weights)
-        X = other._x_train
-        y = other._y_train
+        other._x_train
+        other._y_train
 
         CL = 0.01
-        with tf.GradientTape() as tape:
-            pred = model(X)
-            for i in range(0,len(model.trainable_variables)):
-                if i==0:
-                    l2_loss = CL * tf.nn.l2_loss(model.trainable_variables[i])
-                if i>=1:
-                    l2_loss = l2_loss+ CL * tf.nn.l2_loss(model.trainable_variables[i])
-            loss = keras.metrics.categorical_crossentropy(y, pred)
-            loss += l2_loss
-        grads = tape.gradient(loss, model.trainable_variables)
-        opt = self._get_optimizer(model)
-        opt.apply_gradients(zip(grads, model.trainable_variables))
+        for i in range(0, len(other._x_train), other.batch_size):
+            X = other._x_train[i:min(i+other.batch_size, len(other._x_train))]
+            y = other._y_train[i:min(i+other.batch_size, len(other._y_train))]
+            with tf.GradientTape() as tape:
+                pred = model(X)
+                for i in range(0,len(model.trainable_variables)):
+                    if i==0:
+                        l2_loss = CL * tf.nn.l2_loss(model.trainable_variables[i])
+                    if i>=1:
+                        l2_loss = l2_loss+ CL * tf.nn.l2_loss(model.trainable_variables[i])
+                loss = keras.metrics.categorical_crossentropy(y, pred)
+                loss += l2_loss
+            grads = tape.gradient(loss, model.trainable_variables)
+            opt = self._get_optimizer(model)
+            opt.apply_gradients(zip(grads, model.trainable_variables))
 
         # save optimizer state
         self.optimizer_weights = opt.get_weights()
