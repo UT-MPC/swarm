@@ -29,6 +29,8 @@ def get_model(dataset):
         return models.get_hetero_cnn_cifar_model
     elif dataset == 'opportunity-uci':
         return models.get_deep_conv_lstm_model
+    elif dataset == 'cifar-mobilenetv2':
+        return models.get_mobilenetv2
 
 def get_2nn_mnist_model(size=-1):
     if size <= 0:
@@ -62,7 +64,15 @@ def get_2nn_svhn_model(size=10):
     return model
 
 def get_mobilenetv2():
-    model = keras.applications.MobileNetV2(input_shape=(32,32,3), weights=None, classes=10)
+    base_model = keras.applications.MobileNetV2(input_shape=(32,32,3), weights=None, include_top=False)
+    maxpool_layer = keras.layers.GlobalMaxPooling2D()
+    prediction_layer = Dense(units=10, activation='softmax')
+    # Layer classification head with feature detector
+    model = Sequential([
+        base_model,
+        maxpool_layer,
+        prediction_layer
+    ])
     return model
 
 # def get_Q_2nn_mnist_model(size=10):
