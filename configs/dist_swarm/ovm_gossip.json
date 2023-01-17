@@ -34,7 +34,7 @@
     },
     "learning_scenario": "oppcl",
     "device_config": {
-        "device_strategy": "greedy",
+        "device_strategy": "gossip",
         "id": 0,
         "pretrained_model": "none",
         "model_size": 10,

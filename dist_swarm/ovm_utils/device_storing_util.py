@@ -41,14 +41,15 @@ def save_device_as_pickle(device: base_device.Device, path, swarm_name, id, enc_
                                 swarm_name + '/' + 'device-' + str(id) + '.pickle',
                                 {'Metadata': {'enc-id': str(enc_idx)}})
 
-    # Path(tmp_device_path).unlink()
+    Path(tmp_device_path).unlink()
 
 def load_device_as_pickle(tag, id):
     s3 = boto3.resource('s3')
     tmp_device_path = ".tmp/device.pickle"
     s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
     with open(tmp_device_path, 'rb') as handle:
-        return pickle.load(handle)
+        dev = pickle.load(handle)
+    Path(tmp_device_path).unlink()
 
 def save_device_model(device: base_device.Device, path, swarm_name, id, enc_idx, overwrite=True):
     s3 = boto3.resource('s3')
@@ -70,6 +71,7 @@ def load_device_model(device: base_device.Device, tag, id):
                      tmp_model_path)
     model = keras.models.load_model(tmp_model_path, compile=False)
     device._weights = model.get_weights()
+    Path(tmp_model_path).unlink()
 
 def save_device_dataset(device: base_device.Device, path, swarm_name, id, enc_idx, overwrite):
     save_data_object(device._x_train, "x_train", path, swarm_name, id, enc_idx, overwrite)
@@ -87,7 +89,7 @@ def save_data_object(obj, name, path, swarm_name, id, enc_idx, overwrite=True):
                                 BUCKET_NAME, 
                                 get_device_resource_object_name(swarm_name, name, id),
                                 {'Metadata': {'enc-id': str(enc_idx)}})
-    # Path(tmp_local_file_path).unlink()
+    Path(tmp_local_file_path).unlink()
 
 def load_and_set_attr(device, attr_name, obj_name, tag, id):
     s3 = boto3.resource('s3')
@@ -97,6 +99,7 @@ def load_and_set_attr(device, attr_name, obj_name, tag, id):
     with open(tmp_local_file_path, 'rb') as handle:
         loaded_obj = pickle.load(handle)
     setattr(device, attr_name, loaded_obj)
+    Path(tmp_local_file_path).unlink()
 
 def load_data_objects(device, tag, id):
     s3 = boto3.resource('s3')

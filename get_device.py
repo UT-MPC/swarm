@@ -6,6 +6,7 @@ import device.federated_device
 import device.quantization_device
 import device.droppcl_device
 import device.gr_device
+import device.gossip_device
 
 def get_device_class(class_name):
     ### Hetero & Dropout
@@ -95,5 +96,9 @@ def get_device_class(class_name):
         return device.federated_device.OVMFLServerDevice
     elif class_name == 'fl-client':
         return device.federated_device.OVMFLClientDevice
+
+    ##### Other OVM Devices
+    if class_name == 'gossip':
+        return device.gossip_device.OVMGossipDevice
 
     raise ValueError('Cannot find device name {}'.format(class_name))
