@@ -54,7 +54,7 @@ def save_device_model(device: base_device.Device, path, swarm_name, id, enc_idx,
     s3 = boto3.resource('s3')
     model = device._model_fn()
     model.set_weights(device._weights)
-    init_model_path = path + f'/init_model_{id}.h5'
+    init_model_path = path + f'/init_model.h5'
     if overwrite or not Path(init_model_path).exists():
         model.save(init_model_path)
     s3.meta.client.upload_file(init_model_path, 
