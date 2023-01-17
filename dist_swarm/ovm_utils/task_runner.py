@@ -77,15 +77,23 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         realtime_timed_out = False
         # invoke function 
         for i in range(len(func_list)):
+            # computations that are measured
             if func_list[i]["func_name"][0] != '!':
-                func = getattr(learner, func_list[i]["func_name"])
+                func_name = func_list[i]["func_name"]
+                is_measured = True
+                if func_name[0] == '#':
+                    func_name = func_name[1:]
+                    is_measured = False
+
+                func = getattr(learner, func_name)
                 
                 # @TODO handle multiple neighbors and multiple function calls before eval()
                 compute_start = time.time()
                 for nbgr in neighbors:
                     print(f"{type(nbgr)} and {func_list[i]}")
                     func(nbgr, **func_list[i]["params"])
-                measured_time += time.time() - compute_start
+                if is_measured:
+                    measured_time += time.time() - compute_start
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
                 hist = learner.eval()
                 if real_time_mode == 'True' and real_time_timeout < measured_time:

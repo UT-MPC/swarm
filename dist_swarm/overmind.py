@@ -397,10 +397,21 @@ class Overmind():
                 task_2_1 = Task(self.swarm_name, task_id+1, start_time, end_time_2, device2_id, [device1_id],
                                 real_time_mode=rt_mode, communication_time=self.communication_time,
                                 computation_time=self.computation_time, orig_enc_idx=index)
-                task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
-                task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
-                task_1_2.add_eval()
-                task_2_1.add_eval()
+                if "invoked_functions" in self.device_config["encounter_config"]:
+                    invoked_functions = self.device_config["encounter_config"]["invoked_functions"]
+                    for f in invoked_functions:
+                        if f["func_name"][0] != '!':
+                            task_1_2.add_func(f["func_name"], f["params"])
+                            task_2_1.add_func(f["func_name"], f["params"])
+                        else:
+                            task_1_2.add_eval()
+                            task_2_1.add_eval()
+                            
+                else:
+                    task_1_2.add_func("delegate", {"epoch": 1, "iteration": 1})
+                    task_2_1.add_func("delegate", {"epoch": 1, "iteration": 1})
+                    task_1_2.add_eval()
+                    task_2_1.add_eval()
                 
                 indegrees[task_id] = 0
                 dep_graph[task_id] = []

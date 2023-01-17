@@ -234,8 +234,9 @@ class OVMSwarmInitializer():
                                              x_test, y_test_orig, enc_df)
                 cur_id += 1
 
+        print("creating device states")
         futures = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             for idnum in range(cur_id, cur_id + swarm_config['number_of_devices']):
                 if not create_tables:
                     continue
@@ -245,6 +246,7 @@ class OVMSwarmInitializer():
                                 x_test, y_test_orig, enc_df))
 
             concurrent.futures.wait(futures)
+        print("created device states")
         
         # configure worker tables
         # if create_tables:
