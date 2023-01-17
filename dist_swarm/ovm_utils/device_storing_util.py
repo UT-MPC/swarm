@@ -50,6 +50,7 @@ def load_device_as_pickle(tag, id):
     with open(tmp_device_path, 'rb') as handle:
         dev = pickle.load(handle)
     Path(tmp_device_path).unlink()
+    return dev
 
 def save_device_model(device: base_device.Device, path, swarm_name, id, enc_idx, overwrite=True):
     s3 = boto3.resource('s3')

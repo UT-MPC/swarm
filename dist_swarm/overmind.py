@@ -376,7 +376,7 @@ class Overmind():
         print(f"oppcl time: {oppcl_time}")
 
         dep_graph = {}  # (preceding task id, task id)
-        last_tasks = {}  # (device id, last task idx) 
+        last_tasks = dict.fromkeys(range(self.number_of_devices), [])  # (device id, last task idx) 
         last_times = dict.fromkeys(range(self.number_of_devices), 0)  # (device id, last time device is done with oppcl)
         tasks = {}  # (task id, task object)
         indegrees = {}
