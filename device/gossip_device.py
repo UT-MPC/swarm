@@ -7,12 +7,12 @@ class OVMGossipDevice(device.base_device.Device):
     def __init__(self, *args):
         super().__init__(*args)
 
-    def update_model(self, other):
+    def update_model(self, other, params):
         added_weights = add_weights(self._weights, other._weights)
         added_weights = multiply_weights(added_weights, 1/2)
         self._weights = added_weights
 
-    def train_self(self):
+    def train_self(self, other, params):
         self.fit_to(self, 1)
 
     @staticmethod
