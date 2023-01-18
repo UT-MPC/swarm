@@ -1,0 +1,60 @@
+2023-01-17 15:17:26,062,62 root INFO worker id set to 0
+2023-01-17 15:17:31,793,793 root INFO Running task 99999 in worker 0
+2023-01-17 15:17:31,793,793 root INFO cached is dict_keys([])
+2023-01-17 15:17:31,794,794 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 47, in run_task
+    comm_time = Decimal(task_config['communication_time'])
+KeyError: 'communication_time'
+
+2023-01-17 15:19:23,108,108 root INFO Running task 99999 in worker 0
+2023-01-17 15:19:23,108,108 root INFO cached is dict_keys([])
+2023-01-17 15:19:23,108,108 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 58, in run_task
+    if task_config['learning_scenario'] == 'oppcl' and str(learner_id) in device_state_cache['device_states']:
+KeyError: 'learning_scenario'
+
+2023-01-17 15:20:02,082,82 root INFO Running task 99999 in worker 0
+2023-01-17 15:20:02,082,82 root INFO cached is dict_keys([])
+2023-01-17 15:20:30,900,900 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 70, in run_task
+    neighbors.append(load_device(swarm_name, ngbr, **load_config))
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 143, in load_device
+    device = load_device_as_pickle(tag, device_id)
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/device_storing_util.py", line 49, in load_device_as_pickle
+    s3.Bucket(BUCKET_NAME).download_file(get_device_file_name(tag, id), tmp_device_path)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 246, in bucket_download_file
+    ExtraArgs=ExtraArgs, Callback=Callback, Config=Config)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/inject.py", line 172, in download_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/s3/transfer.py", line 307, in download_file
+    future.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 106, in result
+    return self._coordinator.result()
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/futures.py", line 265, in result
+    raise self._exception
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/tasks.py", line 255, in _main
+    self._submit(transfer_future=transfer_future, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/s3transfer/download.py", line 343, in _submit
+    **transfer_future.meta.call_args.extra_args
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (404) when calling the HeadObject operation: Not Found
+
+2023-01-17 15:36:14,274,274 root INFO Running task 99999 in worker 0
+2023-01-17 15:36:14,274,274 root INFO cached is dict_keys([])
+2023-01-17 15:37:10,631,631 root INFO -- Task 99999 successfully finished --
+2023-01-17 15:37:10,744,744 root INFO updated status
+2023-01-17 21:55:56,836,836 root INFO worker id set to 0
+2023-01-17 21:56:36,345,345 root INFO Running task 9 in worker 0
+2023-01-17 21:56:36,346,346 root INFO cached is dict_keys([])
+2023-01-17 21:57:02,794,794 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 94, in run_task
+    func(nbgr, **func_list[i]["params"])
+  File "../device/gossip_device.py", line 11, in update_model
+    added_weights = add_weights(self._weights, other._weights)
+  File "../model_weight_utils.py", line 27, in add_weights
+    res.append(w1[i] + w2[i])
+IndexError: string index out of range
+

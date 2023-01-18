@@ -13,6 +13,7 @@ ENC_IDX = "EncIdx"
 HOSTNAME = "Hostname"
 TOTAL_ENC_IDX = "TotalEncIdx"
 ORIG_ENC_IDX = "OrigEncIdx"
+WC_TIMESTAMPS = "WCTimeStamps"
 
 ENCOUNTER_HISTORY = "EncounterHistory"
 

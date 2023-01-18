@@ -1,14 +1,18 @@
 {
-    "swarm_name": "ovm_example_100_levy_rt_mode",
+    "swarm_name": "ovm_gossip",
     "worker_namespace": "ds-deployment",
     "start": 10,
     "end": 30,
     "task_id": 99999,
     "learner": 0,
-    "neighbors": [1],
+    "neighbors": [10],
     "timeout": 100000,
     "real_time_mode": true,
     "real_time_timeout": "0.20",
+    "communication_time": "0.2",
+    "computation_time": "0.1",
+    "orig_enc_idx": 99999,
+    "learning_scenario": "gossip",
     "load_config": {
         "0": {
             "load_model": true,
@@ -17,12 +21,16 @@
     },
     "func_list": [
         {
-            "func_name": "delegate",
+            "func_name": "#train_self",
             "params": {
-                "epoch": 1,
-                "iteration": 1
             }
         },
+        {
+            "func_name": "#update_model",
+            "params": {
+            }
+        },
+
         {
             "func_name": "!evaluate"
         }]

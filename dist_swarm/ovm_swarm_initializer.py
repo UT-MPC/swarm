@@ -1,4 +1,5 @@
 import sys
+import traceback
 
 from dist_swarm.db_bridge.rds_bridge import RDSCursor
 sys.path.insert(0,'..')
@@ -26,7 +27,7 @@ from get_device import get_device_class
 import models as custom_models
 from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, GOAL_DIST, HOSTNAME, IS_PROCESSED, LOCAL_DIST, MODEL_INFO, ORIG_ENC_IDX, TASK_ID, TOTAL_ENC_IDX,\
     DATA_INDICES, EVAL_HIST_LOSS, EVAL_HIST_METRIC, ENC_IDX, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, \
-    MODEL_INFO, WORKER_ADDED, WORKER_ID, WORKER_STATUS, WORKER_HISTORY, WORKER_CREATED, WTIMESTAMP, ACTION_TYPE
+    MODEL_INFO, WC_TIMESTAMPS, WORKER_ADDED, WORKER_ID, WORKER_STATUS, WORKER_HISTORY, WORKER_CREATED, WTIMESTAMP, ACTION_TYPE
 from grpc_components.status import STOPPED
 from grpc_components import simulate_device_pb2, simulate_device_pb2_grpc
 from aws_settings import REGION
@@ -241,7 +242,7 @@ class OVMSwarmInitializer():
 
         print("creating device states")
         futures = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
             for idnum in range(cur_id, cur_id + swarm_config['number_of_devices']):
                 if not create_tables:
                     continue
@@ -252,6 +253,8 @@ class OVMSwarmInitializer():
 
             concurrent.futures.wait(futures)
         print("created device states")
+
+        # @TODO Check if devices are all there, if not, initialize again
         
         # configure worker tables
         # if create_tables:
@@ -272,85 +275,88 @@ class OVMSwarmInitializer():
     def _create_and_save_device(self, idnum, config, device_config,
                                 num_classes, x_train, y_train_orig,
                                 x_test, y_test_orig, enc_df):
-        swarm_config = config['swarm_config']
-        # pick data
-        label_set = []
-        goal_dist = {}
-        local_dist = {}
-        if "district-9" in config:
-            label_set.append(swarm_config["district-9"][idnum % len(swarm_config["district-9"])])
-        else:
-            label_set = (np.random.choice(np.arange(num_classes), size=swarm_config['local_set_size'], replace=False)).tolist()
-        
-        for l in label_set:
-            local_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
-
-        labels_not_in_local_set = np.setdiff1d(np.arange(num_classes), np.array(label_set))
-        label_set.extend((np.random.choice(labels_not_in_local_set, 
-                                    size=swarm_config['goal_set_size'] - swarm_config['local_set_size'], replace=False)).tolist())
-        for l in label_set:
-            goal_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
-
-        train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, local_dist)
-        chosen_data_idx = train_data_provider.get_chosen()
-
-        table = dynamodb.Table(config['tag'])
-        with table.batch_writer() as batch:
-            batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [],
-                GOAL_DIST: convert_to_map(goal_dist),
-                LOCAL_DIST: convert_to_map(local_dist), TOTAL_ENC_IDX: len(enc_df.index),
-                ENCOUNTER_HISTORY: [], EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ORIG_ENC_IDX: [],
-                ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
-        
-
-        ## initialize device 
-        # get model and dataset
-        model_fn = get_model(config['dataset'])
-
-        self.device_class = get_device_class(device_config['device_strategy'])
-
-        # bootstrap parameters
-        if device_config['pretrained_model'] != "none":
-            ext = device_config['pretrained_model'].split('.')[-1]
-            pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
-            if ext == 'pickle':
-                with open(pretrained_model_path, 'rb') as handle:
-                    init_weights = pickle.load(handle)
+        try:
+            swarm_config = config['swarm_config']
+            # pick data
+            label_set = []
+            goal_dist = {}
+            local_dist = {}
+            if "district-9" in config:
+                label_set.append(swarm_config["district-9"][idnum % len(swarm_config["district-9"])])
             else:
-                model = keras.models.load_model(pretrained_model_path, compile=False)
-                init_weights = model.get_weights()
-        else:
-            init_weights = None
+                label_set = (np.random.choice(np.arange(num_classes), size=swarm_config['local_set_size'], replace=False)).tolist()
+            
+            for l in label_set:
+                local_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
 
-        test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, device_config['train_config']['test-data-per-label'])
+            labels_not_in_local_set = np.setdiff1d(np.arange(num_classes), np.array(label_set))
+            label_set.extend((np.random.choice(labels_not_in_local_set, 
+                                        size=swarm_config['goal_set_size'] - swarm_config['local_set_size'], replace=False)).tolist())
+            for l in label_set:
+                goal_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
 
-        # get device info from dynamoDB
-        chosen_list = chosen_data_idx
-        goal_labels = goal_dist
-        
-        train_data_provider.set_chosen(chosen_list)
+            train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, local_dist)
+            chosen_data_idx = train_data_provider.get_chosen()
 
-        # prepare params for device
-        x_local, y_local_orig = train_data_provider.fetch()
-        hyperparams = device_config['train_config']
-        compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']}
-        train_config = {'batch_size': hyperparams['batch-size'], 'shuffle': True}
+            table = dynamodb.Table(config['tag'])
+            with table.batch_writer() as batch:
+                batch.put_item(Item={DEVICE_ID: idnum, DEV_STATUS: STOPPED, TIMESTAMPS: [], WC_TIMESTAMPS: [],
+                    GOAL_DIST: convert_to_map(goal_dist),
+                    LOCAL_DIST: convert_to_map(local_dist), TOTAL_ENC_IDX: len(enc_df.index),
+                    ENCOUNTER_HISTORY: [], EVAL_HIST_LOSS: [], EVAL_HIST_METRIC: [], ORIG_ENC_IDX: [],
+                    ENC_IDX: -1, ERROR_TRACE: {}, HOSTNAME: 'N/A', MODEL_INFO: {}})
+            
 
-        device = self.device_class(idnum,
-                                    model_fn, 
-                                    get_optimizer(config['device_config']['train_config']['optimizer']),
-                                    init_weights,
-                                    x_local,
-                                    y_local_orig,
-                                    train_data_provider,
-                                    test_data_provider,
-                                    goal_labels,
-                                    compile_config,
-                                    train_config,
-                                    hyperparams)
+            ## initialize device 
+            # get model and dataset
+            model_fn = get_model(config['dataset'])
 
-        # save device model, dataset, and device object on S3 
-        save_device(device, config['tag'], config['swarm_init_group'], -1, True)
+            self.device_class = get_device_class(device_config['device_strategy'])
+
+            # bootstrap parameters
+            if device_config['pretrained_model'] != "none":
+                ext = device_config['pretrained_model'].split('.')[-1]
+                pretrained_model_path = PurePath(os.path.dirname(__file__) +'/' + device_config['pretrained_model'])
+                if ext == 'pickle':
+                    with open(pretrained_model_path, 'rb') as handle:
+                        init_weights = pickle.load(handle)
+                else:
+                    model = keras.models.load_model(pretrained_model_path, compile=False)
+                    init_weights = model.get_weights()
+            else:
+                init_weights = None
+
+            test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, device_config['train_config']['test-data-per-label'])
+
+            # get device info from dynamoDB
+            chosen_list = chosen_data_idx
+            goal_labels = goal_dist
+            
+            train_data_provider.set_chosen(chosen_list)
+
+            # prepare params for device
+            x_local, y_local_orig = train_data_provider.fetch()
+            hyperparams = device_config['train_config']
+            compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']}
+            train_config = {'batch_size': hyperparams['batch-size'], 'shuffle': True}
+
+            device = self.device_class(idnum,
+                                        model_fn, 
+                                        get_optimizer(config['device_config']['train_config']['optimizer']),
+                                        init_weights,
+                                        x_local,
+                                        y_local_orig,
+                                        train_data_provider,
+                                        test_data_provider,
+                                        goal_labels,
+                                        compile_config,
+                                        train_config,
+                                        hyperparams)
+
+            # save device model, dataset, and device object on S3 
+            save_device(device, config['tag'], config['swarm_init_group'], -1, True)
+        except:
+            logging.error(f"{traceback.format_exc()}")
 
         logging.info(f"device {idnum} initialization complete")
 
