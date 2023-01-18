@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from dynamo_db import DEVICE_ID, ENCOUNTER_HISTORY, EVAL_HIST_LOSS, EVAL_HIST_METRIC, HOSTNAME, \
             GOAL_DIST, LOCAL_DIST, DATA_INDICES, DEV_STATUS, TIMESTAMPS, ERROR_TRACE, ENC_IDX, MODEL_INFO, \
-                ORIG_ENC_IDX
+                ORIG_ENC_IDX, WC_TIMESTAMPS
 from grpc_components.status import IDLE, RUNNING, ERROR, FINISHED
 
 class DeviceInDB():
@@ -99,6 +99,18 @@ class DeviceInDB():
             },
             ExpressionAttributeValues={
                 ":timestamps": [Decimal(timestamp)]
+            },
+            UpdateExpression="SET #timestamps = list_append(#timestamps, :timestamps)"
+        )
+
+    def update_wallclock_timestamp(self):
+        resp = self.table.update_item(
+            Key={DEVICE_ID: self.device_id},
+            ExpressionAttributeNames={
+                "#timestamps": WC_TIMESTAMPS,
+            },
+            ExpressionAttributeValues={
+                ":timestamps": [Decimal(time.time())]
             },
             UpdateExpression="SET #timestamps = list_append(#timestamps, :timestamps)"
         )

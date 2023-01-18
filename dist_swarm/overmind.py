@@ -413,6 +413,14 @@ class Overmind():
                     task_1_2.add_eval()
                     task_2_1.add_eval()
                 
+                if dependency["on_mutable"]:
+                    task_1_2.set_learner_load_config(True, True)
+                    task_1_2.set_neighbor_load_config(True, False)
+                    task_1_2.set_load_config()
+                    task_2_1.set_learner_load_config(True, True)
+                    task_2_1.set_neighbor_load_config(True, False)
+                    task_2_1.set_load_config()
+                
                 indegrees[task_id] = 0
                 dep_graph[task_id] = []
                 tasks[task_id] = task_1_2

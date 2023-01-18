@@ -7,6 +7,7 @@ import sys
 import copy
 import logging
 import time
+import device
 from grpc_components.status import RUNNING, STOPPED
 
 sys.path.insert(0,'..')
@@ -105,8 +106,10 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
 
                 if real_time_mode == 'False':
                     device_in_db.update_timestamp(start + comp_time + comm_time)
+                    device_in_db.update_wallclock_timestamp()
                 else:
                     device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
+                    device_in_db.update_wallclock_timestamp()
                 
                 device_in_db.update_enc_idx(orig_enc_idx)
                     
