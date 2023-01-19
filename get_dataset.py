@@ -18,7 +18,7 @@ def get_dataset(name):
     """
     if name == 'mnist':
         return get_mnist_dataset()       
-    elif name == 'cifar' or name == 'cifar-mobilenetv2':
+    elif name.split('-')[0] == 'cifar':
         return get_cifar_dataset()
     elif name == 'svhn':
         return get_svhn_dataset('data/svhn/')
