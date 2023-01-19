@@ -60,8 +60,8 @@ class Device():
 
             self.last_batch_num = {} # keeps the last batch num of the other client that this client was trained on
             self.total_num_batches = int(len(y_train) / hyperparams['batch-size'])
-            if len(y_train) / hyperparams['batch-size'] - self.total_num_batches != 0:
-                raise ValueError('batch-size has to divide local data size without remainders')
+            # if len(y_train) / hyperparams['batch-size'] - self.total_num_batches != 0:
+            #     raise ValueError('batch-size has to divide local data size without remainders')
 
         self.optimizer_weights = None
         ratio_per_label = 1./(len(target_labels))
