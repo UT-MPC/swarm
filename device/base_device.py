@@ -45,7 +45,7 @@ class Device():
             init_weights = m.get_weights()
         self._weights = init_weights
         self._y_train_orig = y_train
-        self.train_data_provider = train_data_provider
+        # self.train_data_provider = train_data_provider
         self.test_data_provider = test_data_provider
         self._num_classes = test_data_provider.num_classes
         self._hyperparams = hyperparams
@@ -431,8 +431,10 @@ class Device():
 
         CL = 0.01
         for i in range(0, len(other._x_train), other.batch_size):
-            X = other._x_train[i:min(i+other.batch_size, len(other._x_train))]
-            y = other._y_train[i:min(i+other.batch_size, len(other._y_train))]
+            if i + other.batch_size >= len(other._x_train):
+                break
+            X = other._x_train[i:i+other.batch_size]
+            y = other._y_train[i:i+other.batch_size]
             print(f"{i} to {i+other.batch_size}")
             with tf.GradientTape() as tape:
                 pred = model(X)

@@ -42,13 +42,11 @@ class RDSCursor:
             self.conn.commit()
         except OperationalError:
             logging.error(f'OperationalError caught: {traceback.format_exc()}')
-            print(traceback.format_exc())
             self.connect()
             self.cursor.execute(query)
             self.conn.commit()
         except:
             logging.error(f'rds_bridge error caught: {traceback.format_exc()}')
-            print(traceback.format_exc())
             if not self.conn.closed:
                 self.conn.rollback()
         return
