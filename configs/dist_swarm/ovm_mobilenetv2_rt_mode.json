@@ -36,7 +36,7 @@
     "device_config": {
         "device_strategy": "greedy",
         "id": 0,
-        "pretrained_model": "none",
+        "pretrained_model": "../pretrained/mobilenetv2_init_model.h5",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,

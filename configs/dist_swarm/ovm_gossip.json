@@ -32,7 +32,7 @@
                         "device_powers": [10, 8, 6, 4, 2]
                         }
     },
-    "learning_scenario": "oppcl",
+    "learning_scenario": "gossip",
     "device_config": {
         "device_strategy": "gossip",
         "id": 0,
@@ -41,12 +41,12 @@
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_clients_100_epi_5_dur_100_step_02.pickle",
+            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_50_step_02.pickle",
             "computation_time": 0.13,
             "communication_rate": 16000000,
             "invoked_functions": [
                 {"func_name": "#train_self", "params": {}},
-                {"func_name": "#update_model", "params": {}},
+                {"func_name": "update_model", "params": {}},
                 {"func_name": "!evaluate"}
             ]
         },

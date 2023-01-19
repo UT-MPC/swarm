@@ -591,7 +591,9 @@ class Overmind():
                         self.tasks[next_task].real_time_mode = True
                         self.tasks[next_task].reset_start_time(self.last_avail)
                             
-                    if self.indegrees[next_task] == 0 and next_task not in self.processed_tasks:
+                    if self.indegrees[next_task] <= 0 \
+                        and next_task not in self.processed_tasks\
+                        and next_task not in self.deployed_tasks:
                         self.tasks[next_task].determine_skip()
                         self.task_queue.append(next_task)
 
