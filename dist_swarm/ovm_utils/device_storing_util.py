@@ -22,6 +22,9 @@ dynamodb = boto3.resource('dynamodb', region_name=REGION)
 def get_device_model_object_name(tag, id):
     return tag + '/model-' + str(id) + '.h5'
 
+def get_device_model_weight_name(tag, id):
+    return tag + '/model-' + str(id) + '.pickle'
+
 def get_device_file_name(tag, id):
     return tag + '/device-' + str(id) + '.pickle'
 
@@ -68,12 +71,20 @@ def save_device_model(device: base_device.Device, path, swarm_name, id, enc_idx,
 def load_device_model(device: base_device.Device, tag, id):
     s3 = boto3.resource('s3')
     tmp_model_path = '.tmp/loaded_model.h5'
-    s3.Bucket(BUCKET_NAME).download_file(get_device_model_object_name(tag, id),
-                     tmp_model_path)
-    model = keras.models.load_model(tmp_model_path, compile=False)
-    device._weights = model.get_weights()
-    Path(tmp_model_path).unlink()
-
+    try:
+        s3.Bucket(BUCKET_NAME).download_file(get_device_model_object_name(tag, id),
+                        tmp_model_path)
+        model = keras.models.load_model(tmp_model_path, compile=False)
+        device._weights = model.get_weights()
+        Path(tmp_model_path).unlink()
+    except:
+        tmp_weight_path = '.tmp/loaded_weights.pickle'
+        s3.Bucket(BUCKET_NAME).download_file(get_device_model_weight_name(tag, id),
+                        tmp_weight_path)
+        with open(tmp_weight_path, 'rb') as handle:
+            device._weights = pickle.load(handle)
+        Path(tmp_weight_path).unlink()
+        
 def save_device_dataset(device: base_device.Device, path, swarm_name, id, enc_idx, overwrite):
     save_data_object(device._x_train, "x_train", path, swarm_name, id, enc_idx, overwrite)
     save_data_object(device._y_train_orig, "y_train_orig", path, swarm_name, id, enc_idx, overwrite)
