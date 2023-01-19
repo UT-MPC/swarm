@@ -1,8 +1,8 @@
 {
-    "dataset": "mnist",
-    "model": "2nn",
-    "tag": "ovm_gossip_discrete",
-    "swarm_init_group": "levy_100_mnist",
+    "dataset": "cifar-resnet",
+    "model": "cifar-resnet",
+    "tag": "ovm_resnet_rt_mode",
+    "swarm_init_group": "cifar-resnet",
     "worker_ips": [
         "ab449ed59c913445691c747fd673ad42-1496045458.us-east-2.elb.amazonaws.com:50051",
         "afee0160df4714cb3a8d24aca5874404-660404621.us-east-2.elb.amazonaws.com:50051",
@@ -25,34 +25,29 @@
     "swarm_config": {
         "number_of_devices": 100,
         "local_set_size": 10,
-        "local_data_size": 200,
+        "local_data_size": 500,
         "goal_set_size": 10,
         "device_sizes": {
                         "model_sizes": [10, 10, 8, 6, 4],
                         "device_powers": [10, 8, 6, 4, 2]
                         }
     },
-    "learning_scenario": "gossip",
+    "learning_scenario": "oppcl",
     "device_config": {
-        "device_strategy": "gossip",
+        "device_strategy": "greedy",
         "id": 0,
-        "pretrained_model": "../pretrained/mnist_2nn_init.h5",
+        "pretrained_model": "../pretrained/resnet18_init_weights.pickle",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,
         "encounter_config": {
-            "encounter_data_file": "encounter_data/levy_clients_100_epi_2_dur_100_step_02.pickle",
-            "computation_time": 0.00045,
-            "communication_rate": 16000000,
-            "invoked_functions": [
-                {"func_name": "#train_self", "params": {}},
-                {"func_name": "update_model", "params": {}},
-                {"func_name": "!evaluate"}
-            ]
+            "encounter_data_file": "encounter_data/levy_clients_100_epi_5_dur_100_step_02.pickle",
+            "computation_time": 0.13,
+            "communication_rate": 16000000
         },
         "train_config": {
             "__comment__": "formerly called hyperparams",
-            "batch-size": 50,
+            "batch-size": 128,
             "orig-lr": 0.1,
             "max_rounds": 3,
             "evaluation-metrics": "loss-and-accuracy",

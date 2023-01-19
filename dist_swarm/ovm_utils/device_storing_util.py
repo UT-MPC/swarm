@@ -59,14 +59,16 @@ def save_device_model(device: base_device.Device, path, swarm_name, id, enc_idx,
     s3 = boto3.resource('s3')
     model = device._model_fn()
     model.set_weights(device._weights)
-    init_model_path = path + f'/init_model_{id}.h5'
-    if overwrite or not Path(init_model_path).exists():
-        model.save(init_model_path)
-    s3.meta.client.upload_file(init_model_path, 
+    # init_model_path = path + f'/init_model_{id}.h5'
+    init_weight_path = path + f'/init_weights_{id}.pickle'
+    if overwrite or not Path(init_weight_path).exists():
+        with open(init_weight_path, 'wb') as handle:
+            pickle.dump(device._weights, handle)
+    s3.meta.client.upload_file(init_weight_path, 
                                 BUCKET_NAME, 
-                                get_device_model_object_name(swarm_name, id),
+                                get_device_model_weight_name(swarm_name, id),
                                 {'Metadata': {'enc-id': str(enc_idx)}})
-    Path(init_model_path).unlink()
+    Path(init_weight_path).unlink()
 
 def load_device_model(device: base_device.Device, tag, id):
     s3 = boto3.resource('s3')
