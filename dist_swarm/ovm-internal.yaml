@@ -8,6 +8,22 @@ parameters:
 reclaimPolicy: Retain
 ---
 apiVersion: v1
+kind: Pod
+metadata:
+  name: ovm-controller
+  labels:
+    name: overmind
+spec:
+  containers:
+    - name: ds-device
+      image: sethlee0111/private_swarm:0.31
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 50051
+  imagePullSecrets:
+  - name: regcred
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: overmind-service
@@ -26,8 +42,6 @@ kind: Service
 metadata:
   name: ds-deployment-0
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-0
   ports:
@@ -38,8 +52,6 @@ kind: Service
 metadata:
   name: ds-deployment-1
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-1
   ports:
@@ -50,8 +62,6 @@ kind: Service
 metadata:
   name: ds-deployment-2
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-2
   ports:
@@ -62,8 +72,6 @@ kind: Service
 metadata:
   name: ds-deployment-3
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-3
   ports:
@@ -74,73 +82,56 @@ kind: Service
 metadata:
   name: ds-deployment-4
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-4
   ports:
   - port: 50051
----
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ds-deployment-5
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-5
   ports:
   - port: 50051
----
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ds-deployment-6
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-6
   ports:
   - port: 50051
----
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ds-deployment-7
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-7
   ports:
   - port: 50051
----
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ds-deployment-8
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-8
   ports:
   - port: 50051
----
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ds-deployment-9
 spec:
-  type: LoadBalancer 
-  externalTrafficPolicy: Local 
   selector:
     statefulset.kubernetes.io/pod-name: ds-deployment-9
   ports:
@@ -150,7 +141,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: ds-deployment
-  namespace: ds-namespace
+  namespace: ovm-internal
   labels:
     app: dist-swarm
 spec:
@@ -175,10 +166,6 @@ spec:
                 values:
                 - amd64
                 - arm64
-              - key: realtime
-                operator: In
-                values: 
-                - real
       containers:
       - name: ds-device
         image: sethlee0111/private_swarm:0.31
@@ -197,11 +184,6 @@ spec:
         #     cpu: "1"
       imagePullSecrets:
       - name: regcred
-      tolerations:
-      - key: "realtime"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"
   volumeClaimTemplates:
   - metadata:
       name: overmind-volume

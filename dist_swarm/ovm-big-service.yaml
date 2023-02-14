@@ -170,9 +170,13 @@ spec:
                 values:
                 - amd64
                 - arm64
+              - key: node-size
+                operator: In
+                values:
+                - big
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.30
+        image: sethlee0111/private_swarm:0.31
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
@@ -182,6 +186,11 @@ spec:
 
       imagePullSecrets:
       - name: regcred
+      tolerations:
+      - key: "node-size"
+        operator: "Equal"
+        value: "big"
+        effect: "NoSchedule"
   volumeClaimTemplates:
   - metadata:
       name: overmind-volume
@@ -192,8 +201,34 @@ spec:
       storageClassName: "sc-gp2"
       resources:
         requests:
-          storage: 1Gi
----
+          storage: 2Gi
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: sc-gp2-vol
+#   labels:
+#     type: local
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: "/mnt/data"
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: sc-gp2-claim
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 20Gi
 # apiVersion: v1
 # kind: Pod
 # metadata:

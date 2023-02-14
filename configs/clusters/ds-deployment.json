@@ -1,0 +1,14 @@
+{
+    "worker_ips": [
+        "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",
+        "ae183a299361f45e9ab797451bc28b45-25286836.us-east-2.elb.amazonaws.com:50051",
+        "a3a4d1acb3a35497781673ddfdec08b3-234610428.us-east-2.elb.amazonaws.com:50051",
+        "a446231dc48794ce5afb302214aa05da-1535843045.us-east-2.elb.amazonaws.com:50051",
+        "acd0e2592e13e40fe8173b69767e38d9-304729689.us-east-2.elb.amazonaws.com:50051",
+        "a86d15c50c0ef4fd889c208b91306322-1434235675.us-east-2.elb.amazonaws.com:50051",
+        "a73d0841439be4c72a7f99c2a8ee014c-461204456.us-east-2.elb.amazonaws.com:50051",
+        "a2db8d3e5406b4932acea5b23c9031f7-510381442.us-east-2.elb.amazonaws.com:50051",
+        "a53fdee8cddc64425960db2cfccd9cfe-1399437765.us-east-2.elb.amazonaws.com:50051",
+        "ac707e718b19942a9a6cae3863f20aef-1947071726.us-east-2.elb.amazonaws.com:50051"
+    ]
+}

@@ -1,3 +1,5 @@
+leaf/**
+aws-ebs-csi-driver/**
 hist/
 *.ipynb
 __pycache__/
@@ -17,3 +19,6 @@ active-semi-supervised-clustering/
 outputs/
 **/.tmp
 dist_swarm/ovm_logs/**
+*.pem
+**/*.out
+dist_swarm/*.pdf

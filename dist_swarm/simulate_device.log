@@ -58,3 +58,4 @@ botocore.exceptions.ClientError: An error occurred (404) when calling the HeadOb
     res.append(w1[i] + w2[i])
 IndexError: string index out of range
 
+2023-01-21 15:39:29,738,738 root INFO worker id set to 0
