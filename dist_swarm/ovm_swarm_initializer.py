@@ -206,7 +206,14 @@ class OVMSwarmInitializer():
                                             is_finished BOOLEAN NOT NULL, \
                                             is_timed_out BOOLEAN NOT NULL, \
                                             sim_time NUMERIC (10, 4), \
-                                            real_time NUMERIC (10, 4), \
+                                            wc_time NUMERIC (10, 4), \
+                                            learner INTEGER NOT NULL, \
+                                            neighbor VARCHAR (40), \
+                                            sim_timestamp NUMERIC (14, 2), \
+                                            wc_timestamp NUMERIC (14, 2), \
+                                            loss NUMERIC (10, 4), \
+                                            metric NUMERIC (10, 4), \
+                                            enc_idx INTEGER, \
                                             undefined VARCHAR (20) \
                                             )')
         self.rds_tasks_cursor.clear_all()

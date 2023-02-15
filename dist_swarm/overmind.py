@@ -138,7 +138,12 @@ class Overmind():
         self.config = json.loads(config_json)
         self.device_config = self.config["device_config"]
         self.swarm_name = self.config['tag']
-        self.worker_nodes : typing.List[str] = self.config["worker_ips"]
+        if "worker_ips" in self.config:
+            self.worker_nodes : typing.List[str] = self.config["worker_ips"]
+        else:
+            with open(self.config["cluster_config"], 'rb') as f:
+                cluster_config = f.read()
+            self.worker_nodes = cluster_config["worker_ips"]
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"] + (len(self.device_config["device_groups"]) if "device_groups" in self.device_config else 0)
         self.learning_scenario = self.config["learning_scenario"]
         self.worker_namespace = "deprecated"
@@ -158,7 +163,7 @@ class Overmind():
 
         self.tasks_db = TaskInRDS(self.initializer.rds_tasks_cursor)
     
-    def build_dep_graph_multi_neighbors(self, rt_mode=False, dependency=None, oppcl_time=None):
+    def build_dep_graph_multi_neighbors(self, rt_mode=False, dependency=None, oppcl_time=None, time_scale=1):
         # read encounter dataset
         enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
@@ -183,7 +188,10 @@ class Overmind():
         encounter_config = self.device_config['encounter_config']
         self.model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
         self.computation_time = encounter_config['computation_time']
-        self.communication_time = 2 * self.model_send_time 
+        if 'communication_time' not in self.device_config:
+            self.communication_time = 2 * self.model_send_time 
+        else:
+            self.communication_time = self.device_config['communication_time']
         if not rt_mode:
             oppcl_time = 2 * self.model_send_time + self.computation_time
         else:
@@ -199,6 +207,9 @@ class Overmind():
         self.server_list = [0]
 
         for index, row in enc_df.iterrows():
+            start_time = row[TIME_START] * time_scale
+            end_time = row[TIME_END] * time_scale
+
             device1_id = (int)(row[CLIENT1])
             
             if type(row[CLIENT2]) == type([]):
@@ -213,7 +224,6 @@ class Overmind():
             if max(device1_id, max_device2_id) >= self.number_of_devices or is_same:
                 continue
 
-            start_time = row[TIME_START]
             if not rt_mode:
                 start_time_1 = max(start_time, last_times[device1_id])
                 device2_last_time = max(last_times[d2id] for d2id in device2_ids)
@@ -224,11 +234,11 @@ class Overmind():
             else:
                 start_time_1 = start_time
                 start_time_2 = start_time
-                end_time_1 = row[TIME_END]
-                end_time_2 = row[TIME_END]
+                end_time_1 = end_time
+                end_time_2 = end_time
 
-            task_1_timeout = row[TIME_END] - start_time_1 < oppcl_time
-            task_2_timeout = row[TIME_END] - start_time_2 < oppcl_time
+            task_1_timeout = end_time - start_time_1 < oppcl_time
+            task_2_timeout = end_time - start_time_2 < oppcl_time
 
             if (not task_1_timeout) and (not task_2_timeout):
                 task_1_2 = Task(self.swarm_name, task_id, start_time_1, end_time_1, device1_id, device2_ids, 
@@ -342,7 +352,7 @@ class Overmind():
         self.indegrees = indegrees
 
 
-    def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None):
+    def build_dep_graph(self, rt_mode=False, dependency=None, oppcl_time=None, time_scale=1):
         # read encounter dataset
         enc_dataset_filename = self.device_config['encounter_config']['encounter_data_file']
         enc_dataset_path = PurePath(os.path.dirname(__file__) +'/../' + enc_dataset_filename)
@@ -367,10 +377,13 @@ class Overmind():
         encounter_config = self.device_config['encounter_config']
         self.model_send_time = self.device_config['model_size_in_bits'] / encounter_config['communication_rate']
         self.computation_time = encounter_config['computation_time']
-        self.communication_time = 2 * self.model_send_time 
+        if 'communication_time' not in self.device_config:
+            self.communication_time = 2 * self.model_send_time 
+        else:
+            self.communication_time = self.device_config['communication_time']
         if oppcl_time == None:
             if not rt_mode:
-                oppcl_time = 2 * self.model_send_time + self.computation_time
+                oppcl_time = self.communication_time + self.computation_time
             else:
                 oppcl_time = 0.0000001
         print(f"oppcl time: {oppcl_time}")
@@ -381,14 +394,16 @@ class Overmind():
         tasks = {}  # (task id, task object)
         indegrees = {}
         for index, row in enc_df.iterrows():
+            time_start = row[TIME_START] * time_scale
+            time_end = row[TIME_END] * time_scale
             device1_id = (int)(row[CLIENT1])
             device2_id = (int)(row[CLIENT2])
             if max(device1_id, device2_id) >= self.number_of_devices or device1_id == device2_id:
                 continue
-            start_time = max(row[TIME_START], last_times[device1_id], last_times[device2_id])
-            end_time_1 = row[TIME_END]
-            end_time_2 = row[TIME_END]
-            task_timeout = row[TIME_END] - start_time < oppcl_time
+            start_time = max(time_start, last_times[device1_id], last_times[device2_id])
+            end_time_1 = time_end
+            end_time_2 = time_end
+            task_timeout = time_end - start_time < oppcl_time
 
             if not task_timeout:
                 task_1_2 = Task(self.swarm_name, task_id, start_time, end_time_1, device1_id, [device2_id],
@@ -521,6 +536,7 @@ class Overmind():
         self.processed_tasks = []
         self.deployed_tasks = []
         self.next_checkpoint = CHECKPOINT_INTERVAL
+        blocked_time = 0
         for task_id in self.tasks:
             if self.indegrees[task_id] == 0:
                 if rt_mode:
@@ -613,6 +629,16 @@ class Overmind():
             
 
             logging.info(f"free workers {sorted(free_workers)}, task queue size {len(self.task_queue)}")
+        
+            if len(self.task_queue) == 0:
+                blocked_time += polling_interval
+                if blocked_time > 600:
+                    for dt in self.deployed_tasks:
+                        if dt not in self.processed_tasks:
+                            self.task_queue.append(dt)
+                    logging.info(f"re-added blocking tasks {self.task_queue}")
+            else:
+                blocked_time = 0
 
             # check if any of the instances got restarted, if they are, re-allocate the tasks
             running_workers = self.worker_db.get_running_workers()
@@ -670,6 +696,8 @@ class Overmind():
                 self.cur_worker_to_task_id[task_id_to_worker[task_id]] = task_id
 
             sleep(polling_interval)
+            elasped_swarm_time = time.time() - run_swarm_start_time
+            logging.info(f'elasped time: {elasped_swarm_time}, remaining time: {len(self.processed_tasks)/elasped_swarm_time*(len(self.tasks)-len(self.processed_tasks))}')
         
         self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, 'last')
         logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")
@@ -694,11 +722,15 @@ class Overmind():
         log_dict['run_swarm']['processed_tasks'] = self.processed_tasks
         log_dict['run_swarm']['indegrees'] = self.indegrees
         log_dict['run_swarm']['dep_graph'] = self.dep_graph
+        log_dict['run_swarm']['deployed_tasks'] = self.deployed_tasks
+        log_dict['run_swarm']['checkpoint_num'] = checkpoint_num
         
 
         filepath = self.log_path + f'/etc_{checkpoint_num}.log'
         with open(filepath, 'wb') as handle:
             pickle.dump(log_dict, handle, protocol=pickle.HIGHEST_PROTOCOL) 
+        
+    # def load_from_checkpoint(self, )
 
     def _save_dynamodb_table(self, table_name, pickle_file_name, checkpoint_num):
         table = self.dynamodb.Table(table_name)

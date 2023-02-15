@@ -12,7 +12,7 @@ THRES_TIME = 250
 ALPHA = 0.8
 BETA = 1.5
 THRES_NEIGHBOR = 3
-TIME_STEP_SIZE = 0.02
+TIME_STEP_SIZE = 0.2
 
 # data frame column names
 C1_POS_X = "x1"

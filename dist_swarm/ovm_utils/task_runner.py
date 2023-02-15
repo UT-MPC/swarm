@@ -32,6 +32,9 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
     logging.info(f"Running task {task_config['task_id']} in worker {worker_id}")
     logging.info(f"cached is {device_state_cache['device_states'].keys()}")
     task_start_time = time.time()
+    realtime_timed_out = False
+    sim_timestamp = 0
+    hist = [0 for _ in range(3)]
     try:
         # change the state of current worker
         task_id = task_config['task_id']
@@ -75,7 +78,6 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         device_state_cache['device_states'] = {}
         device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
         
-        realtime_timed_out = False
         # invoke function 
         for i in range(len(func_list)):
             # computations that are measured
@@ -98,21 +100,13 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
             elif func_list[i]["func_name"] == '!evaluate' and measured_time <= timeout:
                 hist = learner.eval()
                 if real_time_mode == 'True' and real_time_timeout < measured_time:
-                    device_in_db.update_encounter_history(TASK_REALTIME_TIMEOUT)
                     realtime_timed_out = True
-                else:
-                    device_in_db.update_loss_and_metric(hist[0], hist[1], task_id)
-                    device_in_db.update_encounter_history(TASK_END)
 
                 if real_time_mode == 'False':
-                    device_in_db.update_timestamp(start + comp_time + comm_time)
-                    device_in_db.update_wallclock_timestamp()
+                    sim_timestamp = start + comp_time + comm_time
                 else:
-                    device_in_db.update_timestamp(start + Decimal(measured_time) + comm_time)
-                    device_in_db.update_wallclock_timestamp()
+                    sim_timestamp = start + Decimal(measured_time) + comm_time
                 
-                device_in_db.update_enc_idx(orig_enc_idx)
-                    
 
         # save device (s)
         if not realtime_timed_out:
@@ -137,7 +131,9 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         worker_db.update_status(worker_id, STOPPED)
         # worker_in_db.append_history(**new_history)
         logging.info(f"updated status")
-        task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time)
+        task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time,
+                                           learner_id, "\'" + str(neighbor_ids) + "\'", sim_timestamp, time.time(),
+                                           hist[0], hist[1], orig_enc_idx)
         # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
         logging.info(f"inserted finished task")
     except:
