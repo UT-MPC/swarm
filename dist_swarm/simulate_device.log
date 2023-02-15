@@ -59,3 +59,56 @@ botocore.exceptions.ClientError: An error occurred (404) when calling the HeadOb
 IndexError: string index out of range
 
 2023-01-21 15:39:29,738,738 root INFO worker id set to 0
+2023-02-15 11:26:43,513,513 root INFO worker id set to 0
+2023-02-15 11:27:18,465,465 root INFO Running task 12345 in worker 0
+2023-02-15 11:27:18,465,465 root INFO cached is dict_keys([])
+2023-02-15 11:27:24,458,458 root ERROR Traceback (most recent call last):
+  File "/home/seth/projects/fed-learn-experiment/swarm/dist_swarm/ovm_utils/task_runner.py", line 68, in run_task
+    device_in_db = DeviceInDB(swarm_name, learner_id)
+  File "../dist_swarm/db_bridge/device_in_db.py", line 19, in __init__
+    self.fetch_status()
+  File "../dist_swarm/db_bridge/device_in_db.py", line 26, in fetch_status
+    KeyConditionExpression=Key(DEVICE_ID).eq(self.device_id))
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/factory.py", line 520, in do_action
+    response = action(self, *args, **kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/boto3/resources/action.py", line 83, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/seth/projects/fed-learn-experiment/venv/lib/python3.6/site-packages/botocore/client.py", line 676, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the Query operation: Requested resource not found
+
+2023-02-15 11:32:40,856,856 root INFO worker id set to 0
+2023-02-15 11:32:43,932,932 root INFO Running task 12345 in worker 0
+2023-02-15 11:32:43,932,932 root INFO cached is dict_keys([])
+2023-02-15 11:33:01,297,297 root INFO -- Task 12345 successfully finished --
+2023-02-15 11:33:01,402,402 root INFO updated status
+2023-02-15 11:33:01,476,476 root ERROR rds_bridge error caught: Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 41, in execute_sql
+    self.cursor.execute(query)
+psycopg2.errors.SyntaxError: syntax error at or near "["
+LINE 1: ...45, FALSE, TRUE, FALSE, 0, 17.364980220794678, 0, [10], 10.2...
+                                                             ^
+
+
+2023-02-15 11:33:01,511,511 root INFO inserted finished task
+2023-02-15 11:36:23,723,723 root INFO worker id set to 0
+2023-02-15 11:36:24,643,643 root INFO Running task 12345 in worker 0
+2023-02-15 11:36:24,643,643 root INFO cached is dict_keys([])
+2023-02-15 11:36:40,812,812 root INFO -- Task 12345 successfully finished --
+2023-02-15 11:36:40,920,920 root INFO updated status
+2023-02-15 11:36:40,997,997 root ERROR rds_bridge error caught: Traceback (most recent call last):
+  File "../dist_swarm/db_bridge/rds_bridge.py", line 41, in execute_sql
+    self.cursor.execute(query)
+psycopg2.errors.NumericValueOutOfRange: numeric field overflow
+DETAIL:  A field with precision 12, scale 4 must round to an absolute value less than 10^8.
+
+
+2023-02-15 11:36:41,036,36 root INFO inserted finished task
+2023-02-15 11:39:24,417,417 root INFO worker id set to 0
+2023-02-15 11:39:24,975,975 root INFO Running task 12345 in worker 0
+2023-02-15 11:39:24,976,976 root INFO cached is dict_keys([])
+2023-02-15 11:39:42,811,811 root INFO -- Task 12345 successfully finished --
+2023-02-15 11:39:42,917,917 root INFO updated status
+2023-02-15 11:39:43,086,86 root INFO inserted finished task

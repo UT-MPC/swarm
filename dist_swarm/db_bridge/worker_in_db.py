@@ -125,12 +125,18 @@ class TaskInRDS():
     def get_not_processed_finished_tasks(self):
         return self.cursor.get_column_multi_and({'is_processed': 'FALSE', 'is_finished': 'TRUE'})
 
-    def insert_newly_finished_task(self, task_id, is_timed_out, sim_time, real_time):
+    def insert_newly_finished_task(self, task_id, is_timed_out, sim_time, wc_time,
+                                   learner, neighbor, sim_timestamp, wc_timestamp,
+                                   loss, metric, enc_idx):
         self.cursor.insert_record_wo_quotes(['task_id', 'is_processed', 'is_finished', 
-                                                'is_timed_out', 'sim_time', 'real_time'],
+                                                'is_timed_out', 'sim_time', 'wc_time',
+                                                'learner', 'neighbor', 'sim_timestamp', 'wc_timestamp',
+                                                'loss', 'metric', 'enc_idx'],
                                             [str(task_id), 'FALSE', 'TRUE', 
                                                 'TRUE' if is_timed_out else 'FALSE', 
-                                                str(sim_time), str(real_time)])
+                                                str(sim_time), str(wc_time),
+                                                str(learner), str(neighbor), str(sim_timestamp), str(wc_timestamp),
+                                                str(loss), str(metric), str(enc_idx)])
 
     def mark_processed(self, task_id):
         self.cursor.update_record_by_col('task_id', str(task_id), 'is_processed', 'TRUE')

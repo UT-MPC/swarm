@@ -1,7 +1,7 @@
 {
     "dataset": "mnist",
     "model": "2nn",
-    "tag": "ovm_gossip_discrete_2",
+    "tag": "ovm_gossip",
     "swarm_init_group": "levy_100_mnist",
     "worker_ips": [
         "a0f981079a10c461ab14bc38e656a09d-1521516052.us-east-2.elb.amazonaws.com:50051",

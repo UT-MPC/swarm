@@ -138,7 +138,12 @@ class Overmind():
         self.config = json.loads(config_json)
         self.device_config = self.config["device_config"]
         self.swarm_name = self.config['tag']
-        self.worker_nodes : typing.List[str] = self.config["worker_ips"]
+        if "worker_ips" in self.config:
+            self.worker_nodes : typing.List[str] = self.config["worker_ips"]
+        else:
+            with open(self.config["cluster_config"], 'rb') as f:
+                cluster_config = f.read()
+            self.worker_nodes = cluster_config["worker_ips"]
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"] + (len(self.device_config["device_groups"]) if "device_groups" in self.device_config else 0)
         self.learning_scenario = self.config["learning_scenario"]
         self.worker_namespace = "deprecated"
