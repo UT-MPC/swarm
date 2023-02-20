@@ -143,7 +143,9 @@ class Overmind():
         else:
             with open(self.config["cluster_config"], 'rb') as f:
                 cluster_config = f.read()
+            cluster_config = json.loads(cluster_config)
             self.worker_nodes = cluster_config["worker_ips"]
+            self.config["worker_ips"] = self.worker_nodes
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"] + (len(self.device_config["device_groups"]) if "device_groups" in self.device_config else 0)
         self.learning_scenario = self.config["learning_scenario"]
         self.worker_namespace = "deprecated"
@@ -155,7 +157,7 @@ class Overmind():
                             datefmt='%H:%M:%S',level=logging.INFO)
 
         self.initializer = OVMSwarmInitializer()
-        self.initializer.initialize(config_file, not skip_init_tables)
+        self.initializer.initialize(self.config, not skip_init_tables)
         self.worker_db = WorkerInRDS(self.initializer.rds_cursor, self.worker_nodes)
 
         self.worker_ip_to_id = self.initializer.worker_ip_to_id
@@ -649,7 +651,7 @@ class Overmind():
                     is_init = True
                     logging.info(f"worker {w} is down")
 
-                if not is_init:
+                if not is_init and w in self.cur_worker_to_task_id:
                     self.worker_db.update_status(w, STOPPED)
                     self.initializer._initialize_worker(self.swarm_name, w)
                     task_id = self.cur_worker_to_task_id[w]
@@ -697,7 +699,7 @@ class Overmind():
 
             sleep(polling_interval)
             elasped_swarm_time = time.time() - run_swarm_start_time
-            logging.info(f'elasped time: {elasped_swarm_time}, remaining time: {len(self.processed_tasks)/elasped_swarm_time*(len(self.tasks)-len(self.processed_tasks))}')
+            logging.info(f'elasped time: {elasped_swarm_time}, remaining time: {elasped_swarm_time/(len(self.processed_tasks)+1)*(len(self.tasks)-len(self.processed_tasks))}')
         
         self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, 'last')
         logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")

@@ -168,11 +168,8 @@ class OVMSwarmInitializer():
         set_number_thread = threading.Thread(target=self.send_set_worker_state_request, args=(tag, worker_id,))
         set_number_thread.start()
     
-    def _config_db(self, config_file, create_tables=False):
+    def _config_db(self, config, create_tables=False):
         # load config file
-        with open(config_file, 'rb') as f:
-            config_json = f.read()
-        config = json.loads(config_json)
         self.config = config
         tag = config['tag']
         self.swarm_name = tag

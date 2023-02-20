@@ -22,3 +22,4 @@ dist_swarm/ovm_logs/**
 *.pem
 **/*.out
 dist_swarm/*.pdf
+pretrained/*

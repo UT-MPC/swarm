@@ -176,7 +176,7 @@ spec:
                 - big
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.31
+        image: sethlee0111/private_swarm:0.32
         imagePullPolicy: Always
         ports:
         - containerPort: 50051

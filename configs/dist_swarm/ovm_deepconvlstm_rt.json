@@ -3,18 +3,7 @@
     "model": "opportunity-uci",
     "tag": "ovm_deepconvlstm_realtime",
     "swarm_init_group": "opportunity",
-    "worker_ips": [
-        "aa5002905214c4e26a51597835c7491a-324546927.us-east-2.elb.amazonaws.com:50051",
-        "afee0160df4714cb3a8d24aca5874404-660404621.us-east-2.elb.amazonaws.com:50051",
-        "a725f4b026a014a31a6b61aaecde8b67-22517437.us-east-2.elb.amazonaws.com:50051",
-        "a09966726c8614ace93eb89d656fbe92-1233345801.us-east-2.elb.amazonaws.com:50051",
-        "a191f186b8a07414cb4d66a195bf2aed-1346645701.us-east-2.elb.amazonaws.com:50051",
-        "af4d21d3128e94aaeaf8f7a94570c7db-661218768.us-east-2.elb.amazonaws.com:50051",
-        "a4f8bfbed5009435c8ed13a90fb54776-238498025.us-east-2.elb.amazonaws.com:50051",
-        "af90ec2a3b10f4087b33a97523948b4f-1879445545.us-east-2.elb.amazonaws.com:50051",
-        "acaca5e51cd5c45ffae897f6384bce2c-301986543.us-east-2.elb.amazonaws.com:50051",
-        "aa07889883bc04a47b6db753fe7d5488-2123856431.us-east-2.elb.amazonaws.com:50051"
-    ],
+    "cluster_config": "../configs/clusters/ovm-big.json",
     "worker_namespace": "ds-deployment",
     "rds_config": {
         "rds_endpoint": "ovm-workers.cluster-cssbjidz4kjh.us-east-2.rds.amazonaws.com",
@@ -24,9 +13,9 @@
     },
     "swarm_config": {
         "number_of_devices": 100,
-        "local_set_size": 10,
-        "local_data_size": 200,
-        "goal_set_size": 10,
+        "local_set_size": 18,
+        "local_data_size": 2000,
+        "goal_set_size": 18,
         "device_sizes": {
                         "model_sizes": [10, 10, 8, 6, 4],
                         "device_powers": [10, 8, 6, 4, 2]
@@ -36,7 +25,7 @@
     "device_config": {
         "device_strategy": "greedy",
         "id": 0,
-        "pretrained_model": "../pretrained/deepConvLSTM_pretrained_05p.pickle",
+        "pretrained_model": "../pretrained/deepconvlstm_init.pickle",
         "model_size": 10,
         "model_size_in_bits": 6224000,
         "device_power": 8,
