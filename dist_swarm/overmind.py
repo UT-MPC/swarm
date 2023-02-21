@@ -132,7 +132,7 @@ class Overmind():
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
-    def create_swarm(self, config_file, skip_init_tables=False):
+    def create_swarm(self, config_file, skip_init_tables=False, init_worker=True):
         with open(config_file, 'rb') as f:
             config_json = f.read()
         self.config = json.loads(config_json)
@@ -157,7 +157,7 @@ class Overmind():
                             datefmt='%H:%M:%S',level=logging.INFO)
 
         self.initializer = OVMSwarmInitializer()
-        self.initializer.initialize(self.config, not skip_init_tables)
+        self.initializer.initialize(self.config, not skip_init_tables, init_worker)
         self.worker_db = WorkerInRDS(self.initializer.rds_cursor, self.worker_nodes)
 
         self.worker_ip_to_id = self.initializer.worker_ip_to_id

@@ -39,8 +39,8 @@ client = boto3.client('dynamodb', region_name=REGION)
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 
 class OVMSwarmInitializer():
-    def initialize(self, config_file, create_tables=False) -> None:
-        self._config_db(config_file, create_tables)
+    def initialize(self, config_file, create_tables=False, init_worker=True) -> None:
+        self._config_db(config_file, create_tables, init_worker)
         
     def _delete_all_items_on_table(self, table_name):
         try:
@@ -168,7 +168,7 @@ class OVMSwarmInitializer():
         set_number_thread = threading.Thread(target=self.send_set_worker_state_request, args=(tag, worker_id,))
         set_number_thread.start()
     
-    def _config_db(self, config, create_tables=False):
+    def _config_db(self, config, create_tables=False, init_worker=True):
         # load config file
         self.config = config
         tag = config['tag']
@@ -266,10 +266,12 @@ class OVMSwarmInitializer():
             worker_id_resp = self.rds_cursor.get_column('worker_id', 'external_ip', self.worker_ips[idx])
             self.worker_ip_to_id[self.worker_ips[idx]] = worker_id_resp[0][0]
             self.worker_id_to_ip[worker_id_resp[0][0]] = self.worker_ips[idx]
-            self._initialize_worker(tag, worker_id_resp[0][0])
+            if init_worker:
+                self._initialize_worker(tag, worker_id_resp[0][0])
        
         # if create_tables:
         #     self._create_finished_tasks_table(tag)
+
     
     def _create_and_save_device(self, idnum, config, device_config,
                                 num_classes, x_train, y_train_orig,
