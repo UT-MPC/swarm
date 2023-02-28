@@ -100,5 +100,7 @@ def get_device_class(class_name):
     ##### Other OVM Devices
     if class_name == 'gossip':
         return device.gossip_device.OVMGossipDevice
+    elif class_name == 'b-gossip':
+        return device.gossip_device.OVMBroadcastGossipDevice
 
     raise ValueError('Cannot find device name {}'.format(class_name))
