@@ -236,7 +236,7 @@ class Device():
         model = self._get_model()
         xt, yt = self.test_data_provider.fetch(list(self._desired_data_dist.keys()), self._hyperparams['test-data-per-label'])
         y_pred = np.argmax(model.predict(xt), axis = 1)
-        hist = f1_score(yt, y_pred, average=average)
+        hist = [0, f1_score(yt, y_pred, average=average)]
         self._last_hist = hist
         K.clear_session()
         del model
