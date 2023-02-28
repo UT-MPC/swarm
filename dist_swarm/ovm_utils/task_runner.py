@@ -133,7 +133,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         logging.info(f"updated status")
         task_db.insert_newly_finished_task(task_id, realtime_timed_out, measured_time, total_time,
                                            learner_id, "\'" + str(neighbor_ids) + "\'", sim_timestamp, time.time(),
-                                           hist[0], hist[1], orig_enc_idx)
+                                           hist[0], hist[1], orig_enc_idx, worker_id)
         # worker_in_db.update_finished_task(task_id, True, realtime_timed_out, Decimal(measured_time))
         logging.info(f"inserted finished task")
     except:

@@ -135,7 +135,7 @@ metadata:
   name: ovm-big-deployment-9
 spec:
   type: LoadBalancer 
-  externalTrafficPolicy: Local 
+  externalTrafficPolicy: Local
   selector:
     statefulset.kubernetes.io/pod-name: ovm-big-deployment-9
   ports:
@@ -170,26 +170,25 @@ spec:
                 values:
                 - amd64
                 - arm64
-              - key: node-size
+              - key: group-name
                 operator: In
                 values:
-                - big
+                - ovm-big
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.32
+        image: sethlee0111/private_swarm:0.34
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
         volumeMounts:
            - name: overmind-volume
              mountPath: /data/db
-
       imagePullSecrets:
       - name: regcred
       tolerations:
-      - key: "node-size"
+      - key: "group-name"
         operator: "Equal"
-        value: "big"
+        value: "ovm-big"
         effect: "NoSchedule"
   volumeClaimTemplates:
   - metadata:
@@ -201,7 +200,7 @@ spec:
       storageClassName: "sc-gp2"
       resources:
         requests:
-          storage: 2Gi
+          storage: 1Gi
 # ---
 # apiVersion: v1
 # kind: PersistentVolume

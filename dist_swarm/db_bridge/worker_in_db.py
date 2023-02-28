@@ -127,16 +127,19 @@ class TaskInRDS():
 
     def insert_newly_finished_task(self, task_id, is_timed_out, sim_time, wc_time,
                                    learner, neighbor, sim_timestamp, wc_timestamp,
-                                   loss, metric, enc_idx):
+                                   loss, metric, enc_idx, worker_id):
         self.cursor.insert_record_wo_quotes(['task_id', 'is_processed', 'is_finished', 
                                                 'is_timed_out', 'sim_time', 'wc_time',
                                                 'learner', 'neighbor', 'sim_timestamp', 'wc_timestamp',
-                                                'loss', 'metric', 'enc_idx'],
+                                                'loss', 'metric', 'enc_idx', 'undefined'],
                                             [str(task_id), 'FALSE', 'TRUE', 
                                                 'TRUE' if is_timed_out else 'FALSE', 
                                                 str(sim_time), str(wc_time),
                                                 str(learner), str(neighbor), str(sim_timestamp), str(wc_timestamp),
-                                                str(loss), str(metric), str(enc_idx)])
+                                                str(loss), str(metric), str(enc_idx), str(worker_id)])
 
     def mark_processed(self, task_id):
         self.cursor.update_record_by_col('task_id', str(task_id), 'is_processed', 'TRUE')
+
+    def recover_from_file(self, filename):
+        self.cursor.copy_from_file(filename, self.cursor.table)

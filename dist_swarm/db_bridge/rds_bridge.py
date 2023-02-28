@@ -29,6 +29,11 @@ class RDSCursor:
 
     def clear_all(self):
         self.execute_sql(f'delete from {self.table}')
+    
+    def copy_from_file(self, filename, table_name):
+        with open(filename, 'r') as f:
+            self.cursor.copy_from(f, table_name, sep=',')
+        self.conn.commit()
 
     def execute_sql(self, query):
         if time.time() - self.connection_time > 20 * 60:

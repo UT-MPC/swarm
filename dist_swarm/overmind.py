@@ -20,6 +20,8 @@ import pickle
 import datetime
 import typing
 from pathlib import PurePath, Path
+import pandas as pd
+import numpy as np
 from pandas import read_pickle, read_csv
 import boto3
 from dynamo_db import IS_FINISHED, IS_PROCESSED, IS_TIMED_OUT, TASK_ID, TIME
@@ -164,6 +166,231 @@ class Overmind():
         self.worker_id_to_ip = {v: k for k, v in self.worker_ip_to_id.items()}
 
         self.tasks_db = TaskInRDS(self.initializer.rds_tasks_cursor)
+
+    def load_and_run_swarm(self, device_state_log_file, task_table_log_file, etc_log_file, rt_mode=False):
+        CHECKPOINT_INTERVAL = 1000
+        polling_interval = 5
+        with open(etc_log_file, 'rb') as handle:
+            etc_log = pickle.load(handle)
+        swarm_state = etc_log['run_swarm']
+        self.config = etc_log['config']
+        self.tasks = swarm_state['tasks']
+        self.task_queue = swarm_state['task_queue']
+        self.processed_tasks = swarm_state['processed_tasks']
+        self.indegrees = swarm_state['indegrees']
+        self.dep_graph = swarm_state['dep_graph']
+        self.deployed_tasks = swarm_state['deployed_tasks']
+        self.cached_devices_to_worker_nodes = {}  # (cached_device_id, worker node)
+        self.cached_worker_nodes_to_devices = {}
+        self.allocated_tasks = dict.fromkeys(range(len(self.worker_nodes)), 0)
+        self.last_avail = dict.fromkeys(range(self.number_of_devices), 0)
+        self.cur_worker_to_task_id = {}
+        self.next_checkpoint = len(self.processed_tasks) + CHECKPOINT_INTERVAL
+        self.successful_tasks = 0
+        self.timed_out_tasks = 0
+
+        if len(self.task_queue) == 0:
+            self.task_queue = [t for t in self.deployed_tasks]
+
+        run_swarm_start_time = time.time() - float(etc_log['elasped_time'])
+
+        # TODO make separate routine for this duplicated code
+        # recover tables from log files
+        # with open(task_table_log_file, 'rb') as handle:
+        #     records = pickle.load(handle)
+        # columns = [
+        #     'serial_id',
+        #     'task_id',
+        #     'is_processed',
+        #     'is_finished',
+        #     'is_timed_out',
+        #     'sim_time',
+        #     'wc_time',
+        #     'learner',
+        #     'neighbor',
+        #     'sim_timestamp',
+        #     'wc_timestamp',
+        #     'loss',
+        #     'metric',
+        #     'enc_idx',
+        #     'undefined'
+        # ]
+        # dtypes = np.dtype([
+        #         (columns[0], int),
+        #         (columns[1], int),
+        #         (columns[2], bool),
+        #         (columns[3], bool),
+        #         (columns[4], bool),
+        #         (columns[5], str),
+        #         (columns[6], str),
+        #         (columns[7], str),
+        #         (columns[8], str),
+        #         (columns[9], str),
+        #         (columns[10], str),
+        #         (columns[11], str),
+        #         (columns[12], str),
+        #         (columns[13], str),
+        #         (columns[14], str),
+        #         ])
+        # data = np.empty(0, dtype=dtypes)
+        # df = pd.DataFrame(data = data)
+        # logging.info('constructing task table')
+        # for r in records:
+        #     row_dict = {}
+        #     for i in range(len(columns)):
+        #         row_dict[columns[i]] = r[i]
+        #     df.loc[0 if pd.isnull(df.index.max()) else df.index.max() + 1] = row_dict   
+        
+        # df.to_csv('tmp.csv', sep=',', index_label=False, index=False, header=False)
+        # self.tasks_db.recover_from_file('tmp.csv')
+        # logging.info('task table is recovered from the checkpoint')
+
+        iterations = 0
+        blocked_time = 0
+        while iterations < MAX_ITERATIONS:
+            if not Path(self.log_path).exists():  # exit simulation when log file is deleted
+                return
+
+            iterations += 1
+
+            finished_not_processed_tasks = self.tasks_db.get_not_processed_finished_tasks()
+            # print(f"not fin: {finished_not_processed_tasks}")
+            # checkpointing
+            if len(self.processed_tasks) >= self.next_checkpoint:
+                self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, len(self.processed_tasks))
+                self.next_checkpoint += CHECKPOINT_INTERVAL
+
+            # re-allocate failed tasks
+            for task_item in finished_not_processed_tasks:
+                if not task_item[3]:
+                    self.task_queue.append(task_item[1])
+                    logging.info(f"re-allocating failed task {task_item}")
+                    # TODO delete task item from DB
+
+            for task_item in finished_not_processed_tasks:
+                # "process" the finished task, which is
+                # decrementing indegrees of tasks that are dependent on that task
+                task_id = task_item[1]
+                learner_id = self.tasks[task_id].learner_id
+                neighbor_ids = self.tasks[task_id].neighbor_id_list
+                self.processed_tasks.append(task_id)
+
+                # get end time of the task
+                if rt_mode and not task_item[4]:
+                    elasped_time = float(task_item[5]) + self.communication_time
+                    freed_time = self.tasks[task_id].start + elasped_time
+                elif rt_mode and task_item[4]:
+                    self.timed_out_tasks += 1
+                    freed_time = self.tasks[task_id].start
+                else:  # if discrete mode
+                    freed_time = self.tasks[task_id].start + self.communication_time + self.computation_time
+
+                self.last_avail[learner_id] = max(self.last_avail[learner_id], freed_time)
+                self.successful_tasks += 1
+                # if self.dependant_to_mutable:
+                # for nid in neighbor_ids:
+                #     self.last_avail[nid] = max(self.last_avail[nid], freed_time)
+
+                for next_task in self.dep_graph[task_id]:
+                    # print(f"next task {next_task}")
+                    self.indegrees[next_task] -= 1
+                    if rt_mode:
+                        self.tasks[next_task].real_time_mode = True
+                        self.tasks[next_task].reset_start_time(self.last_avail)
+                            
+                    if self.indegrees[next_task] <= 0 \
+                        and next_task not in self.processed_tasks\
+                        and next_task not in self.deployed_tasks:
+                        self.tasks[next_task].determine_skip()
+                        self.task_queue.append(next_task)
+
+                self.tasks_db.mark_processed(task_id)
+                try:
+                    self.deployed_tasks.remove(task_id)
+                except:
+                    logging.error(f"not deployed or already processed task {task_id} has been processed again")
+
+            # get "Stopped" workers and check if one of them holds recent device state
+            # worker_dbs = [WorkerInDB(self.swarm_name, self.worker_namespace, id) for id, ip in enumerate(self.worker_nodes)]
+            # free_workers = [worker.worker_id for worker in worker_dbs if worker.status != RUNNING]
+            task_id_to_worker = {}
+            
+            free_workers = self.worker_db.get_stopped_workers()
+            
+
+            logging.info(f"free workers {sorted(free_workers)}, task queue size {len(self.task_queue)}")
+        
+            if len(self.task_queue) == 0:
+                blocked_time += polling_interval
+                if blocked_time > 600:
+                    for dt in self.deployed_tasks:
+                        if dt not in self.processed_tasks:
+                            self.task_queue.append(dt)
+                    logging.info(f"re-added blocking tasks {self.task_queue}")
+            else:
+                blocked_time = 0
+
+            # check if any of the instances got restarted, if they are, re-allocate the tasks
+            running_workers = self.worker_db.get_running_workers()
+            for w in running_workers:
+                try:
+                    is_init = self.send_check_initialized_request(w)
+                except:
+                    is_init = True
+                    logging.info(f"worker {w} is down")
+
+                if not is_init and w in self.cur_worker_to_task_id:
+                    self.worker_db.update_status(w, STOPPED)
+                    self.initializer._initialize_worker(self.swarm_name, w)
+                    task_id = self.cur_worker_to_task_id[w]
+                    self.task_queue.append(task_id)
+                    self.cur_worker_to_task_id.pop(w)
+                    logging.error(f"worker {w} has been restarted, task {task_id} has been re-added to queue")
+               
+
+            ## start assigning tasks to worker nodes (populate task_id_to_worker)
+            # first assign based on cached device state
+            # print(f"cached: {self.cached_devices_to_worker_nodes}")
+            if self.learning_scenario == "oppcl":
+                for task_id in self.task_queue:
+                    # @TODO support mutable neighbors
+                    if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \
+                        task_id not in task_id_to_worker and \
+                        self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] in free_workers:  
+                        target_worker_id = self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id]
+                        task_id_to_worker[task_id] = target_worker_id
+                        free_workers.remove(target_worker_id)
+                        logging.info(f"using {target_worker_id} to reuse state {self.tasks[task_id].learner_id} in {task_id}")
+            
+            # delete assigned tasks from task queue
+            for task_id in task_id_to_worker:
+                self.task_queue.remove(task_id)
+
+            # assign remaining tasks to "Stopped" worker nodes
+            while len(free_workers) > 0 and len(self.task_queue) > 0:
+                worker_id = free_workers.pop()
+                task_to_deploy = self.task_queue.pop()
+                task_id_to_worker[task_to_deploy] = worker_id
+
+            # print(f"{task_id_to_worker}")
+            # print(f"{self.task_queue}")
+            # logging.info(f"tasks left: {self.task_num}")
+
+            # call RunTask asynchronously 
+            for task_id in task_id_to_worker:
+                task_thread = threading.Thread(target=self.send_run_task_request, args=(task_id_to_worker[task_id], self.tasks[task_id]))
+                task_thread.start()
+                self.deployed_tasks.append(task_id)
+                self.allocated_tasks[task_id_to_worker[task_id]] = task_id
+                self.cached_devices_to_worker_nodes[self.tasks[task_id].learner_id] = task_id_to_worker[task_id]
+                self.cur_worker_to_task_id[task_id_to_worker[task_id]] = task_id
+
+            sleep(polling_interval)
+            elasped_swarm_time = time.time() - run_swarm_start_time
+            logging.info(f'elasped time: {elasped_swarm_time}, remaining time: {elasped_swarm_time/(len(self.processed_tasks)+1)*(len(self.tasks)-len(self.processed_tasks))}')
+        
+        self.save_checkpoint({'elasped_time': f'{time.time() - run_swarm_start_time}'}, 'last')
+        logging.info(f"Overmind run finished successfully with {iterations} iterations, elasped time {time.time() - run_swarm_start_time} sec.")
     
     def build_dep_graph_multi_neighbors(self, rt_mode=False, dependency=None, oppcl_time=None, time_scale=1):
         # read encounter dataset
@@ -726,6 +953,7 @@ class Overmind():
         log_dict['run_swarm']['dep_graph'] = self.dep_graph
         log_dict['run_swarm']['deployed_tasks'] = self.deployed_tasks
         log_dict['run_swarm']['checkpoint_num'] = checkpoint_num
+        log_dict['run_swarm']['task_num'] = self.task_num
         
 
         filepath = self.log_path + f'/etc_{checkpoint_num}.log'
