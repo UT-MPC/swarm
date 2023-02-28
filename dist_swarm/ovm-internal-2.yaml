@@ -16,17 +16,29 @@ metadata:
 spec:
   containers:
     - name: ds-device
-      image: sethlee0111/private_swarm:0.32
+      image: sethlee0111/private_swarm:0.33
       imagePullPolicy: Always
       ports:
       - containerPort: 50051
   imagePullSecrets:
   - name: regcred
   tolerations:
-  - key: "internal"
+  - key: "node-group"
     operator: "Equal"
-    value: "true"
+    value: "ovm-internal-2"
     effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ovm-controller-service
+  labels:
+    name: overmind
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: ovm-controller
+  ports:
+  - port: 50051
 ---
 apiVersion: v1
 kind: Service
@@ -171,28 +183,25 @@ spec:
                 values:
                 - amd64
                 - arm64
+              - key: "node-group"
+                operator: In
+                values:
+                - ovm-internal-2
       containers:
       - name: ds-device
-        image: sethlee0111/private_swarm:0.32
+        image: sethlee0111/private_swarm:0.33
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
         volumeMounts:
            - name: overmind-volume
              mountPath: /data/db
-        # resources:
-        #   requests:
-        #   # memory: "2Gi"
-        #     cpu: "1"
-        #   limits:
-        #     # memory: "2Gi"
-        #     cpu: "1"
       imagePullSecrets:
       - name: regcred
       tolerations:
-      - key: "internal"
+      - key: "node-group"
         operator: "Equal"
-        value: "true"
+        value: "ovm-internal-2"
         effect: "NoSchedule"
   volumeClaimTemplates:
   - metadata:
