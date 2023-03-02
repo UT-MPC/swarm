@@ -42,7 +42,7 @@ MAX_ITERATIONS = 10_000_000
 class Task():
     def __init__(self, swarm_name, task_id, start, end, learner_id, neighbor_id_list,
                  timeout=2**16, real_time_mode=False, communication_time=0, computation_time=0, 
-                 dependant_on_mutable=False, orig_enc_idx=0, learning_config='oppcl'):
+                 dependant_on_mutable=False, orig_enc_idx=0, learning_config='oppcl', bucket='opfl-sim-models'):
         self.swarm_name = swarm_name
         self.worker_namespace = "deprecated"
         self.task_id = task_id
@@ -56,6 +56,7 @@ class Task():
         self.communication_time = communication_time
         self.learning_config = learning_config
         self.orig_enc_idx = orig_enc_idx
+        self.bucket = bucket
 
         self.real_time_timeout = self.end - self.start - communication_time
         self.dependant_on_mutable = dependant_on_mutable
@@ -100,7 +101,8 @@ class Task():
             "real_time_mode": str(self.real_time_mode),
             "real_time_timeout": str(self.real_time_timeout),
             "learning_scenario": self.learning_config,
-            "orig_enc_idx": str(self.orig_enc_idx)
+            "orig_enc_idx": str(self.orig_enc_idx),
+            "bucket": str(self.bucket)
         }
         
     def set_learner_load_config(self, learner_load_model: bool, learner_load_dataset: bool):
@@ -151,6 +153,11 @@ class Overmind():
         self.number_of_devices = self.config["swarm_config"]["number_of_devices"] + (len(self.device_config["device_groups"]) if "device_groups" in self.device_config else 0)
         self.learning_scenario = self.config["learning_scenario"]
         self.worker_namespace = "deprecated"
+
+        if 'bucket' in config:
+            self.bucket = config['bucket']
+        else:
+            self.bucket = 'opfl-sim-models'
 
         self.log_path = f'ovm_logs/{self.swarm_name}/{datetime.datetime.now()}'
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
@@ -322,10 +329,12 @@ class Overmind():
         
             if len(self.task_queue) == 0:
                 blocked_time += polling_interval
-                if blocked_time > 600:
+                if blocked_time > 300:
                     for dt in self.deployed_tasks:
                         if dt not in self.processed_tasks:
                             self.task_queue.append(dt)
+                    tset = set(self.task_queue)
+                    self.task_queue = list(tset)
                     logging.info(f"re-added blocking tasks {self.task_queue}")
             else:
                 blocked_time = 0
@@ -637,10 +646,10 @@ class Overmind():
             if not task_timeout:
                 task_1_2 = Task(self.swarm_name, task_id, start_time, end_time_1, device1_id, [device2_id],
                                 real_time_mode=rt_mode, communication_time=self.communication_time, 
-                                computation_time=self.computation_time, orig_enc_idx=index)
+                                computation_time=self.computation_time, orig_enc_idx=index, bucket=self.bucket)
                 task_2_1 = Task(self.swarm_name, task_id+1, start_time, end_time_2, device2_id, [device1_id],
                                 real_time_mode=rt_mode, communication_time=self.communication_time,
-                                computation_time=self.computation_time, orig_enc_idx=index)
+                                computation_time=self.computation_time, orig_enc_idx=index, bucket=self.bucket)
                 if "invoked_functions" in self.device_config["encounter_config"]:
                     invoked_functions = self.device_config["encounter_config"]["invoked_functions"]
                     for f in invoked_functions:

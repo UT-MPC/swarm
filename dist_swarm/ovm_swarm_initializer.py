@@ -177,6 +177,10 @@ class OVMSwarmInitializer():
         self.worker_ips = config['worker_ips']
         self.worker_namespace = "deprecated"
         self.swarm_init_group = config['swarm_init_group']
+        if 'bucket' in config:
+            self.bucket = config['bucket']
+        else:
+            self.bucket = 'opfl-sim-models'
 
         # setup RDS cursor
         rds_config = config['rds_config']
@@ -356,7 +360,7 @@ class OVMSwarmInitializer():
                                         hyperparams)
 
             # save device model, dataset, and device object on S3 
-            save_device(device, config['tag'], config['swarm_init_group'], -1, True)
+            save_device(device, config['tag'], config['swarm_init_group'], -1, True, self.bucket)
         except:
             logging.error(f"{traceback.format_exc()}")
 
