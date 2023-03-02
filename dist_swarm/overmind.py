@@ -789,7 +789,7 @@ class Overmind():
         self.successful_tasks = 0
         self.timed_out_tasks = 0
 
-        self.allocated_tasks = dict.fromkeys(range(len(self.worker_nodes)), 0)
+        self.allocated_tasks = {}
         self.last_avail = dict.fromkeys(range(self.number_of_devices), 0)
         self.cur_worker_to_task_id = {}
 

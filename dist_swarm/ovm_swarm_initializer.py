@@ -171,6 +171,7 @@ class OVMSwarmInitializer():
     def _config_db(self, config, create_tables=False, init_worker=True):
         # load config file
         self.config = config
+        self.swarm_name = config['tag']
         tag = config['tag']
         self.swarm_name = tag
         swarm_config = config['swarm_config']

@@ -19,6 +19,7 @@ active-semi-supervised-clustering/
 outputs/
 **/.tmp
 dist_swarm/ovm_logs/**
+configs/**
 *.pem
 **/*.out
 dist_swarm/*.pdf
