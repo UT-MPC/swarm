@@ -154,8 +154,8 @@ class Overmind():
         self.learning_scenario = self.config["learning_scenario"]
         self.worker_namespace = "deprecated"
 
-        if 'bucket' in config:
-            self.bucket = config['bucket']
+        if 'bucket' in self.config:
+            self.bucket = self.config['bucket']
         else:
             self.bucket = 'opfl-sim-models'
 
