@@ -311,8 +311,8 @@ class OVMSwarmInitializer():
                 chosen_data_idx = train_data_provider.get_chosen()
             else:
                 x_local, y_local_orig, _, _ = get_dataset('femnist', idnum)
-                goal_dist = dict.fromkeys(range(10), 10)
-                local_dist = dict.fromkeys(range(10), 10)
+                goal_dist = dict.fromkeys(range(62), 1)
+                local_dist = dict.fromkeys(range(62), 1)
 
 
             table = dynamodb.Table(config['tag'])

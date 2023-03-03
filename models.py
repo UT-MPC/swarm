@@ -38,7 +38,7 @@ def get_model(dataset):
     elif dataset == 'cifar-resnet':
         return models.get_resnet18
     elif dataset == 'femnist':
-        return models.get_cnn_mnist_model
+        return models.get_cnn_femnist_model
 
 def get_2nn_mnist_model(size=-1):
     if size <= 0:
@@ -170,6 +170,17 @@ def get_cnn_mnist_model():
     model.add(Conv2D(64, (3, 3), activation='relu'))
     model.add(MaxPooling2D((2, 2)))
     model.add(Conv2D(64, (3, 3), activation='relu'))
+    return model
+
+def get_cnn_femnist_model():
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Flatten())
+    model.add(Dense(512, activation='relu'))
+    model.add(Dense(62, activation='softmax'))
     return model
 
 def get_cnn_cifar_model():

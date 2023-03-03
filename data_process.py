@@ -227,7 +227,7 @@ def filter_data(x_train, y_train, labels):
 
 class DummyTestDataProvider():
     def __init__(self, *args):
-        self.num_classes = 10
+        self.num_classes = 62
 
 class StableTestDataProvider():
     """
