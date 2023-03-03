@@ -37,6 +37,8 @@ def get_model(dataset):
         return models.get_mobilenetv2
     elif dataset == 'cifar-resnet':
         return models.get_resnet18
+    elif dataset == 'femnist':
+        return models.get_cnn_mnist_model
 
 def get_2nn_mnist_model(size=-1):
     if size <= 0:
@@ -543,17 +545,17 @@ def get_deep_conv_lstm_model(num_filters=NUM_FILTERS,
                              num_units_lstm=NUM_UNITS_LSTM,
                              num_classes=NUM_CLASSES):
     model = keras.models.Sequential()
-    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu',
+    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu', name='conv1',
                                   input_shape=(sliding_window_length, nb_sensor_channels, 1)))
-    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu'))
-    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu'))
-    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu'))
+    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu', name='conv2'))
+    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu', name='conv3'))
+    model.add(keras.layers.Conv2D(num_filters, (filter_size, 1), activation='relu', name='conv4'))
     shape = model.layers[-1].output_shape
     model.add(keras.layers.Reshape((shape[1], shape[3] * shape[2])))
-    model.add(keras.layers.LSTM(num_units_lstm, activation='tanh', return_sequences=True)) # [batch, timesteps, features]
-    model.add(keras.layers.Dropout(0.5, seed=123))
-    model.add(keras.layers.LSTM(num_units_lstm, activation='tanh'))
-    model.add(keras.layers.Dropout(0.5, seed=124))
+    model.add(keras.layers.LSTM(num_units_lstm, activation='tanh', return_sequences=True, name='lstm1')) # [batch, timesteps, features]
+    model.add(keras.layers.Dropout(0.5, seed=123, name='dr1'))
+    model.add(keras.layers.LSTM(num_units_lstm, activation='tanh', name='lstm2'))
+    model.add(keras.layers.Dropout(0.5, seed=124, name='dr2'))
     model.add(keras.layers.Dense(num_classes, activation='softmax'))
     return model
 

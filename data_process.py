@@ -225,6 +225,10 @@ def filter_data(x_train, y_train, labels):
         
     return x_train[mask], y_train[mask]
 
+class DummyTestDataProvider():
+    def __init__(self, *args):
+        self.num_classes = 10
+
 class StableTestDataProvider():
     """
     when size_per_label = 0, use all the data for the test set

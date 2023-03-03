@@ -216,8 +216,12 @@ class OVMSwarmInitializer():
                                                 )')
             self.rds_tasks_cursor.clear_all()
 
-        x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
-        num_classes = len(np.unique(y_train_orig))
+        if config['dataset'] is not 'femnist':
+            x_train, y_train_orig, x_test, y_test_orig = get_dataset(config['dataset'])
+            num_classes = len(np.unique(y_train_orig))
+        else:
+            x_train, y_train_orig, x_test, y_test_orig = (0,0,0,0)
+            num_classes = 0
 
         if create_tables:
             self._create_db_state_table(tag)
@@ -247,7 +251,7 @@ class OVMSwarmInitializer():
 
         print("creating device states")
         futures = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             for idnum in range(cur_id, cur_id + swarm_config['number_of_devices']):
                 if not create_tables:
                     continue
@@ -284,26 +288,32 @@ class OVMSwarmInitializer():
                                 x_test, y_test_orig, enc_df):
         try:
             swarm_config = config['swarm_config']
-            # pick data
-            label_set = []
-            goal_dist = {}
-            local_dist = {}
-            if "district-9" in config:
-                label_set.append(swarm_config["district-9"][idnum % len(swarm_config["district-9"])])
+            if config['dataset'] is not 'femnist':
+                # pick data
+                label_set = []
+                goal_dist = {}
+                local_dist = {}
+                if "district-9" in config:
+                    label_set.append(swarm_config["district-9"][idnum % len(swarm_config["district-9"])])
+                else:
+                    label_set = (np.random.choice(np.arange(num_classes), size=swarm_config['local_set_size'], replace=False)).tolist()
+                
+                for l in label_set:
+                    local_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
+
+                labels_not_in_local_set = np.setdiff1d(np.arange(num_classes), np.array(label_set))
+                label_set.extend((np.random.choice(labels_not_in_local_set, 
+                                            size=swarm_config['goal_set_size'] - swarm_config['local_set_size'], replace=False)).tolist())
+                for l in label_set:
+                    goal_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
+
+                train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, local_dist)
+                chosen_data_idx = train_data_provider.get_chosen()
             else:
-                label_set = (np.random.choice(np.arange(num_classes), size=swarm_config['local_set_size'], replace=False)).tolist()
-            
-            for l in label_set:
-                local_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
+                x_local, y_local_orig, _, _ = get_dataset('femnist', idnum)
+                goal_dist = dict.fromkeys(range(10), 10)
+                local_dist = dict.fromkeys(range(10), 10)
 
-            labels_not_in_local_set = np.setdiff1d(np.arange(num_classes), np.array(label_set))
-            label_set.extend((np.random.choice(labels_not_in_local_set, 
-                                        size=swarm_config['goal_set_size'] - swarm_config['local_set_size'], replace=False)).tolist())
-            for l in label_set:
-                goal_dist[l] = (int) (swarm_config['local_data_size'] / len(label_set))
-
-            train_data_provider = dp.IndicedDataProvider(x_train, y_train_orig, local_dist)
-            chosen_data_idx = train_data_provider.get_chosen()
 
             table = dynamodb.Table(config['tag'])
             with table.batch_writer() as batch:
@@ -333,19 +343,26 @@ class OVMSwarmInitializer():
             else:
                 init_weights = None
 
-            test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, device_config['train_config']['test-data-per-label'])
+            if config['dataset'] is not 'femnist':
+                test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, device_config['train_config']['test-data-per-label'])
 
-            # get device info from dynamoDB
-            chosen_list = chosen_data_idx
-            goal_labels = goal_dist
-            
-            train_data_provider.set_chosen(chosen_list)
+                # get device info from dynamoDB
+                chosen_list = chosen_data_idx
+                goal_labels = goal_dist
+                
+                train_data_provider.set_chosen(chosen_list) 
 
-            # prepare params for device
-            x_local, y_local_orig = train_data_provider.fetch()
+                # prepare params for device
+                x_local, y_local_orig = train_data_provider.fetch()
+                
+            else:
+                test_data_provider = dp.DummyTestDataProvider()
+                goal_labels = 0
+
             hyperparams = device_config['train_config']
             compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']}
             train_config = {'batch_size': hyperparams['batch-size'], 'shuffle': True}
+            
 
             device = self.device_class(idnum,
                                         model_fn, 

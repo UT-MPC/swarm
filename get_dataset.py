@@ -6,13 +6,14 @@ from utils.har.sliding_window import sliding_window
 from scipy.io import loadmat
 import _pickle as cp
 import boto3
+import json
 from pathlib import Path
 
 # hyperparams for uci dataset
 SLIDING_WINDOW_LENGTH = 24
 SLIDING_WINDOW_STEP = 12
 
-def get_dataset(name):
+def get_dataset(name, client_num=0):
     """
     returns x_train, y_train_orig, x_test, y_test_orig 
     """
@@ -25,8 +26,28 @@ def get_dataset(name):
     elif name == 'opportunity-uci':
         return get_opp_uci_dataset('data/opportunity-uci/oppChallenge_gestures.data',
                                             SLIDING_WINDOW_LENGTH, SLIDING_WINDOW_STEP)
+    elif name == 'femnist':
+        return get_femnist_dataset(client_num)
     else:
         raise ValueError('No such dataset: {}'.format(name))
+
+def get_femnist_dataset(client_num):
+    path = '../leaf/data/femnist/data/all_data/'
+    file_num = (int) (client_num / 100)
+    filename = f'all_data_{file_num}.json'
+    with open(path + filename, 'rb') as f:
+        data_json = f.read()
+    data = json.loads(data_json)
+    idx = client_num - file_num * 100
+    user_name = data['users'][idx]
+    data_size = data['num_samples'][idx]
+    x = data['user_data'][user_name]['x']
+    y = data['user_data'][user_name]['y']
+    x_train = (np.array(x)).reshape(data_size, 28, 28, 1)
+    y_train = (np.array(y))
+
+    return x_train, y_train, 0, 0
+
 
 def get_mnist_dataset():
     # import dataset
