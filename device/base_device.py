@@ -414,14 +414,17 @@ class Device():
             grads = tape.gradient(loss, model.trainable_variables)
             opt = self._get_optimizer(model)
             opt.apply_gradients(zip(grads, model.trainable_variables))
+
+            # save optimizer state
+            self.optimizer_weights = opt.get_weights()
+            self._weights = model.get_weights()
+            return model.get_weights()
         else:
             for _ in range(epoch):
                 self.fit_to(other, 1)
+            return self._weights
 
-        # save optimizer state
-        self.optimizer_weights = opt.get_weights()
-        self._weights = model.get_weights()
-        return model.get_weights()
+        
 
     def fit_to_batch(self, other, epoch):
         """
