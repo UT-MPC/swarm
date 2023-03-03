@@ -77,7 +77,8 @@ class OVMFLServerDevice(device.base_device.Device):
         self._round_number = 0
         # evaluate here and put in last eval
         self.last_eval_round = -1
-        self.last_eval = self.eval()
+        # self.last_eval = self.eval()
+        self.last_eval = [0, 0]
 
     def _init_model_updates(self):
         self._updated_model_nums = 0
@@ -103,9 +104,9 @@ class OVMFLServerDevice(device.base_device.Device):
     def eval(self):
         # return last_eval if we have updated evaluation results
         # if not, evaluate
-        if self.last_eval_round < self._round_number:
-            self.last_eval_round = self._round_number
-            self.last_eval = super().eval()
+        # if self.last_eval_round < self._round_number:
+        #     self.last_eval_round = self._round_number
+        #     self.last_eval = super().eval()
         return self.last_eval
 
     @staticmethod

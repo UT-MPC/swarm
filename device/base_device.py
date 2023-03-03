@@ -395,24 +395,28 @@ class Device():
         fit the model to others data for "epoch" epochs
         one epoch only corresponds to a single batch
         """
-        model = self._model_fn()
-        model.set_weights(self._weights)
-        X = other._x_train
-        y = other._y_train
+        if epoch == 1:
+            model = self._model_fn()
+            model.set_weights(self._weights)
+            X = other._x_train
+            y = other._y_train
 
-        CL = cl
-        with tf.GradientTape() as tape:
-            pred = model(X)
-            for i in range(0,len(model.trainable_variables)):
-                if i==0:
-                    l2_loss = CL * tf.nn.l2_loss(model.trainable_variables[i])
-                if i>=1:
-                    l2_loss = l2_loss+ CL * tf.nn.l2_loss(model.trainable_variables[i])
-            loss = keras.metrics.categorical_crossentropy(y, pred)
-            loss += l2_loss
-        grads = tape.gradient(loss, model.trainable_variables)
-        opt = self._get_optimizer(model)
-        opt.apply_gradients(zip(grads, model.trainable_variables))
+            CL = cl
+            with tf.GradientTape() as tape:
+                pred = model(X)
+                for i in range(0,len(model.trainable_variables)):
+                    if i==0:
+                        l2_loss = CL * tf.nn.l2_loss(model.trainable_variables[i])
+                    if i>=1:
+                        l2_loss = l2_loss+ CL * tf.nn.l2_loss(model.trainable_variables[i])
+                loss = keras.metrics.categorical_crossentropy(y, pred)
+                loss += l2_loss
+            grads = tape.gradient(loss, model.trainable_variables)
+            opt = self._get_optimizer(model)
+            opt.apply_gradients(zip(grads, model.trainable_variables))
+        else:
+            for _ in range(epoch):
+                self.fit_to(other, 1)
 
         # save optimizer state
         self.optimizer_weights = opt.get_weights()
