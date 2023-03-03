@@ -763,7 +763,7 @@ class Overmind():
             worker_in_db.update_status(STOPPED)
             self.initializer._initialize_worker(self.swarm_name, worker_id)
     
-    def run_swarm(self, polling_interval=5, rt_mode=False):
+    def run_swarm(self, polling_interval=5, rt_mode=False, use_cache=True):
         CHECKPOINT_INTERVAL = 1000
         ## !!Warning, rt_mode here has an error
         logging.info("----- swarm run start -----")
@@ -899,7 +899,7 @@ class Overmind():
             ## start assigning tasks to worker nodes (populate task_id_to_worker)
             # first assign based on cached device state
             # print(f"cached: {self.cached_devices_to_worker_nodes}")
-            if self.learning_scenario == "oppcl":
+            if self.learning_scenario == "oppcl" and use_cache:
                 for task_id in self.task_queue:
                     # @TODO support mutable neighbors
                     if self.tasks[task_id].learner_id in self.cached_devices_to_worker_nodes and \

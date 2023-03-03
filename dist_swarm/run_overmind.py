@@ -11,6 +11,8 @@ def main():
                         default=False, help='skip initializing device state table')
     parser.add_argument('--rt-mode', dest='rt_mode', action='store_true',
                         default=False, help='real time mode')
+    parser.add_argument('--no-cache', dest='no_cache', action='store_true',
+                        default=False, help='do not use cache')
     
     parsed = parser.parse_args()
 
@@ -27,7 +29,7 @@ def main():
         ovm.build_dep_graph_multi_neighbors(rt_mode=parsed.rt_mode)
     else:
         ovm.build_dep_graph(rt_mode=parsed.rt_mode)
-    ovm.run_swarm(rt_mode=parsed.rt_mode)
+    ovm.run_swarm(rt_mode=parsed.rt_mode, use_cache=not parsed.no_cache)
 
 if __name__ == '__main__':
     main()
