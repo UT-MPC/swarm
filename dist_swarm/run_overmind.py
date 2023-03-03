@@ -1,4 +1,5 @@
 import argparse
+import json
 
 from overmind import Overmind
 
@@ -22,7 +23,7 @@ def main():
     with open(parsed.config, 'rb') as f:
         config_json = f.read()
     config = json.loads(config_json)
-    if config['learning_scenario'] = 'federated':
+    if config['learning_scenario'] == 'federated':
         ovm.build_dep_graph_multi_neighbors(rt_mode=parsed.rt_mode)
     else:
         ovm.build_dep_graph(rt_mode=parsed.rt_mode)

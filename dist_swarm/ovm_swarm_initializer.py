@@ -288,7 +288,7 @@ class OVMSwarmInitializer():
                                 x_test, y_test_orig, enc_df):
         try:
             swarm_config = config['swarm_config']
-            if config['dataset'] is not 'femnist':
+            if config['dataset'] != 'femnist':
                 # pick data
                 label_set = []
                 goal_dist = {}
@@ -343,7 +343,7 @@ class OVMSwarmInitializer():
             else:
                 init_weights = None
 
-            if config['dataset'] is not 'femnist':
+            if config['dataset'] != 'femnist':
                 test_data_provider = dp.StableTestDataProvider(x_test, y_test_orig, device_config['train_config']['test-data-per-label'])
 
                 # get device info from dynamoDB
@@ -356,8 +356,9 @@ class OVMSwarmInitializer():
                 x_local, y_local_orig = train_data_provider.fetch()
                 
             else:
+                train_data_provider = 0
                 test_data_provider = dp.DummyTestDataProvider()
-                goal_labels = 0
+                goal_labels = [0]
 
             hyperparams = device_config['train_config']
             compile_config = {'loss': 'mean_squared_error', 'metrics': ['accuracy']}
