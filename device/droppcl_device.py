@@ -21,6 +21,8 @@ class DROppCLDevice(device.base_device.Device):
         self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
         self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
+        self.possible_device_powers = self.num_params.keys()
+        self.hetero_upper_bound = max(self.possible_device_powers)
         self.model_num_params = self.num_params[str(self.model_size)]
 
         self.optimizer_params = self._hyperparams['optimizer-params']
@@ -76,8 +78,8 @@ class DROppCLDevice(device.base_device.Device):
             count = Counter(self.window)
             self.window.pop(0)
             self.window.append(other.device_power)
-            d_l = self._hyperparams['hetero-upper-bound']
-            for d in [2,4,6,8,10]:
+            d_l = self.hetero_upper_bound
+            for d in self.possible_device_powers:
                 p = count[d] / self.WINDOW_SIZE
                 target = self.model_num_params / self.num_params[str[d]]
                 mean = self.WINDOW_SIZE * p
