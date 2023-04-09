@@ -175,7 +175,7 @@ class DROppCLDevice(device.base_device.Device):
         self.optimizer_weights = opt.get_weights()
 
         ########### @TODO change this
-        other.resample_local_data()
+        # other.resample_local_data()
 
         tf.compat.v1.reset_default_graph()
         K.clear_session()
