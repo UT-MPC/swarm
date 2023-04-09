@@ -50,6 +50,10 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         start = Decimal(task_config['start'])
         comm_time = Decimal(task_config['communication_time'])
         comp_time = Decimal(task_config['computation_time'])
+        if 'bucket' in task_config:
+            bucket = task_config['bucket']
+        else:
+            bucket = 'opfl-sim-models'
         orig_enc_idx = task_config['orig_enc_idx']
         measured_time = 0
 
@@ -63,7 +67,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
             learner = device_state_cache['device_states'][str(learner_id)]
             logging.info(f"device state {learner_id} loaded from cache")
         else:
-            learner = load_device(swarm_name, learner_id, **learner_load_config)
+            learner = load_device(swarm_name, learner_id, **learner_load_config, bucket=bucket)
 
         device_in_db = DeviceInDB(swarm_name, learner_id)
         neighbors = []
@@ -71,7 +75,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
             load_config = {}
             if str(ngbr) in device_load_config:
                 load_config = device_load_config[str(ngbr)]
-            neighbors.append(load_device(swarm_name, ngbr, **load_config))
+            neighbors.append(load_device(swarm_name, ngbr, **load_config, bucket=bucket))
         
         # save to cache before saving to DB
         # because save_device deletes model and data from the device
@@ -111,7 +115,7 @@ def run_task(worker_db, task_db, worker_status, worker_id, task_config, device_s
         # save device (s)
         if not realtime_timed_out:
             device_state_cache['device_states'][str(learner_id)] = copy.deepcopy(learner)
-            save_device(learner, swarm_name, "local", task_id, True)
+            save_device(learner, swarm_name, "local", task_id, True, bucket)
         # @TODO save neighbor device states if instructed
         
         new_history = {"timestamp": strftime("%Y-%m-%d %H:%M:%S", gmtime()), 
