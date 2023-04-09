@@ -71,12 +71,13 @@ class DROppCLDevice(device.base_device.Device):
             return 100000
         if len(self.window) < self.WINDOW_SIZE:
             d_l = other.device_power
+            self.window.append(other.device_power)
         else:
             count = Counter(self.window)
             self.window.pop(0)
             self.window.append(other.device_power)
             d_l = self._hyperparams['hetero-upper-bound']
-            for d in self.device_power_to_idx:
+            for d in [2,4,6,8,10]:
                 p = count[d] / self.WINDOW_SIZE
                 target = self.model_num_params / self.num_params[str[d]]
                 mean = self.WINDOW_SIZE * p
@@ -90,7 +91,7 @@ class DROppCLDevice(device.base_device.Device):
     def get_q_and_iteration(self, d_l, time_duration):
         computation_duration = self._hyperparams['computation-time']
         time_left = time_duration - computation_duration
-        num_params = self.num_params[str(self.model_size)]
+        num_params = self.num_params[str(self.model_size)] * d_l / 10
         bits_to = time_left * self._hyperparams['communication-rate'] / (2 * num_params)
         if bits_to < 1:
             return (0, 0)
@@ -128,8 +129,7 @@ class DROppCLDevice(device.base_device.Device):
         no dropout if d_l == my model size
         no quantization if q == 64
         """
-        return
-        print('running training {}->{}'.format(self._id_num, other._id_num))
+        logging.info('running training {}->{}'.format(self._id_num, other._id_num))
         if d_l >= self.model_size:
             d_l = self.model_size
         # logging.info('d_l: {}'.format(d_l))
