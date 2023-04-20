@@ -414,6 +414,7 @@ class NoDropoutNorQDevice(MomentumDROppCLDevice):
         super().__init__(*args)
     
     def delegate(self, other, epoch, iteration):
+        print(f'NoDropoutNorQDevice met {other.device_power}')
         if other.enc_duration >= 6 and other.device_power >= self.model_size:
             self.requests.append((other.device_power, other.enc_duration))
             for _ in range(iteration):

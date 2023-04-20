@@ -21,8 +21,9 @@ class DROppCLDevice(device.base_device.Device):
         self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
         self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
-        self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
+        self.possible_device_powers = [int(l) for l in list(self.num_params.keys()) if int(l) >= self._hyperparams['hetero-lower-bound']]
         self.hetero_upper_bound = max(self.possible_device_powers)
+        self.hetero_lower_bound = self._hyperparams['hetero-lower-bound']
         self.model_num_params = self.num_params[str(self.model_size)]
 
         self.optimizer_params = self._hyperparams['optimizer-params']
@@ -88,7 +89,8 @@ class DROppCLDevice(device.base_device.Device):
                 res = 1 - scipy.stats.norm.cdf(z)
                 if res > 0.5 and d < d_l:
                     d_l = d
-        return d_l
+            logging.info(f'd_l selected: {d_l}')
+        return max(self.hetero_lower_bound, d_l)
 
     def get_q_and_iteration(self, d_l, time_duration):
         computation_duration = self._hyperparams['computation-time']
@@ -118,6 +120,7 @@ class DROppCLDevice(device.base_device.Device):
 
         ######## determine quantization bits
         iteration, n = self.get_q_and_iteration(d_l, time_duration)
+        logging.info(f'selected d_l: {d_l}, bits: {n}, iter: {iteration}')
         
         ####### compute gradients and update the model
         for _ in range(iteration):
@@ -262,3 +265,72 @@ class DROppCLOnlyQuantizationDevice(DROppCLDevice):
             return (0, 0, 0)
 
         return iteration, d_l, n
+    
+class NoTrainDROppCLDevice(DROppCLDevice):
+    def __init__(self, id_num, hyperparams):
+        self._id_num = id_num
+        self._hyperparams = hyperparams
+
+        self.window = []
+        self.WINDOW_SIZE = 30
+        self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
+        self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
+        self.num_params = self._hyperparams['enc-exp-config']['model-params']
+        self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
+        self.hetero_upper_bound = max(self.possible_device_powers)
+        self.model_num_params = self.num_params[str(self.model_size)]
+
+    def fit_w_drop_quant(self, other, epoch, d_l, q):
+        return
+
+
+class NoTrainBaselineDevice(DROppCLBaselineDevice):
+    def __init__(self, id_num, hyperparams):
+        self._id_num = id_num
+        self._hyperparams = hyperparams
+
+        self.window = []
+        self.WINDOW_SIZE = 30
+        self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
+        self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
+        self.num_params = self._hyperparams['enc-exp-config']['model-params']
+        self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
+        self.hetero_upper_bound = max(self.possible_device_powers)
+        self.model_num_params = self.num_params[str(self.model_size)]
+
+    def fit_w_drop_quant(self, other, epoch, d_l, q):
+        return
+    
+class NoTrainOnlyQuantizationDevice(DROppCLOnlyQuantizationDevice):
+    def __init__(self, id_num, hyperparams):
+        self._id_num = id_num
+        self._hyperparams = hyperparams
+
+        self.window = []
+        self.WINDOW_SIZE = 30
+        self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
+        self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
+        self.num_params = self._hyperparams['enc-exp-config']['model-params']
+        self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
+        self.hetero_upper_bound = max(self.possible_device_powers)
+        self.model_num_params = self.num_params[str(self.model_size)]
+
+    def fit_w_drop_quant(self, other, epoch, d_l, q):
+        return
+    
+class NoTrainOnlyDropoutDevice(DROppCLOnlyDropoutDevice):
+    def __init__(self, id_num, hyperparams):
+        self._id_num = id_num
+        self._hyperparams = hyperparams
+
+        self.window = []
+        self.WINDOW_SIZE = 30
+        self.model_size = self._hyperparams['enc-exp-config']['client-sizes']['model-sizes'][self._id_num%5]
+        self.device_power = self._hyperparams['enc-exp-config']['client-sizes']['device-powers'][self._id_num%5]
+        self.num_params = self._hyperparams['enc-exp-config']['model-params']
+        self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
+        self.hetero_upper_bound = max(self.possible_device_powers)
+        self.model_num_params = self.num_params[str(self.model_size)]
+
+    def fit_w_drop_quant(self, other, epoch, d_l, q):
+        return
