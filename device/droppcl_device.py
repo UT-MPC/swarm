@@ -110,7 +110,7 @@ class DROppCLDevice(device.base_device.Device):
         else:
             iteration = 1
 
-        return iteration, n
+        return 1, n
 
     def hetero_delegate(self, other, epoch, time_duration):
         ######### determine d_l
@@ -278,6 +278,7 @@ class NoTrainDROppCLDevice(DROppCLDevice):
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
         self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
         self.hetero_upper_bound = max(self.possible_device_powers)
+        self.hetero_lower_bound = self._hyperparams['hetero-lower-bound']
         self.model_num_params = self.num_params[str(self.model_size)]
 
     def fit_w_drop_quant(self, other, epoch, d_l, q):
@@ -296,6 +297,7 @@ class NoTrainBaselineDevice(DROppCLBaselineDevice):
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
         self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
         self.hetero_upper_bound = max(self.possible_device_powers)
+        self.hetero_lower_bound = self._hyperparams['hetero-lower-bound']
         self.model_num_params = self.num_params[str(self.model_size)]
 
     def fit_w_drop_quant(self, other, epoch, d_l, q):
@@ -313,6 +315,7 @@ class NoTrainOnlyQuantizationDevice(DROppCLOnlyQuantizationDevice):
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
         self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
         self.hetero_upper_bound = max(self.possible_device_powers)
+        self.hetero_lower_bound = self._hyperparams['hetero-lower-bound']
         self.model_num_params = self.num_params[str(self.model_size)]
 
     def fit_w_drop_quant(self, other, epoch, d_l, q):
@@ -330,6 +333,7 @@ class NoTrainOnlyDropoutDevice(DROppCLOnlyDropoutDevice):
         self.num_params = self._hyperparams['enc-exp-config']['model-params']
         self.possible_device_powers = [int(l) for l in list(self.num_params.keys())]
         self.hetero_upper_bound = max(self.possible_device_powers)
+        self.hetero_lower_bound = self._hyperparams['hetero-lower-bound']
         self.model_num_params = self.num_params[str(self.model_size)]
 
     def fit_w_drop_quant(self, other, epoch, d_l, q):

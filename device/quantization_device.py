@@ -306,6 +306,7 @@ class MomentumDROppCLDevice(device.hetero_device.MomentumMixedDropoutDevice):
         else:
             quantized_weights = vec_to_grad(quant(weights_to_vec(sub_weights), q), sub_weights)
         submodel.set_weights(quantized_weights)
+        print(f'q: {q}')
 
         # train submodel
         X = other._x_train
